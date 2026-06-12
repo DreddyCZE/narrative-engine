@@ -1,0 +1,6 @@
+{
+  "name": "@narrative-engine/engine-kernel",
+  "devDependencies": {
+    "editor-app": "file:../../../apps/editor"
+  }
+}

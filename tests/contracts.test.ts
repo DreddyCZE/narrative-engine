@@ -17,4 +17,3 @@ describe("initial contract inventory seed", () => {
     ]);
   });
 });
-

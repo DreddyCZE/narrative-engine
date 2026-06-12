@@ -13,7 +13,8 @@
     "test": "vitest run",
     "lint": "eslint .",
     "typecheck": "tsc -b --pretty false",
-    "validate": "node tools/validate.mjs",
+    "check:boundaries": "node tools/check-boundaries.mjs",
+    "validate": "node tools/validate.mjs && node tools/check-boundaries.mjs",
     "format": "prettier --check ."
   },
   "devDependencies": {
@@ -26,4 +27,3 @@
     "vitest": "^3.2.3"
   }
 }
-

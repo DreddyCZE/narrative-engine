@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   pull_request:
   push:
@@ -18,10 +21,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
+      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm check:boundaries
       - run: pnpm validate
-

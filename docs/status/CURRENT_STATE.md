@@ -3,18 +3,18 @@
 **Date:** 2026-06-12  
 **Milestone:** M0 - Governance and Contracts  
 **Active task:** none
-**Status:** TASK-002 is done. No task is active.
+**Status:** TASK-003 is done. No task is active.
 
 ## Five Questions
 
 1. **Current milestone:** M0 - Governance and Contracts.
-2. **Current state:** TASK-001 and TASK-002 are done. The repository has governance, workspace
-   skeleton, contract inventory, dependency order, and contract versioning policy.
-3. **Single next most important task:** TASK-003 - CI and architecture boundary skeleton.
+2. **Current state:** TASK-001, TASK-002, and TASK-003 are done. M0 now has governance,
+   contracts inventory, versioning policy, architecture boundary documentation, executable boundary
+   checks, fixtures, and CI wiring.
+3. **Single next most important task:** Run the M0 completion gate / Gate D planning check.
 4. **What the next task must not change:** It must not implement runtime UI, editor UI, concrete
    game content, runtime systems, or framework choices.
-5. **How done is recognized:** TASK-003 introduces basic automatically verifiable boundary checks
-   without implementing future domain systems.
+5. **How done is recognized:** M0 exit criteria are verified before any M1 task is activated.
 
 ## Notes
 
@@ -28,8 +28,8 @@
 - `corepack pnpm typecheck` - passed on 2026-06-12.
 - `corepack pnpm test` - passed on 2026-06-12.
 - `corepack pnpm build` - passed on 2026-06-12.
-- `corepack pnpm validate` - passed on 2026-06-12 after fixing validation handling for deleted
-  tracked files.
+- `corepack pnpm check:boundaries` - passed on 2026-06-12.
+- `corepack pnpm validate` - passed on 2026-06-12.
 
 Local note: checks were run through `corepack pnpm` because `pnpm` was not directly available in
 PATH. The local Node runtime was `v24.16.0`, so pnpm emitted an engine warning; CI is pinned to
@@ -37,5 +37,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-TASK-003 should introduce only basic automatically verifiable architecture boundary checks. It must
-not attempt to analyze all future domain logic before real packages and contracts exist.
+Recommended next step is a planning-only M0 completion gate / Gate D check. Do not activate M1 until
+M0 exit criteria are explicitly verified.

@@ -1,0 +1,6 @@
+{
+  "name": "@narrative-engine/engine-kernel",
+  "dependencies": {
+    "example-game": "file:../../../games/example"
+  }
+}

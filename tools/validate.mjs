@@ -24,6 +24,7 @@ const requiredPaths = [
   "docs/contracts/CONTRACT_INVENTORY.md",
   "docs/contracts/CONTRACT_DEPENDENCY_ORDER.md",
   "docs/contracts/CONTRACT_VERSIONING_POLICY.md",
+  "docs/contracts/ARCHITECTURE_BOUNDARIES.md",
   "docs/tasks/TASK_TEMPLATE.md",
   "docs/ideas/IDEA_TEMPLATE.md",
   "docs/adr/ADR_TEMPLATE.md",
