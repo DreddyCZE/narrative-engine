@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/engine-contracts" },
+    { "path": "packages/engine-kernel" },
+    { "path": "packages/engine-state" },
+    { "path": "packages/engine-rules" },
+    { "path": "packages/validation" },
+    { "path": "packages/test-support" }
+  ]
+}
+

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+.cache/
+*.log
+MASTER_SPEC_univerzalni_narativni_engine_a_rizeni_projektu_v3.md
+
