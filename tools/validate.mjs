@@ -21,6 +21,9 @@ const requiredPaths = [
   "docs/status/CURRENT_STATE.md",
   "docs/status/RISKS.md",
   "docs/status/TECH_DEBT.md",
+  "docs/contracts/CONTRACT_INVENTORY.md",
+  "docs/contracts/CONTRACT_DEPENDENCY_ORDER.md",
+  "docs/contracts/CONTRACT_VERSIONING_POLICY.md",
   "docs/tasks/TASK_TEMPLATE.md",
   "docs/ideas/IDEA_TEMPLATE.md",
   "docs/adr/ADR_TEMPLATE.md",
@@ -40,8 +43,120 @@ const activeTasks = existsSync(activeTasksDir)
   ? readdirSync(activeTasksDir).filter((name) => name.endsWith(".md"))
   : [];
 
-if (activeTasks.length !== 1) {
-  errors.push(`Expected exactly one active task, found ${activeTasks.length}.`);
+if (activeTasks.length > 1) {
+  errors.push(`Expected at most one active task, found ${activeTasks.length}.`);
+}
+
+const currentStatePath = join(root, "docs/status/CURRENT_STATE.md");
+if (existsSync(currentStatePath)) {
+  const currentState = readFileSync(currentStatePath, "utf8");
+  const claimsNoActiveTask = /\*\*Active task:\*\*\s+none/iu.test(currentState);
+  if (activeTasks.length === 0 && !claimsNoActiveTask) {
+    errors.push("CURRENT_STATE.md must say `Active task: none` when no active task file exists.");
+  }
+  if (activeTasks.length === 1 && claimsNoActiveTask) {
+    errors.push("CURRENT_STATE.md says no active task, but one active task file exists.");
+  }
+}
+
+const requiredContracts = [
+  "Entity Identity Contract",
+  "Schema Versioning Contract",
+  "Game Manifest Contract",
+  "Game Data Schema Contract",
+  "Engine State Contract",
+  "Command Contract",
+  "Transaction Contract",
+  "Condition Contract",
+  "Effect Contract",
+  "Domain Event Contract",
+  "Event Log Contract",
+  "Scheduler Contract",
+  "Check Resolver Contract",
+  "View Model Contract",
+  "Save Contract",
+  "Migration Contract",
+  "Validation Diagnostic Contract",
+  "Localization Contract",
+  "Theme Contract",
+  "Asset Manifest Contract",
+  "Plugin Contract",
+  "Script Extension Contract",
+  "Source Provenance Contract",
+  "Runtime Error Contract",
+  "Editor Draft and Approval Contract",
+  "Context Pack Contract"
+];
+
+const inventoryPath = join(root, "docs/contracts/CONTRACT_INVENTORY.md");
+if (existsSync(inventoryPath)) {
+  const inventory = readFileSync(inventoryPath, "utf8");
+  for (const contractName of requiredContracts) {
+    if (!inventory.includes(`### ${contractName}`)) {
+      errors.push(`Contract inventory missing required section: ${contractName}`);
+    }
+  }
+
+  for (const status of ["IDENTIFIED", "DRAFT_REQUIRED", "DEFERRED", "NOT_REQUIRED"]) {
+    if (!inventory.includes(status)) {
+      errors.push(`Contract inventory missing status definition or use: ${status}`);
+    }
+  }
+}
+
+const dependencyOrderPath = join(root, "docs/contracts/CONTRACT_DEPENDENCY_ORDER.md");
+if (existsSync(dependencyOrderPath)) {
+  const dependencyOrder = readFileSync(dependencyOrderPath, "utf8");
+  const requiredM1Order = [
+    "1. Entity Identity",
+    "2. Schema Versioning",
+    "3. Engine State",
+    "4. Condition",
+    "5. Effect",
+    "6. Command",
+    "7. Transaction",
+    "8. Domain Event",
+    "9. Validation Diagnostic"
+  ];
+
+  let previousIndex = -1;
+  for (const item of requiredM1Order) {
+    const index = dependencyOrder.indexOf(item);
+    if (index <= previousIndex) {
+      errors.push(`Contract dependency order missing or reordering M1 item: ${item}`);
+      break;
+    }
+    previousIndex = index;
+  }
+
+  if (!dependencyOrder.includes("```mermaid")) {
+    errors.push("Contract dependency order must include a Mermaid dependency graph.");
+  }
+}
+
+const versioningPolicyPath = join(root, "docs/contracts/CONTRACT_VERSIONING_POLICY.md");
+if (existsSync(versioningPolicyPath)) {
+  const versioningPolicy = readFileSync(versioningPolicyPath, "utf8");
+  const requiredPolicyTerms = [
+    "Package Version",
+    "Contract Version",
+    "Schema Version",
+    "Save Format Version",
+    "Plugin API Version",
+    "Compatible Changes",
+    "Incompatible Changes",
+    "Deprecation Policy",
+    "Migration Obligation",
+    "Stable ID Aliasing",
+    "Contract Test Fixtures",
+    "No Silent Public Contract Changes"
+  ];
+
+  for (const term of requiredPolicyTerms) {
+    if (!versioningPolicy.includes(term)) {
+      errors.push(`Contract versioning policy missing section: ${term}`);
+    }
+  }
 }
 
 const trackedFiles = execFileSync("git", ["ls-files"], { cwd: root, encoding: "utf8" })
@@ -59,7 +174,7 @@ const allowedExplanatoryFiles = new Set(["README.md", "PROJECT_CHARTER.md", "too
 
 for (const file of trackedFiles) {
   const absolute = join(root, file);
-  if (!statSync(absolute).isFile()) {
+  if (!existsSync(absolute) || !statSync(absolute).isFile()) {
     continue;
   }
 

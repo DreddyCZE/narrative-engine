@@ -4,6 +4,10 @@
 
 TASK-001 - repository and workspace foundation
 
+## Commit
+
+`2849bb8 chore(repo): bootstrap narrative engine governance`
+
 ## Summary
 
 Bootstrapped the greenfield repository for M0. Added governance documents, task flow, initial ADR,
@@ -43,4 +47,3 @@ workflow, and minimal test coverage.
 ## Recommended Next Task
 
 TASK-002 - core contract inventory.
-

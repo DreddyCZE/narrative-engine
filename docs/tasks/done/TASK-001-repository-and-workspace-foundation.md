@@ -6,7 +6,7 @@ M0 - Governance and Contracts
 
 ## Status
 
-active
+DONE
 
 ## Objective
 
@@ -45,4 +45,8 @@ initial governance files required before broader implementation.
 - `pnpm test`
 - `pnpm build`
 - `pnpm validate`
+
+## Closure
+
+Closed by commit `2849bb8 chore(repo): bootstrap narrative engine governance`.
 
