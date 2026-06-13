@@ -1,0 +1,42 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "asset-manifest",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "asset-manifest",
+    "version": "asset-manifest@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "deprecated",
+      "jsonSchema": "schemas/asset-manifest.v1.schema.json",
+      "deprecation": {
+        "replacementSchemaKey": "asset-manifest@2",
+        "reason": "Version 2 is the canonical writer target."
+      }
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/asset-manifest.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 2,
+  "migrations": [
+    {
+      "migrationId": "asset-manifest.1-to-2",
+      "schemaId": "asset-manifest",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

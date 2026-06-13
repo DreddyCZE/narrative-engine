@@ -1,0 +1,26 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "removed-reused",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "removed-reused",
+    "version": "removed-reused@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "removed",
+      "jsonSchema": "schemas/removed-reused.v1-tombstone.schema.json"
+    },
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/removed-reused.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1
+}

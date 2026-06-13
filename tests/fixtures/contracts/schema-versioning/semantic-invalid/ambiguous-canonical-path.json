@@ -1,0 +1,63 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "ambiguous-path",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "ambiguous-path",
+    "version": "ambiguous-path@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/ambiguous-path.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/ambiguous-path.v2.schema.json"
+    },
+    {
+      "schemaVersion": 3,
+      "status": "accepted",
+      "jsonSchema": "schemas/ambiguous-path.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 3
+  },
+  "writerVersion": 3,
+  "migrations": [
+    {
+      "migrationId": "ambiguous-path.1-to-2",
+      "schemaId": "ambiguous-path",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    },
+    {
+      "migrationId": "ambiguous-path.2-to-3",
+      "schemaId": "ambiguous-path",
+      "fromVersion": 2,
+      "toVersion": 3,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    },
+    {
+      "migrationId": "ambiguous-path.1-to-3",
+      "schemaId": "ambiguous-path",
+      "fromVersion": 1,
+      "toVersion": 3,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

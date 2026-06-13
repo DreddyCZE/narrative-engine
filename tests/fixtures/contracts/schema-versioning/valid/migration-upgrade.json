@@ -1,0 +1,38 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "condition-data",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "condition-data",
+    "version": "condition-data@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/condition-data.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/condition-data.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 2,
+  "migrations": [
+    {
+      "migrationId": "condition-data.1-to-2",
+      "schemaId": "condition-data",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

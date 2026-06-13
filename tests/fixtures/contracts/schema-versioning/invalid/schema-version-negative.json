@@ -1,0 +1,21 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "entity-identity",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "entity-identity",
+    "version": "entity-identity@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": -1,
+      "status": "accepted",
+      "jsonSchema": "schemas/entity-identity.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1
+}

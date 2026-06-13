@@ -1,0 +1,22 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "draft-writer",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "draft-writer",
+    "version": "draft-writer@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "draft",
+      "jsonSchema": "schemas/draft-writer.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1,
+  "writerProfile": "production"
+}

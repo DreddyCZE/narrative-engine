@@ -1,0 +1,43 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "legacy-import",
+  "owningPackage": "@narrative-engine/validation",
+  "contract": {
+    "id": "legacy-import",
+    "version": "legacy-import@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "deprecated",
+      "jsonSchema": "schemas/legacy-import.v1.schema.json",
+      "deprecation": {
+        "replacementSchemaKey": "legacy-import@2",
+        "reason": "Version 1 remains readable only for controlled import validation.",
+        "lastSupportedBy": "M1-contract-draft"
+      }
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/legacy-import.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 2,
+  "migrations": [
+    {
+      "migrationId": "legacy-import.1-to-2",
+      "schemaId": "legacy-import",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

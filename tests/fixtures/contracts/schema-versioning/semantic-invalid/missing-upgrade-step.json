@@ -1,0 +1,43 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "gap-schema",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "gap-schema",
+    "version": "gap-schema@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/gap-schema.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/gap-schema.v2.schema.json"
+    },
+    {
+      "schemaVersion": 3,
+      "status": "accepted",
+      "jsonSchema": "schemas/gap-schema.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 3
+  },
+  "writerVersion": 3,
+  "migrations": [
+    {
+      "migrationId": "gap-schema.1-to-2",
+      "schemaId": "gap-schema",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

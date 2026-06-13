@@ -1,0 +1,33 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "migration-same",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "migration-same",
+    "version": "migration-same@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/migration-same.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1,
+  "migrations": [
+    {
+      "migrationId": "migration-same.1-to-1",
+      "schemaId": "migration-same",
+      "fromVersion": 1,
+      "toVersion": 1,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

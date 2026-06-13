@@ -1,0 +1,53 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "game-manifest",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "game-manifest",
+    "version": "game-manifest@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/game-manifest.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/game-manifest.v2.schema.json"
+    },
+    {
+      "schemaVersion": 3,
+      "status": "accepted",
+      "jsonSchema": "schemas/game-manifest.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 3
+  },
+  "writerVersion": 3,
+  "migrations": [
+    {
+      "migrationId": "game-manifest.1-to-2",
+      "schemaId": "game-manifest",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    },
+    {
+      "migrationId": "game-manifest.2-to-3",
+      "schemaId": "game-manifest",
+      "fromVersion": 2,
+      "toVersion": 3,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "cycle-schema",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "cycle-schema",
+    "version": "cycle-schema@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/cycle-schema.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/cycle-schema.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 2,
+  "migrations": [
+    {
+      "migrationId": "cycle-schema.1-to-2",
+      "schemaId": "cycle-schema",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    },
+    {
+      "migrationId": "cycle-schema.2-to-1",
+      "schemaId": "cycle-schema",
+      "fromVersion": 2,
+      "toVersion": 1,
+      "direction": "downgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

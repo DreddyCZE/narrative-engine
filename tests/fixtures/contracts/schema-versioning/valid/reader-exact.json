@@ -1,0 +1,21 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "dialogue-data",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "dialogue-data",
+    "version": "dialogue-data@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/dialogue-data.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1
+}

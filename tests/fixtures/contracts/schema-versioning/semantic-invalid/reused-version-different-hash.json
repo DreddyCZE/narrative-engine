@@ -1,0 +1,28 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "hash-schema",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "hash-schema",
+    "version": "hash-schema@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/hash-schema.schema.json",
+      "schemaHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/hash-schema.schema.json",
+      "schemaHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1
+}

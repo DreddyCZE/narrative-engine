@@ -1,0 +1,31 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "writer-range",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "writer-range",
+    "version": "writer-range@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/writer-range.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/writer-range.schema.json"
+    },
+    {
+      "schemaVersion": 3,
+      "status": "accepted",
+      "jsonSchema": "schemas/writer-range.v3.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 3
+}

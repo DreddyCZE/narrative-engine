@@ -46,16 +46,19 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Purpose:** Defines how schemas declare versions, compatibility, deprecation, migrations, and
   fixture expectations.
 - **Owner:** `packages/engine-contracts`; validation package consumes it.
+- **Contract document:** `docs/contracts/SCHEMA_VERSIONING_CONTRACT.md`.
+- **Schema:** `schemas/schema-versioning.schema.json`.
 - **Producers:** Contract authors, schema authors, migration tooling.
 - **Consumers:** Game Data, Engine, Editor, CI validation, migrations, saves.
 - **Visibility:** Public.
-- **Stability:** planning.
-- **Versioning:** Its own contract version; governs schema major/minor evolution.
+- **Stability:** draft.
+- **Versioning:** Contract version `schema-versioning@0.1.0`; governs integer schemaVersion,
+  compatibility status, migration descriptor, and registry descriptor rules.
 - **Dependencies:** Entity Identity.
 - **Security or migration impact:** High. Silent schema drift can invalidate content and saves.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2.2, 33, 58.7, 58.9, 61.18.
 
 ### Game Manifest Contract

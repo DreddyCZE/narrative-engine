@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/schema-versioning/0.1.0/schema.json",
+  "title": "Schema Versioning Contract Descriptor",
+  "description": "Draft M1 schema for logical schema descriptors, version entries, reader support, and migration metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "schemaId",
+    "owningPackage",
+    "contract",
+    "versions",
+    "readerSupport",
+    "writerVersion"
+  ],
+  "properties": {
+    "contractVersion": {
+      "const": "schema-versioning@0.1.0"
+    },
+    "schemaId": {
+      "$ref": "#/$defs/schemaId"
+    },
+    "owningPackage": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^(?:@[a-z0-9._-]+/[a-z0-9._-]+|[a-z0-9._-]+)$"
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/schemaId"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 96,
+          "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}@[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$"
+        }
+      }
+    },
+    "versions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/versionEntry"
+      }
+    },
+    "readerSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minVersion", "maxVersion"],
+      "properties": {
+        "minVersion": {
+          "$ref": "#/$defs/version"
+        },
+        "maxVersion": {
+          "$ref": "#/$defs/version"
+        }
+      }
+    },
+    "writerVersion": {
+      "$ref": "#/$defs/version"
+    },
+    "writerProfile": {
+      "type": "string",
+      "enum": ["development", "production"],
+      "default": "production"
+    },
+    "migrations": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/migration"
+      }
+    }
+  },
+  "$defs": {
+    "schemaId": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "hash": {
+      "type": "string",
+      "minLength": 71,
+      "maxLength": 71,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(^|/)\\.\\.?(/|$))[A-Za-z0-9._/-]+\\.schema\\.json$"
+    },
+    "versionEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "status", "jsonSchema"],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/version"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "accepted", "deprecated", "removed"]
+        },
+        "jsonSchema": {
+          "$ref": "#/$defs/path"
+        },
+        "schemaHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "meaningHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "deprecation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["replacementSchemaKey", "reason"],
+          "properties": {
+            "replacementSchemaKey": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 80,
+              "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}@[1-9][0-9]*$"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "lastSupportedBy": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "pattern": "^[A-Za-z0-9._/@:-]+$"
+            }
+          }
+        }
+      }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "migrationId",
+        "schemaId",
+        "fromVersion",
+        "toVersion",
+        "direction",
+        "deterministic",
+        "lossy",
+        "requiresContext"
+      ],
+      "properties": {
+        "migrationId": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "pattern": "^[a-z](?:[a-z0-9]|[._-](?=[a-z0-9])){1,119}$"
+        },
+        "schemaId": {
+          "$ref": "#/$defs/schemaId"
+        },
+        "fromVersion": {
+          "$ref": "#/$defs/version"
+        },
+        "toVersion": {
+          "$ref": "#/$defs/version"
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["upgrade", "downgrade"]
+        },
+        "deterministic": {
+          "type": "boolean"
+        },
+        "lossy": {
+          "type": "boolean"
+        },
+        "lossDescription": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "requiresContext": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "lossy": {
+                "const": true
+              }
+            },
+            "required": ["lossy"]
+          },
+          "then": {
+            "required": ["lossDescription"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lossy": {
+                "const": false
+              }
+            },
+            "required": ["lossy"]
+          },
+          "then": {
+            "not": {
+              "required": ["lossDescription"]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

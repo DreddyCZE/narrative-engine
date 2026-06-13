@@ -1,0 +1,38 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "bad-direction",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "bad-direction",
+    "version": "bad-direction@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/bad-direction.v1.schema.json"
+    },
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/bad-direction.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 2
+  },
+  "writerVersion": 2,
+  "migrations": [
+    {
+      "migrationId": "bad-direction.2-to-1",
+      "schemaId": "bad-direction",
+      "fromVersion": 2,
+      "toVersion": 1,
+      "direction": "upgrade",
+      "deterministic": true,
+      "lossy": false,
+      "requiresContext": false
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "missing-schema-id",
+    "version": "missing-schema-id@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 1,
+      "status": "accepted",
+      "jsonSchema": "schemas/missing-schema-id.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 1,
+    "maxVersion": 1
+  },
+  "writerVersion": 1
+}

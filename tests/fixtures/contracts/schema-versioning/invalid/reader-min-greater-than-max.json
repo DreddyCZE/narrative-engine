@@ -1,0 +1,21 @@
+{
+  "contractVersion": "schema-versioning@0.1.0",
+  "schemaId": "reader-range",
+  "owningPackage": "@narrative-engine/engine-contracts",
+  "contract": {
+    "id": "reader-range",
+    "version": "reader-range@0.1.0"
+  },
+  "versions": [
+    {
+      "schemaVersion": 2,
+      "status": "accepted",
+      "jsonSchema": "schemas/reader-range.schema.json"
+    }
+  ],
+  "readerSupport": {
+    "minVersion": 3,
+    "maxVersion": 2
+  },
+  "writerVersion": 2
+}
