@@ -1,0 +1,7 @@
+export const condition = {
+  contractVersion: "condition@0.1.0",
+  schemaId: "condition",
+  schemaVersion: 1,
+  type: "constant",
+  value: true
+};

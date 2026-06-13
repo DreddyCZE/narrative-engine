@@ -1,0 +1,15 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "compare",
+  "operator": "eq",
+  "left": {
+    "kind": "context-value",
+    "key": "actor"
+  },
+  "right": {
+    "kind": "literal",
+    "value": "npc.example.guard"
+  }
+}

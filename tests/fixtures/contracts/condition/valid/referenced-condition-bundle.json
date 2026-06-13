@@ -1,0 +1,36 @@
+{
+  "entryConditionId": "condition.core.can-enter",
+  "conditions": [
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.can-enter",
+      "type": "all",
+      "operands": [
+        {
+          "contractVersion": "condition@0.1.0",
+          "schemaId": "condition",
+          "schemaVersion": 1,
+          "type": "domain-exists",
+          "domainId": "state-domain.world.rooms"
+        },
+        {
+          "contractVersion": "condition@0.1.0",
+          "schemaId": "condition",
+          "schemaVersion": 1,
+          "type": "condition-ref",
+          "targetConditionId": "condition.core.guard-ready"
+        }
+      ]
+    },
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.guard-ready",
+      "type": "constant",
+      "value": true
+    }
+  ]
+}

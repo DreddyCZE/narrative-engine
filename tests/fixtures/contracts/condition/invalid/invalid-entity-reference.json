@@ -1,0 +1,16 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "entity-is",
+  "left": {
+    "kind": "entity-reference",
+    "id": "npc.example.guard",
+    "entityType": "item"
+  },
+  "right": {
+    "kind": "entity-reference",
+    "id": "npc.example.guard",
+    "entityType": "npc"
+  }
+}

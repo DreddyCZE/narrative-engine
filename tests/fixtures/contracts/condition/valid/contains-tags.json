@@ -1,0 +1,17 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "contains",
+  "collection": {
+    "kind": "state-value",
+    "selector": {
+      "domainId": "state-domain.core.flags",
+      "path": "/tags"
+    }
+  },
+  "member": {
+    "kind": "literal",
+    "value": "alpha"
+  }
+}

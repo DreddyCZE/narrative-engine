@@ -69,7 +69,7 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Producers:** Game package authors, Editor export tooling.
 - **Consumers:** Runtime loader, validation, build tooling, editor, save migration tooling.
 - **Visibility:** Public.
-- **Stability:** planning.
+- **Stability:** draft.
 - **Versioning:** Manifest schema version plus game package semantic version.
 - **Dependencies:** Entity Identity, Schema Versioning, Theme, Asset Manifest, Plugin,
   Localization.
@@ -95,7 +95,7 @@ draft priority so future READY tasks can be created without changing scope silen
   boundaries.
 - **Needed for M1:** No.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFT`.
 - **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
 
 ### Engine State Contract
@@ -155,14 +155,17 @@ draft priority so future READY tasks can be created without changing scope silen
 
 ### Condition Contract
 
-- **Purpose:** Defines declarative predicates, explainability, allowed inputs, and forbidden direct
-  UI evaluation.
+- **Purpose:** Defines declarative, deterministic predicates that read committed Engine State and
+  return fail-closed results without mutation or executable code.
 - **Owner:** `packages/engine-rules`.
+- **Contract document:** `docs/contracts/CONDITION_CONTRACT.md`.
+- **Schema:** `schemas/condition.schema.json`.
 - **Producers:** Game Data, plugins through declared extensions, Editor.
-- **Consumers:** Engine rules, validation, View Model builder, Editor explain tools.
+- **Consumers:** Engine rules, validation, View Model builder, Editor explain tools, tests.
 - **Visibility:** Public.
 - **Stability:** planning.
-- **Versioning:** Schema version for condition expression format and extension capability version.
+- **Versioning:** Contract version plus schema version for condition expression format and extension
+  capability rules.
 - **Dependencies:** Entity Identity, Schema Versioning, Validation Diagnostic.
 - **Security or migration impact:** High. Conditions gate content, commands, and player-visible
   choices.

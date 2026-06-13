@@ -1,0 +1,18 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "compare",
+  "operator": "eq",
+  "left": {
+    "kind": "state-value",
+    "selector": {
+      "domainId": "state-domain.core.clock",
+      "path": "/tick"
+    }
+  },
+  "right": {
+    "kind": "literal",
+    "value": 3
+  }
+}

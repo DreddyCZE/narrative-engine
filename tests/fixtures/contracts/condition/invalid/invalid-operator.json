@@ -1,0 +1,15 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "compare",
+  "operator": "between",
+  "left": {
+    "kind": "literal",
+    "value": 1
+  },
+  "right": {
+    "kind": "literal",
+    "value": 2
+  }
+}

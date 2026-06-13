@@ -1,0 +1,246 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "all",
+  "operands": [
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    },
+    {
+      "type": "constant",
+      "value": true,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    }
+  ]
+}

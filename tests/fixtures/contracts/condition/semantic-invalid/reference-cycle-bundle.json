@@ -1,0 +1,21 @@
+{
+  "entryConditionId": "condition.core.first",
+  "conditions": [
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.first",
+      "type": "condition-ref",
+      "targetConditionId": "condition.core.second"
+    },
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.second",
+      "type": "condition-ref",
+      "targetConditionId": "condition.core.first"
+    }
+  ]
+}

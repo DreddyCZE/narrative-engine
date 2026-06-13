@@ -1,0 +1,10 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "exists",
+  "selector": {
+    "domainId": "state-domain.secret.lock",
+    "path": "/open"
+  }
+}

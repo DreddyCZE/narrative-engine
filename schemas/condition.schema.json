@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/condition/0.1.0/schema.json",
+  "title": "Condition Contract Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "schemaId", "schemaVersion", "type"],
+  "properties": {
+    "contractVersion": {
+      "const": "condition@0.1.0"
+    },
+    "schemaId": {
+      "const": "condition"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "conditionId": {
+      "$ref": "#/$defs/entityId"
+    },
+    "type": {
+      "enum": [
+        "all",
+        "any",
+        "not",
+        "constant",
+        "exists",
+        "compare",
+        "contains",
+        "entity-is",
+        "domain-exists",
+        "condition-ref"
+      ]
+    },
+    "value": {
+      "$ref": "#/$defs/jsonValue"
+    },
+    "selector": {
+      "$ref": "#/$defs/stateSelector"
+    },
+    "operator": {
+      "enum": ["eq", "neq", "lt", "lte", "gt", "gte"]
+    },
+    "left": {
+      "$ref": "#/$defs/operand"
+    },
+    "right": {
+      "$ref": "#/$defs/operand"
+    },
+    "collection": {
+      "$ref": "#/$defs/operand"
+    },
+    "member": {
+      "$ref": "#/$defs/operand"
+    },
+    "operands": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#"
+      }
+    },
+    "domainId": {
+      "$ref": "#/$defs/stateDomainId"
+    },
+    "targetConditionId": {
+      "$ref": "#/$defs/entityId"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "constant"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["value"],
+        "properties": {
+          "value": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "exists"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["selector"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "compare"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["operator", "left", "right"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "contains"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["collection", "member"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "entity-is"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["left", "right"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "domain-exists"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["domainId"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "condition-ref"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["targetConditionId"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "all"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["operands"],
+        "properties": {
+          "operands": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 32,
+            "items": {
+              "$ref": "#"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "any"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["operands"],
+        "properties": {
+          "operands": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 32,
+            "items": {
+              "$ref": "#"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "not"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["operands"],
+        "properties": {
+          "operands": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "entityId": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 160,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+    },
+    "stateDomainId": {
+      "type": "string",
+      "minLength": 18,
+      "maxLength": 96,
+      "pattern": "^state-domain\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+    },
+    "statePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^(?:/$|/(?:[^~/]|~0|~1)+(?:/(?:[^~/]|~0|~1)+)*)$"
+    },
+    "stateSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domainId", "path"],
+      "properties": {
+        "domainId": {
+          "$ref": "#/$defs/stateDomainId"
+        },
+        "path": {
+          "$ref": "#/$defs/statePath"
+        }
+      }
+    },
+    "contextKey": {
+      "enum": ["actor", "target", "location", "source", "initiator", "mode"]
+    },
+    "contextValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key"],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/contextKey"
+        }
+      }
+    },
+    "entityReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "entityType"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entityId"
+        },
+        "entityType": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32,
+          "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+        }
+      }
+    },
+    "jsonValue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        {
+          "type": "number",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "operand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {
+              "const": "literal"
+            },
+            "value": {
+              "$ref": "#/$defs/jsonValue"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "selector"],
+          "properties": {
+            "kind": {
+              "const": "state-value"
+            },
+            "selector": {
+              "$ref": "#/$defs/stateSelector"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "entityType"],
+          "properties": {
+            "kind": {
+              "const": "entity-reference"
+            },
+            "id": {
+              "$ref": "#/$defs/entityId"
+            },
+            "entityType": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 32,
+              "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "key"],
+          "properties": {
+            "kind": {
+              "const": "context-value"
+            },
+            "key": {
+              "$ref": "#/$defs/contextKey"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "targetConditionId"],
+          "properties": {
+            "kind": {
+              "const": "condition-ref"
+            },
+            "targetConditionId": {
+              "$ref": "#/$defs/entityId"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

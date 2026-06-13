@@ -3,19 +3,18 @@
 **Date:** 2026-06-13
 **Milestone:** M1 - Core Foundation
 **Active task:** none
-**Status:** TASK-006 is done. It is a design-only contract task for Engine State.
+**Status:** TASK-007 is done. It is a design-only contract task for Condition.
 
 ## Five Questions
 
 1. **Current milestone:** M1 - Core Foundation.
-2. **Current state:** TASK-004 produced and reviewed a draft Entity Identity Contract. TASK-005
-   produced a draft Schema Versioning Contract, descriptor schema, fixtures, and contract tests.
-   TASK-006 is now defining the Engine State Contract.
-3. **Single next most important task:** Create the precise Condition Contract task.
+2. **Current state:** TASK-004, TASK-005, TASK-006, and TASK-007 are done. Condition Contract design
+   is complete.
+3. **Single next most important task:** Create the precise design task for the Effect Contract.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, concrete game entities, editor UI, or save migration code.
-5. **How done is recognized:** The Engine State Contract document, schema, fixtures, and tests
-   exist; TASK-006 is done; and no ACTIVE task remains.
+5. **How done is recognized:** The Condition Contract document, schema, fixtures, and tests exist;
+   TASK-007 is done; and no ACTIVE task remains.
 
 ## Notes
 
@@ -38,4 +37,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-Do not start another contract task or M1 implementation work.
+Do not start another contract task or M1 implementation work until a new task is explicitly created
+and activated.

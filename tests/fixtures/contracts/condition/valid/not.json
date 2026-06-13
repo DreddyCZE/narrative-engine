@@ -1,0 +1,15 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "schemaVersion": 1,
+  "type": "not",
+  "operands": [
+    {
+      "type": "constant",
+      "value": false,
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1
+    }
+  ]
+}

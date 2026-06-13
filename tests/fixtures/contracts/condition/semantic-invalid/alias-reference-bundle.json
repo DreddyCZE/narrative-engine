@@ -1,0 +1,21 @@
+{
+  "entryConditionId": "condition.core.entry",
+  "conditions": [
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.entry",
+      "type": "condition-ref",
+      "targetConditionId": "condition.core.guard-alias"
+    },
+    {
+      "contractVersion": "condition@0.1.0",
+      "schemaId": "condition",
+      "schemaVersion": 1,
+      "conditionId": "condition.core.guard-ready",
+      "type": "constant",
+      "value": true
+    }
+  ]
+}

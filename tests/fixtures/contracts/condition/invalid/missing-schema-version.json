@@ -1,0 +1,6 @@
+{
+  "contractVersion": "condition@0.1.0",
+  "schemaId": "condition",
+  "type": "constant",
+  "value": true
+}
