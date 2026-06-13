@@ -1,0 +1,23 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "requiredDomains": ["state-domain.core.clock"],
+  "run": {
+    "domains": [
+      {
+        "domainId": "state-domain.world.flags",
+        "schemaId": "state-flags",
+        "schemaVersion": 1,
+        "owner": "engine",
+        "authority": "engine",
+        "persistence": "run",
+        "data": {
+          "flags": ["open"]
+        }
+      }
+    ]
+  }
+}

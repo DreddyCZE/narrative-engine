@@ -1,0 +1,24 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "run": {
+    "seed": "module-seed",
+    "activeModules": ["module.world"],
+    "domains": [
+      {
+        "domainId": "state-domain.module.world",
+        "schemaId": "state-world",
+        "schemaVersion": 1,
+        "owner": "module.world",
+        "authority": "module",
+        "persistence": "run",
+        "data": {
+          "weather": "clear"
+        }
+      }
+    ]
+  }
+}

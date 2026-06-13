@@ -1,0 +1,23 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "run": {
+    "seed": "reference-seed",
+    "domains": [
+      {
+        "domainId": "state-domain.core.links",
+        "schemaId": "state-links",
+        "schemaVersion": 1,
+        "owner": "engine",
+        "authority": "engine",
+        "persistence": "run",
+        "data": {
+          "referenceId": "npc.demo.guard"
+        }
+      }
+    ]
+  }
+}

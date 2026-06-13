@@ -1,0 +1,25 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "run": {
+    "seed": "game-seed",
+    "activeModules": ["module.world"],
+    "domains": [
+      {
+        "domainId": "state-domain.game.progress",
+        "schemaId": "state-progress",
+        "schemaVersion": 1,
+        "owner": "game",
+        "authority": "game",
+        "persistence": "run",
+        "data": {
+          "chapter": 1,
+          "checkpoint": "start"
+        }
+      }
+    ]
+  }
+}

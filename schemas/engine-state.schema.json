@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/engine-state/0.1.0/schema.json",
+  "title": "Engine State Contract",
+  "description": "Draft M1 schema for the authoritative runtime state envelope and state domain descriptors.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "schemaId", "schemaVersion", "stateId", "revision", "run"],
+  "properties": {
+    "contractVersion": {
+      "const": "engine-state@0.1.0"
+    },
+    "schemaId": {
+      "const": "engine-state"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "stateId": {
+      "type": "string",
+      "minLength": 11,
+      "maxLength": 96,
+      "pattern": "^state\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "requiredDomains": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 15,
+        "maxLength": 128,
+        "pattern": "^state-domain\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}$"
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domains"],
+      "properties": {
+        "seed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "activeModules": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "domains": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/domainDescriptor"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domains"],
+      "properties": {
+        "domains": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/domainDescriptor"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "segment": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}$"
+    },
+    "ownerToken": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120,
+      "pattern": "^[a-z](?:[a-z0-9]|[._-](?=[a-z0-9])){1,119}$"
+    },
+    "authority": {
+      "type": "string",
+      "enum": ["engine", "module", "game"]
+    },
+    "persistence": {
+      "type": "string",
+      "enum": ["transient", "run", "meta", "snapshot-only", "reconstructable"]
+    },
+    "jsonValue": {
+      "description": "Recursive JSON-safe value used only for domain data payloads.",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        {
+          "type": "number",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "domainDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domainId",
+        "schemaId",
+        "schemaVersion",
+        "owner",
+        "authority",
+        "persistence",
+        "data"
+      ],
+      "properties": {
+        "domainId": {
+          "type": "string",
+          "minLength": 15,
+          "maxLength": 128,
+          "pattern": "^state-domain\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,63}$"
+        },
+        "schemaId": {
+          "$ref": "#/$defs/segment"
+        },
+        "schemaVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "owner": {
+          "$ref": "#/$defs/ownerToken"
+        },
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "persistence": {
+          "$ref": "#/$defs/persistence"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      }
+    }
+  }
+}

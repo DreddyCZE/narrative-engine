@@ -1,0 +1,11 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "unexpected": true,
+  "run": {
+    "domains": []
+  }
+}

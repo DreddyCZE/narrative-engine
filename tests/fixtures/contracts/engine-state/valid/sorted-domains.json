@@ -1,0 +1,41 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.demo.current",
+  "revision": 1,
+  "run": {
+    "seed": "demo-seed",
+    "activeModules": [
+      "module.core",
+      "module.world"
+    ],
+    "domains": [
+      {
+        "domainId": "state-domain.core.clock",
+        "schemaId": "state-clock",
+        "schemaVersion": 1,
+        "owner": "engine",
+        "authority": "engine",
+        "persistence": "run",
+        "data": {
+          "turn": 0
+        }
+      },
+      {
+        "domainId": "state-domain.world.flags",
+        "schemaId": "state-flags",
+        "schemaVersion": 1,
+        "owner": "engine",
+        "authority": "engine",
+        "persistence": "run",
+        "data": {
+          "flags": [
+            "open",
+            "ready"
+          ]
+        }
+      }
+    ]
+  }
+}

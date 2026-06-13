@@ -1,0 +1,39 @@
+{
+  "contractVersion": "engine-state@0.1.0",
+  "schemaId": "engine-state",
+  "schemaVersion": 1,
+  "stateId": "state.runtime.current",
+  "revision": 0,
+  "run": {
+    "seed": "run-seed",
+    "activeModules": ["module.core", "module.world"],
+    "domains": [
+      {
+        "domainId": "state-domain.core.clock",
+        "schemaId": "state-clock",
+        "schemaVersion": 1,
+        "owner": "engine",
+        "authority": "engine",
+        "persistence": "run",
+        "data": {
+          "turn": 0
+        }
+      }
+    ]
+  },
+  "meta": {
+    "domains": [
+      {
+        "domainId": "state-domain.meta.progress",
+        "schemaId": "state-progress",
+        "schemaVersion": 1,
+        "owner": "game",
+        "authority": "game",
+        "persistence": "meta",
+        "data": {
+          "unlockedModes": ["new-game-plus"]
+        }
+      }
+    ]
+  }
+}

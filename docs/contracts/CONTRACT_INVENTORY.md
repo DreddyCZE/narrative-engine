@@ -100,22 +100,23 @@ draft priority so future READY tasks can be created without changing scope silen
 
 ### Engine State Contract
 
-- **Purpose:** Defines the canonical internal state boundary and what may be persisted, exposed, or
-  mutated through commands.
+- **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,
+  validation layers, and deterministic serialization rules.
 - **Owner:** `packages/engine-state`.
-- **Producers:** Engine transaction pipeline and migration tooling.
-- **Consumers:** Engine rules, View Model builder, Save, diagnostics, tests.
-- **Visibility:** Internal with public compatibility touchpoints through Save, View Model, and Event
-  contracts.
-- **Stability:** planning.
-- **Versioning:** Internal state schema version; incompatible changes require migration analysis if
-  state is persisted.
+- **Contract document:** `docs/contracts/ENGINE_STATE_CONTRACT.md`.
+- **Schema:** `schemas/engine-state.schema.json`.
+- **Producers:** Engine runtime, future transaction pipeline, future migration tooling.
+- **Consumers:** Engine rules, future View Model builder, future Save, diagnostics, tests.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `engine-state@0.1.0`; state schema version governs envelope and
+  domain descriptor rules.
 - **Dependencies:** Entity Identity, Schema Versioning.
 - **Security or migration impact:** High. UI must not mutate state directly; save compatibility
   depends on state evolution.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2A.A, 2A.E, 33, 61.1, 61.2.
 
 ### Command Contract
