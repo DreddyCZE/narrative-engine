@@ -3,18 +3,18 @@
 **Date:** 2026-06-13
 **Milestone:** M1 - Core Foundation
 **Active task:** none
-**Status:** TASK-009 is done. No ACTIVE task remains.
+**Status:** TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Five Questions
 
 1. **Current milestone:** M1 - Core Foundation.
-2. **Current state:** TASK-004, TASK-005, TASK-006, TASK-007, TASK-008, and TASK-009 are done.
-3. **Single next most important task:** Do not start another task until a new task is explicitly created and activated.
+2. **Current state:** TASK-010 is done; TASK-004 through TASK-009 are done.
+3. **Single next most important task:** Create the precise TASK-011 draft for Domain Event Contract.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, concrete game entities,
    editor UI, or save migration code.
-5. **How completion is recognized:** The Command Contract document, schema, fixtures, and tests
-   exist; TASK-009 is done; and no ACTIVE task remains.
+5. **How completion is recognized:** The Transaction Contract document, schema, fixtures, and tests
+   exist; TASK-010 is done; and no second ACTIVE task exists.
 
 ## Notes
 
@@ -37,5 +37,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-Do not start another contract task or M1 implementation work until a new task is explicitly created
-and activated.
+Do not start another contract task or M1 implementation work until the next task is explicitly
+created and activated.

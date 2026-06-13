@@ -1,0 +1,11 @@
+{
+  "contractVersion": "transaction@0.1.0",
+  "schemaId": "transaction",
+  "schemaVersion": 0,
+  "baseRevision": 42,
+  "source": {
+    "kind": "command-plan",
+    "commandId": "command.runtime.open-main-door"
+  },
+  "effects": []
+}

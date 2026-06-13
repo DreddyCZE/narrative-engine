@@ -153,7 +153,7 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Security or migration impact:** High. Partial state application must be impossible.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 61.1, 61.2, 61.9.
 
 ### Condition Contract

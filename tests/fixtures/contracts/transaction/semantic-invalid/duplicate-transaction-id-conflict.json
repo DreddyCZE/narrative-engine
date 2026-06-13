@@ -1,0 +1,24 @@
+{
+  "contractVersion": "transaction@0.1.0",
+  "schemaId": "transaction",
+  "schemaVersion": 1,
+  "transactionId": "transaction.runtime.dedup-1",
+  "baseRevision": 42,
+  "source": {
+    "kind": "command-plan",
+    "commandId": "command.runtime.dedup-1"
+  },
+  "effects": [
+    {
+      "contractVersion": "effect@0.1.0",
+      "schemaId": "effect",
+      "schemaVersion": 1,
+      "type": "set",
+      "target": {
+        "domainId": "state-domain.core.world",
+        "path": "/doors/main/state"
+      },
+      "value": "locked"
+    }
+  ]
+}
