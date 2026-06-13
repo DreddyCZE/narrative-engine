@@ -6,7 +6,7 @@ M0 - Governance and Contracts
 
 ## Status
 
-ready
+DONE
 
 ## Objective
 
@@ -16,3 +16,9 @@ Review and refine governance documents after the initial bootstrap.
 
 Implementation work and new systems.
 
+## Closure
+
+Closed by commit `2849bb8 chore(repo): bootstrap narrative engine governance`.
+
+Gate D review confirmed the required governance documents exist and are consistent with the project
+authority hierarchy.
