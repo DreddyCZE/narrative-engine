@@ -1,0 +1,21 @@
+{
+  "contractVersion": "effect@0.1.0",
+  "schemaId": "effect",
+  "schemaVersion": 1,
+  "type": "set",
+  "target": {
+    "domainId": "state-domain.core.flags",
+    "path": "/label"
+  },
+  "value": "guarded",
+  "guard": {
+    "contractVersion": "condition@0.1.0",
+    "schemaId": "condition",
+    "schemaVersion": 1,
+    "type": "exists",
+    "selector": {
+      "domainId": "state-domain.core.flags",
+      "path": "/missing"
+    }
+  }
+}

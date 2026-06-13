@@ -3,18 +3,18 @@
 **Date:** 2026-06-13
 **Milestone:** M1 - Core Foundation
 **Active task:** none
-**Status:** TASK-007 is done. It is a design-only contract task for Condition.
+**Status:** TASK-008 is done. No ACTIVE task remains.
 
 ## Five Questions
 
 1. **Current milestone:** M1 - Core Foundation.
-2. **Current state:** TASK-004, TASK-005, TASK-006, and TASK-007 are done. Condition Contract design
-   is complete.
-3. **Single next most important task:** Create the precise design task for the Effect Contract.
+2. **Current state:** TASK-004, TASK-005, TASK-006, TASK-007, and TASK-008 are done.
+   Effect Contract design is complete and closed.
+3. **Single next most important task:** Create the precise design task for the Command Contract.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, concrete game entities, editor UI, or save migration code.
-5. **How done is recognized:** The Condition Contract document, schema, fixtures, and tests exist;
-   TASK-007 is done; and no ACTIVE task remains.
+5. **How done is recognized:** The Effect Contract document, schema, fixtures, and tests exist;
+   TASK-008 is done; and no ACTIVE task remains.
 
 ## Notes
 

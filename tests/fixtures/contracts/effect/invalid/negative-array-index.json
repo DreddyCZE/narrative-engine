@@ -1,0 +1,11 @@
+{
+  "contractVersion": "effect@0.1.0",
+  "schemaId": "effect",
+  "schemaVersion": 1,
+  "type": "remove-at",
+  "target": {
+    "domainId": "state-domain.core.world",
+    "path": "/items"
+  },
+  "index": -1
+}

@@ -1,0 +1,12 @@
+{
+  "contractVersion": "effect@0.1.0",
+  "schemaId": "effect",
+  "schemaVersion": 1,
+  "effectId": "effect.core.set-string",
+  "type": "set",
+  "target": {
+    "domainId": "state-domain.core.flags",
+    "path": "/label"
+  },
+  "value": "updated"
+}

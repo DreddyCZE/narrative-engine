@@ -1,0 +1,11 @@
+export const effectSource = () => ({
+  contractVersion: "effect@0.1.0",
+  schemaId: "effect",
+  schemaVersion: 1,
+  type: "set",
+  target: {
+    domainId: "state-domain.core.flags",
+    path: "/label"
+  },
+  value: "updated"
+});

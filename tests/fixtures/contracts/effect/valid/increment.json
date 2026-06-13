@@ -1,0 +1,12 @@
+{
+  "contractVersion": "effect@0.1.0",
+  "schemaId": "effect",
+  "schemaVersion": 1,
+  "effectId": "effect.core.increment",
+  "type": "increment",
+  "target": {
+    "domainId": "state-domain.core.clock",
+    "path": "/tick"
+  },
+  "delta": 1
+}

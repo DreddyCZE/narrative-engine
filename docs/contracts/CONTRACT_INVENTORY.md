@@ -176,19 +176,24 @@ draft priority so future READY tasks can be created without changing scope silen
 
 ### Effect Contract
 
-- **Purpose:** Defines declarative, validated state changes that are applied only inside
-  transactions.
-- **Owner:** Engine rules and state owners.
+- **Purpose:** Defines declarative candidate-state changes, guards, targets, and atomic mutation
+  records that are applied only inside transactions.
+- **Owner:** `packages/engine-rules`; engine state and transaction boundary owners.
+- **Contract document:** `docs/contracts/EFFECT_CONTRACT.md`.
+- **Schema:** `schemas/effect.schema.json`.
 - **Producers:** Game Data, command handlers, scheduler, plugins through declared extensions.
-- **Consumers:** Transaction pipeline, Engine State, Event production, validation.
+- **Consumers:** Transaction pipeline, Engine State, Event production, validation, tests.
 - **Visibility:** Public.
-- **Stability:** planning.
-- **Versioning:** Schema version for effect records and extension capability version.
-- **Dependencies:** Entity Identity, Schema Versioning, Engine State, Validation Diagnostic.
-- **Security or migration impact:** High. Effects are the only sanctioned state mutation records.
+- **Stability:** draft.
+- **Versioning:** Contract version `effect@0.1.0`; schema version governs the serialized effect
+  envelope and type payload shape.
+- **Dependencies:** Entity Identity, Schema Versioning, Engine State, Condition, Validation
+  Diagnostic.
+- **Security or migration impact:** High. Effects are the only sanctioned declarative state mutation
+  records.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 5, 61.1, 61.2, 61.12.
 
 ### Domain Event Contract

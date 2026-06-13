@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/effect/0.1.0/schema.json",
+  "title": "Effect Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "schemaId", "schemaVersion", "type", "target"],
+  "properties": {
+    "contractVersion": {
+      "const": "effect@0.1.0"
+    },
+    "schemaId": {
+      "const": "effect"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "effectId": {
+      "$ref": "#/$defs/entityIdentityId"
+    },
+    "type": {
+      "enum": [
+        "set",
+        "unset",
+        "increment",
+        "append",
+        "remove-at",
+        "add-unique",
+        "remove-value"
+      ]
+    },
+    "target": {
+      "$ref": "#/$defs/target"
+    },
+    "guard": {
+      "$ref": "./condition.schema.json"
+    },
+    "value": {
+      "$ref": "#/$defs/jsonValue"
+    },
+    "delta": {
+      "type": "number"
+    },
+    "index": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "set" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["value"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "unset" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            { "required": ["value"] },
+            { "required": ["delta"] },
+            { "required": ["index"] }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "increment" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["delta"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "append" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["value"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "remove-at" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["index"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "add-unique" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["value"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "remove-value" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["value"]
+      }
+    }
+  ],
+  "$defs": {
+    "entityIdentityId": {
+      "type": "string",
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$",
+      "maxLength": 128
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domainId", "path"],
+      "properties": {
+        "domainId": {
+          "type": "string",
+          "pattern": "^state-domain\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$",
+          "maxLength": 128
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(?:/|/(?:[^~/]|~0|~1)+(?:/(?:[^~/]|~0|~1)+)*)$",
+          "maxLength": 256
+        }
+      }
+    },
+    "jsonValue": {
+      "anyOf": [
+        {
+          "type": "object",
+          "propertyNames": {
+            "not": {
+              "enum": ["__proto__", "prototype", "constructor"]
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          },
+          "maxItems": 128
+        },
+        {
+          "type": "string",
+          "maxLength": 256
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer",
+          "minimum": -2147483647,
+          "maximum": 2147483647
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

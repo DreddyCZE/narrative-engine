@@ -1,0 +1,11 @@
+{
+  "contractVersion": "effect@0.1.0",
+  "schemaId": "effect",
+  "schemaVersion": 1,
+  "type": "remove-value",
+  "target": {
+    "domainId": "state-domain.core.world",
+    "path": "/tags"
+  },
+  "value": "gamma"
+}
