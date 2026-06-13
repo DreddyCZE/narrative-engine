@@ -2,7 +2,8 @@
 
 ## Outcome
 
-TASK-009 defines the Command Contract as a draft contract and is in `REVIEW`.
+TASK-009 defines the Command Contract as a draft contract and is now `DONE`.
+The review did not require further content changes after the original contract commit.
 
 ## Implemented Boundaries
 
@@ -20,7 +21,7 @@ TASK-009 defines the Command Contract as a draft contract and is in `REVIEW`.
 - `tests/command-contract.test.ts`
 - `tests/fixtures/contracts/command/**`
 - `docs/contracts/CONTRACT_INVENTORY.md`
-- `docs/tasks/review/TASK-009-design-command-contract.md`
+- `docs/tasks/done/TASK-009-design-command-contract.md`
 - `docs/status/CURRENT_STATE.md`
 
 ## Test Fixtures

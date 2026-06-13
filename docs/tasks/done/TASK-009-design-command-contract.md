@@ -14,7 +14,7 @@ M1 - Core Foundation
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -166,5 +166,5 @@ from handlers, transactions, state mutation, and domain events.
 
 - All acceptance criteria are met.
 - Required checks pass.
-- TASK-009 is moved to `docs/tasks/review/` with status `REVIEW`.
+- TASK-009 is moved to `docs/tasks/done/` with status `DONE`.
 - The handoff documents the design decisions and known limits.
