@@ -1,0 +1,19 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 1,
+  "commandType": "core.set-value",
+  "actor": {
+    "id": "npc.example.missing",
+    "entityType": "npc"
+  },
+  "targets": [
+    {
+      "id": "device.example.main-door",
+      "entityType": "device"
+    }
+  ],
+  "payload": {
+    "value": "open"
+  }
+}

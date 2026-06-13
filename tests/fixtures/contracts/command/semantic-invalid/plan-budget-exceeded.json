@@ -1,0 +1,25 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 1,
+  "commandType": "core.double-set",
+  "initiator": {
+    "kind": "system"
+  },
+  "targets": [
+    {
+      "id": "device.example.main-door",
+      "entityType": "device"
+    },
+    {
+      "id": "device.example.side-door",
+      "entityType": "device"
+    }
+  ],
+  "payload": {
+    "values": [
+      "open",
+      "locked"
+    ]
+  }
+}

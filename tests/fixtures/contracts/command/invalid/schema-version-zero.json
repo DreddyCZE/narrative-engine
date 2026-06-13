@@ -1,0 +1,10 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 0,
+  "commandType": "core.validate-only",
+  "initiator": {
+    "kind": "system"
+  },
+  "payload": {}
+}

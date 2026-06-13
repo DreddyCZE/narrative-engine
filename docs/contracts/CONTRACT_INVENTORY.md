@@ -121,18 +121,21 @@ draft priority so future READY tasks can be created without changing scope silen
 
 ### Command Contract
 
-- **Purpose:** Represents user or system intent entering the engine pipeline.
-- **Owner:** `packages/engine-contracts` with Engine owner.
-- **Producers:** Runtime UI, AI agent adapters, tests, Editor preview.
-- **Consumers:** Command validation, transaction pipeline, diagnostics, event trace.
+- **Purpose:** Represents user, system, or planner intent entering the engine pipeline.
+- **Owner:** `packages/engine-contracts`; engine owner and command pipeline owners.
+- **Contract document:** `docs/contracts/COMMAND_CONTRACT.md`.
+- **Schema:** `schemas/command.schema.json`.
+- **Producers:** Runtime UI, AI agent adapters, tests, Editor preview, planners.
+- **Consumers:** Command validation, transaction pipeline, diagnostics, event trace, tests.
 - **Visibility:** Public.
-- **Stability:** planning.
-- **Versioning:** Contract version plus per-command type version if payloads diverge.
-- **Dependencies:** Entity Identity, Schema Versioning, Validation Diagnostic.
+- **Stability:** draft.
+- **Versioning:** Contract version `command@0.1.0`; schema version governs the serialized command
+  envelope and command-type payload contract.
+- **Dependencies:** Entity Identity, Schema Versioning, Condition, Effect, Validation Diagnostic.
 - **Security or migration impact:** High. Commands are the only sanctioned mutation entry point.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2A.E, 61.1, 61.2, 61.36.
 
 ### Transaction Contract

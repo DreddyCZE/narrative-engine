@@ -1,0 +1,37 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 1,
+  "commandType": "core.double-set",
+  "initiator": {
+    "kind": "system"
+  },
+  "targets": [
+    {
+      "id": "device.example.a",
+      "entityType": "device"
+    },
+    {
+      "id": "device.example.b",
+      "entityType": "device"
+    },
+    {
+      "id": "device.example.c",
+      "entityType": "device"
+    },
+    {
+      "id": "device.example.d",
+      "entityType": "device"
+    },
+    {
+      "id": "device.example.e",
+      "entityType": "device"
+    }
+  ],
+  "payload": {
+    "values": [
+      "open",
+      "locked"
+    ]
+  }
+}

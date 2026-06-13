@@ -1,0 +1,13 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 1,
+  "commandType": "core.validate-only",
+  "initiator": {
+    "kind": "scheduler",
+    "sourceId": "scheduler.daily"
+  },
+  "correlationId": "corr-1",
+  "causationId": "cause-1",
+  "payload": {}
+}

@@ -1,0 +1,24 @@
+{
+  "contractVersion": "command@0.1.0",
+  "schemaId": "command",
+  "schemaVersion": 1,
+  "commandType": "core.set-value",
+  "initiator": {
+    "kind": "system"
+  },
+  "targets": [
+    {
+      "id": "device.example.main-door",
+      "entityType": "device"
+    }
+  ],
+  "payload": {
+    "value": {
+      "label": "open",
+      "meta": {
+        "priority": 1,
+        "enabled": true
+      }
+    }
+  }
+}
