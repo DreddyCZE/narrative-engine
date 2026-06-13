@@ -1,0 +1,7 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "r.demo.start",
+  "entityType": "r",
+  "namespace": "demo",
+  "schemaVersion": 1
+}

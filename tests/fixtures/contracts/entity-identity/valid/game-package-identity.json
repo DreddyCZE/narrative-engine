@@ -1,0 +1,8 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "quest.sample-game.first-step",
+  "entityType": "quest",
+  "namespace": "sample-game",
+  "schemaVersion": 1,
+  "tags": ["main-path"]
+}

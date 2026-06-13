@@ -1,0 +1,8 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "fact.demo.first-clue",
+  "entityType": "fact",
+  "namespace": "demo",
+  "schemaVersion": 1,
+  "tags": ["required", "intro"]
+}

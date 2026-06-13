@@ -1,0 +1,7 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "scenes.example.intro",
+  "entityType": "scene",
+  "namespace": "example",
+  "schemaVersion": 1
+}

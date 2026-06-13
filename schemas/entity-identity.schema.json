@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/entity-identity/0.1.0/schema.json",
+  "title": "Entity Identity Contract",
+  "description": "Draft M1 schema for the Entity Identity Contract identity envelope.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "id", "entityType", "namespace", "schemaVersion"],
+  "properties": {
+    "contractVersion": {
+      "const": "entity-identity@0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 160,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+    },
+    "entityType": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+    },
+    "namespace": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 48,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}$"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 32,
+        "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "reason", "sinceSchemaVersion"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 160,
+            "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["renamed", "split", "merged", "legacy-import", "migration"]
+          },
+          "sinceSchemaVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "removeAfterSchemaVersion": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceFile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(^|/)\\.\\.?(/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sourceEntityId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 160,
+          "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+        },
+        "sourceRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9._/@:-]+$"
+        },
+        "sourceLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "generatedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9._/@:-]+$"
+        },
+        "taskId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "^[A-Z]+-[0-9]{3,5}$"
+        },
+        "commit": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 40,
+          "pattern": "^[0-9a-f]{7,40}$"
+        },
+        "approvalState": {
+          "type": "string",
+          "enum": ["draft", "ai-draft", "human-edited", "approved", "canonical"]
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[a-z][a-z0-9._-]{1,79}$"
+        },
+        "updatedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[a-z][a-z0-9._-]{1,79}$"
+        }
+      }
+    }
+  }
+}

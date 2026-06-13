@@ -1,0 +1,7 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "scene.neutral-demo.opening",
+  "entityType": "scene",
+  "namespace": "neutral-demo",
+  "schemaVersion": 1
+}

@@ -1,0 +1,7 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "room.demo.start_",
+  "entityType": "room",
+  "namespace": "demo",
+  "schemaVersion": 1
+}

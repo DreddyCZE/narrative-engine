@@ -6,7 +6,7 @@ M1 - Core Foundation
 
 ## Status
 
-READY
+DONE
 
 ## Objective
 
@@ -36,6 +36,43 @@ not an engine implementation task.
 - Define compatibility expectations with Schema Versioning, Source Provenance, Validation
   Diagnostic, Game Data Schema, Engine State, Event, Save, and Migration contracts.
 
+## Dependencies
+
+- `PROJECT_CHARTER.md`
+- `docs/spec/MASTER_SPEC.md`
+- `docs/adr/ADR-0001-greenfield-independence-and-layer-boundaries.md`
+- `docs/contracts/CONTRACT_INVENTORY.md`
+- `docs/contracts/CONTRACT_DEPENDENCY_ORDER.md`
+- `docs/contracts/CONTRACT_VERSIONING_POLICY.md`
+- `docs/reports/M0-GATE-D-REVIEW.md`
+
+## Allowed Files
+
+- `docs/contracts/ENTITY_IDENTITY_CONTRACT.md`
+- `schemas/entity-identity.schema.json`
+- `tests/fixtures/contracts/entity-identity/**`
+- `tests/entity-identity-contract.test.ts`
+- `docs/contracts/CONTRACT_INVENTORY.md`
+- `docs/status/CURRENT_STATE.md`
+- `docs/tasks/active/TASK-004-design-entity-identity-contract.md`
+- `docs/tasks/review/TASK-004-design-entity-identity-contract.md`
+- `docs/handoffs/TASK-004-HANDOFF.md`
+
+## Forbidden Changes
+
+- Do not implement runtime Entity Registry.
+- Do not implement State Store, Condition Resolver, Effect Executor, Command pipeline, Transaction
+  pipeline, Event Log, Scheduler, Save migration, plugin lifecycle, runtime UI, or editor UI.
+- Do not create concrete game entities or game-specific namespaces.
+- Do not change unrelated contracts beyond the inventory status/link for Entity Identity.
+- Do not add external validation dependencies unless a concrete need is documented.
+
+## Migration Impact
+
+This task defines a new draft public contract. It does not migrate existing canonical data or saves.
+The design identifies future migration implications for published IDs, aliases, references, schema
+versions, saves, and event records.
+
 ## Out of Scope
 
 - Runtime registry implementation.
@@ -57,6 +94,18 @@ not an engine implementation task.
 - No engine runtime system is implemented.
 - Required checks pass.
 
+## Definition of Done
+
+- TASK-004 is moved to `done`.
+- `docs/contracts/ENTITY_IDENTITY_CONTRACT.md` exists and covers all required design questions.
+- `schemas/entity-identity.schema.json` validates the basic contract shape.
+- Required valid and invalid fixtures exist under `tests/fixtures/contracts/entity-identity`.
+- Contract tests prove core rules rather than only file existence.
+- `CONTRACT_INVENTORY.md` reflects Entity Identity as drafted and links the contract document.
+- `CURRENT_STATE.md` is updated and no active task remains.
+- `docs/handoffs/TASK-004-HANDOFF.md` exists.
+- All required checks pass.
+
 ## Required Checks
 
 - `corepack pnpm lint`
@@ -68,4 +117,4 @@ not an engine implementation task.
 
 ## Handoff
 
-Create `docs/handoffs/TASK-004-HANDOFF.md` when the task is complete.
+`docs/handoffs/TASK-004-HANDOFF.md`

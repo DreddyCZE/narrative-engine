@@ -1,0 +1,7 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "schema.engine.identity",
+  "entityType": "schema",
+  "namespace": "engine",
+  "schemaVersion": 1
+}

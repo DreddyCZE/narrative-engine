@@ -1,0 +1,8 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "marker.plugin-demo.anchor",
+  "entityType": "marker",
+  "namespace": "plugin-demo",
+  "schemaVersion": 1,
+  "tags": ["extension"]
+}

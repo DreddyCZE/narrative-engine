@@ -1,0 +1,13 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "room.demo.start",
+  "entityType": "room",
+  "namespace": "demo",
+  "schemaVersion": 1,
+  "provenance": {
+    "sourceFile": "../secrets/source.json",
+    "sourceEntityId": "room.demo.start",
+    "commit": "NOTAHEX",
+    "approvalState": "published"
+  }
+}

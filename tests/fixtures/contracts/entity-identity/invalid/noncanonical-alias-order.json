@@ -1,0 +1,19 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "room.demo.start-renamed",
+  "entityType": "room",
+  "namespace": "demo",
+  "schemaVersion": 3,
+  "aliases": [
+    {
+      "id": "room.demo.start-z",
+      "reason": "renamed",
+      "sinceSchemaVersion": 2
+    },
+    {
+      "id": "room.demo.start-a",
+      "reason": "renamed",
+      "sinceSchemaVersion": 2
+    }
+  ]
+}

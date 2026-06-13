@@ -8,6 +8,7 @@ draft priority so future READY tasks can be created without changing scope silen
 
 - `IDENTIFIED`: known contract, enough information exists for planning.
 - `DRAFT_REQUIRED`: required soon; a dedicated draft task should define it before implementation.
+- `DRAFTED`: a concrete draft contract exists and is awaiting or undergoing review.
 - `DEFERRED`: valid contract, but not needed for M1 or the first vertical slice.
 - `NOT_REQUIRED`: considered and rejected for now.
 
@@ -25,17 +26,19 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Purpose:** Defines stable entity IDs, namespaces, entity type markers, aliases, provenance hooks,
   and rules for renames.
 - **Owner:** `packages/engine-contracts`; architecture and contract owners.
+- **Contract document:** `docs/contracts/ENTITY_IDENTITY_CONTRACT.md`.
+- **Schema:** `schemas/entity-identity.schema.json`.
 - **Producers:** Game Data, Editor, migrations, content import tooling.
 - **Consumers:** Engine, validation, save, event log, editor, context packs.
 - **Visibility:** Public.
-- **Stability:** planning.
+- **Stability:** draft.
 - **Versioning:** Contract version plus schema-level rules for ID syntax and alias records.
 - **Dependencies:** None.
 - **Security or migration impact:** High. Broken identity rules corrupt references, saves, events,
   and migrations.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2.2, 3, 33, 61.6, 61.11, 61.17.
 
 ### Schema Versioning Contract

@@ -1,0 +1,22 @@
+{
+  "contractVersion": "entity-identity@0.1.0",
+  "id": "dialogue.demo.greeting",
+  "entityType": "dialogue",
+  "namespace": "demo",
+  "schemaVersion": 1,
+  "provenance": {
+    "sourceFile": "games/demo/dialogues/greeting.json",
+    "sourceEntityId": "dialogue.demo.greeting",
+    "sourceRevision": "content-v1",
+    "sourceLine": 12,
+    "generatedBy": "manual",
+    "taskId": "TASK-004",
+    "commit": "6e874df",
+    "approvalState": "approved"
+  },
+  "change": {
+    "revision": 1,
+    "createdBy": "author.content",
+    "updatedBy": "author.content"
+  }
+}
