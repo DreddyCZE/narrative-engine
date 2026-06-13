@@ -213,7 +213,7 @@ draft priority so future READY tasks can be created without changing scope silen
   replay meaning.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 6, 61.1, 61.2.
 
 ### Event Log Contract

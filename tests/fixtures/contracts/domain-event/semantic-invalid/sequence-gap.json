@@ -1,0 +1,46 @@
+{
+  "contractVersion": "domain-event@0.1.0",
+  "schemaId": "domain-event",
+  "schemaVersion": 1,
+  "transactionId": "transaction.runtime.open-main-door",
+  "previousRevision": 42,
+  "revision": 43,
+  "events": [
+    {
+      "contractVersion": "domain-event@0.1.0",
+      "schemaId": "domain-event",
+      "schemaVersion": 1,
+      "eventId": "domain-event.engine.sequence-0",
+      "eventType": "core.zeta-opened",
+      "transactionId": "transaction.runtime.open-main-door",
+      "previousRevision": 42,
+      "revision": 43,
+      "sequence": 0,
+      "payload": {
+        "door": {
+          "id": "device.example.main-door",
+          "entityType": "device"
+        },
+        "state": "open"
+      }
+    },
+    {
+      "contractVersion": "domain-event@0.1.0",
+      "schemaId": "domain-event",
+      "schemaVersion": 1,
+      "eventId": "domain-event.engine.sequence-2",
+      "eventType": "core.alpha-opened",
+      "transactionId": "transaction.runtime.open-main-door",
+      "previousRevision": 42,
+      "revision": 43,
+      "sequence": 2,
+      "payload": {
+        "door": {
+          "id": "device.example.side-door",
+          "entityType": "device"
+        },
+        "state": "closed"
+      }
+    }
+  ]
+}

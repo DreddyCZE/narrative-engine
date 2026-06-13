@@ -1,0 +1,9 @@
+{
+  "contractVersion": "domain-event@0.1.0",
+  "schemaId": "domain-event",
+  "schemaVersion": 1,
+  "transactionId": "transaction.runtime.open-main-door",
+  "previousRevision": 42,
+  "revision": 43,
+  "events": []
+}

@@ -1,0 +1,18 @@
+{
+  "contractVersion": "domain-event@0.1.0",
+  "schemaId": "domain-event",
+  "schemaVersion": 1,
+  "eventId": "domain-event.engine.main-door-opened-0",
+  "eventType": "core.door-opened",
+  "transactionId": "transaction.runtime.open-main-door",
+  "previousRevision": 42,
+  "revision": 43,
+  "sequence": 0.5,
+  "payload": {
+    "door": {
+      "id": "device.example.main-door",
+      "entityType": "device"
+    },
+    "state": "open"
+  }
+}

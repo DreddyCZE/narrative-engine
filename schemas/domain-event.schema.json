@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/domain-event/0.1.0/schema.json",
+  "title": "Domain Event Contract Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "schemaId", "schemaVersion"],
+  "oneOf": [
+    {
+      "$ref": "#/$defs/confirmedEvent"
+    },
+    {
+      "$ref": "#/$defs/confirmedEventBatch"
+    }
+  ],
+  "$defs": {
+    "entityIdentityId": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 160,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+    },
+    "eventType": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"
+    },
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "typedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "entityType"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "entityType": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32,
+          "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}$"
+        }
+      }
+    },
+    "jsonValue": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number", "minimum": -2147483647, "maximum": 2147483647 },
+        { "type": "string", "maxLength": 1024 },
+        {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/jsonValue" }
+        },
+        {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "not": {
+              "enum": ["__proto__", "prototype", "constructor"]
+            }
+          },
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      ]
+    },
+    "confirmedEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractVersion",
+        "schemaId",
+        "schemaVersion",
+        "eventId",
+        "eventType",
+        "transactionId",
+        "previousRevision",
+        "revision",
+        "sequence",
+        "payload"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "domain-event@0.1.0"
+        },
+        "schemaId": {
+          "const": "domain-event"
+        },
+        "schemaVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "eventId": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "eventType": {
+          "$ref": "#/$defs/eventType"
+        },
+        "transactionId": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "commandId": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "previousRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "correlationId": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "causationKind": {
+          "type": "string",
+          "enum": ["command", "event", "transaction"]
+        },
+        "causationId": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "payload": {
+          "$ref": "#/$defs/jsonValue"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["causationId"]
+          },
+          "then": {
+            "required": ["causationKind"]
+          }
+        },
+        {
+          "if": {
+            "required": ["causationKind"]
+          },
+          "then": {
+            "required": ["causationId"]
+          }
+        },
+        {
+          "if": {
+            "required": ["sequence"]
+          },
+          "then": {
+            "not": {
+              "required": ["events"]
+            }
+          }
+        }
+      ]
+    },
+    "confirmedEventBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractVersion",
+        "schemaId",
+        "schemaVersion",
+        "transactionId",
+        "previousRevision",
+        "revision",
+        "events"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "domain-event@0.1.0"
+        },
+        "schemaId": {
+          "const": "domain-event"
+        },
+        "schemaVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "transactionId": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "commandId": {
+          "$ref": "#/$defs/entityIdentityId"
+        },
+        "previousRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "correlationId": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "causationKind": {
+          "type": "string",
+          "enum": ["command", "event", "transaction"]
+        },
+        "causationId": {
+          "$ref": "#/$defs/opaqueId"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/confirmedEvent"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["causationId"]
+          },
+          "then": {
+            "required": ["causationKind"]
+          }
+        },
+        {
+          "if": {
+            "required": ["causationKind"]
+          },
+          "then": {
+            "required": ["causationId"]
+          }
+        },
+        {
+          "not": {
+            "anyOf": [
+              { "required": ["eventId"] },
+              { "required": ["eventType"] },
+              { "required": ["sequence"] },
+              { "required": ["payload"] }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
