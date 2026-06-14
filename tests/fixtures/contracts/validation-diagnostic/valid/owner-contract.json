@@ -1,0 +1,11 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "ownerContract": "transaction@0.1.0",
+  "code": "REVISION_CONFLICT",
+  "severity": "error",
+  "category": "concurrency",
+  "phase": "final-revision-check",
+  "message": "Transaction revision changed before commit."
+}

@@ -1,0 +1,18 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "status": "valid-with-warnings",
+  "diagnostics": [
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "code": "ATOMICITY_VIOLATION",
+      "severity": "fatal",
+      "category": "internal",
+      "phase": "commit",
+      "message": "Fatal diagnostics cannot be downgraded."
+    }
+  ]
+}

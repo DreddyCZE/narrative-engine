@@ -1,0 +1,10 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "THIS_CODE_IS_A_DELIBERATELY_LONG_DIAGNOSTIC_CODE_THAT_EXCEEDS_THE_LIMIT",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "Code is too long."
+}

@@ -1,0 +1,10 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "VALIDATION_NOTE",
+  "severity": "warning",
+  "category": "validation",
+  "phase": "explain",
+  "message": "Severity does not match the registry."
+}

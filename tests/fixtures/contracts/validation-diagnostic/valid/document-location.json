@@ -1,0 +1,14 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_COMMAND_SHAPE",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "Command shape is invalid.",
+  "location": {
+    "kind": "document",
+    "path": "/effects/0/target"
+  }
+}

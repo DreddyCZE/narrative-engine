@@ -1,0 +1,16 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_TARGET",
+  "severity": "error",
+  "category": "reference",
+  "phase": "reference-validation",
+  "message": "Sensitive actual values must be redacted.",
+  "actual": {
+    "kind": "value",
+    "value": {
+      "token": "secret-token"
+    }
+  }
+}

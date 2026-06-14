@@ -1,0 +1,10 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "BOGUS_CODE",
+  "severity": "error",
+  "category": "validation",
+  "phase": "semantic-validation",
+  "message": "Unknown code should remain unknown."
+}

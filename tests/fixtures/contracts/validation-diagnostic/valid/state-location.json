@@ -1,0 +1,15 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "REVISION_CONFLICT",
+  "severity": "error",
+  "category": "concurrency",
+  "phase": "final-revision-check",
+  "message": "Committed state revision does not match the expected base revision.",
+  "location": {
+    "kind": "state",
+    "domainId": "state-domain.core.world",
+    "path": "/doors/main/state"
+  }
+}

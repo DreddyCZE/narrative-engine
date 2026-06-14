@@ -1,0 +1,10 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "_BAD",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "Leading underscore is invalid."
+}

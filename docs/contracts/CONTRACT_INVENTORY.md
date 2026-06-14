@@ -320,22 +320,24 @@ draft priority so future READY tasks can be created without changing scope silen
 
 ### Validation Diagnostic Contract
 
-- **Purpose:** Defines structured validation findings with severity, source references, rule IDs,
-  remediation hints, and CI behavior.
+- **Purpose:** Defines structured diagnostics with stable codes, severity, category, phase, source
+  references, redaction, and deterministic aggregation for validation and workflow tooling.
 - **Owner:** `packages/validation`.
 - **Producers:** Schema validation, reference validation, architecture boundary checks, narrative
-  lint, migration checks.
-- **Consumers:** CI, Editor, agents, reports, task handoffs.
+  lint, migration checks, transaction and event materializers, and authoring validators.
+- **Consumers:** CI, Editor, agents, reports, task handoffs, runtime explain tools.
 - **Visibility:** Public.
 - **Stability:** planning.
-- **Versioning:** Diagnostic envelope version and rule ID versioning.
-- **Dependencies:** Entity Identity, Source Provenance, Schema Versioning.
-- **Security or migration impact:** Medium. Poor diagnostics hide blockers or mislead automated
-  agents.
+- **Versioning:** Contract version `validation-diagnostic@0.1.0`; schema version governs the
+  serialized diagnostic envelope and aggregate result shape.
+- **Dependencies:** Entity Identity, Schema Versioning, Engine State, Command, Condition, Effect,
+  Transaction, Domain Event.
+- **Security or migration impact:** Medium. Poor diagnostics hide blockers, leak sensitive values, or
+  cause automated agents to misclassify failures.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
-- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.9, 61.36.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.9, 61.21, 61.36.
 
 ### Localization Contract
 

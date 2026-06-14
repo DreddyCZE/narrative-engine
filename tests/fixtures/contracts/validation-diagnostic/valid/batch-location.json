@@ -1,0 +1,17 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_LOCATION",
+  "severity": "error",
+  "category": "reference",
+  "phase": "reference-validation",
+  "message": "Batch location is invalid.",
+  "location": {
+    "kind": "batch",
+    "transactionId": "transaction.runtime.open-main-door",
+    "previousRevision": 42,
+    "revision": 43,
+    "index": 0
+  }
+}

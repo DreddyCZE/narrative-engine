@@ -1,0 +1,11 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "diagnosticId": "bad-id",
+  "code": "INVALID_EFFECT_SHAPE",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "diagnosticId is invalid."
+}

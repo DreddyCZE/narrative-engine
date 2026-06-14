@@ -1,0 +1,426 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.narrative-engine.local/validation-diagnostic/0.1.0/schema.json",
+  "title": "Validation Diagnostic Contract Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "schemaId", "schemaVersion"],
+  "properties": {
+    "contractVersion": { "const": "validation-diagnostic@0.1.0" },
+    "schemaId": { "const": "validation-diagnostic" },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "ownerContract": { "$ref": "#/$defs/ownerContract" },
+    "diagnosticId": { "$ref": "#/$defs/entityIdentityId" },
+    "code": { "$ref": "#/$defs/code" },
+    "severity": { "$ref": "#/$defs/severity" },
+    "category": { "$ref": "#/$defs/category" },
+    "phase": { "$ref": "#/$defs/phase" },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "location": { "$ref": "#/$defs/location" },
+    "source": { "$ref": "#/$defs/source" },
+    "related": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/relatedReference" }
+    },
+    "expected": { "$ref": "#/$defs/valueDescriptor" },
+    "actual": { "$ref": "#/$defs/valueDescriptor" },
+    "metadata": { "$ref": "#/$defs/metadata" },
+    "status": { "$ref": "#/$defs/aggregateStatus" },
+    "diagnostics": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/diagnosticEnvelope" }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/diagnosticEnvelope"
+    },
+    {
+      "$ref": "#/$defs/aggregateEnvelope"
+    }
+  ],
+  "$defs": {
+    "entityIdentityId": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 160,
+      "pattern": "^[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,31}\\.[a-z](?:[a-z0-9]|-(?=[a-z0-9])){1,47}\\.[a-z0-9](?:[a-z0-9]|[_-](?=[a-z0-9])){0,79}$"
+    },
+    "ownerContract": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9-]*@[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "code": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "warning", "error", "fatal"]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "shape",
+        "schema",
+        "identity",
+        "reference",
+        "type",
+        "validation",
+        "state",
+        "condition",
+        "effect",
+        "command",
+        "transaction",
+        "event",
+        "concurrency",
+        "authorization",
+        "security",
+        "budget",
+        "serialization",
+        "migration",
+        "internal"
+      ]
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)*$"
+    },
+    "jsonPointer": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 512,
+      "pattern": "^(?:$|(?:/(?:[^~/]|~0|~1)+)+)$"
+    },
+    "jsonValue": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "string", "maxLength": 1024 },
+        {
+          "type": "number",
+          "minimum": -2147483647,
+          "maximum": 2147483647
+        },
+        {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/jsonValue" }
+        },
+        {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "not": {
+              "enum": ["__proto__", "prototype", "constructor"]
+            }
+          },
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      ]
+    },
+    "redactedValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reason"],
+      "properties": {
+        "kind": { "const": "redacted" },
+        "reason": {
+          "type": "string",
+          "enum": ["sensitive", "too-large", "not-serializable", "security-policy", "unsupported"]
+        }
+      }
+    },
+    "valueDescriptor": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "value" },
+            "value": { "$ref": "#/$defs/jsonValue" }
+          }
+        },
+        { "$ref": "#/$defs/redactedValue" }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {
+        "not": {
+          "enum": ["__proto__", "prototype", "constructor"]
+        }
+      },
+      "patternProperties": {
+        "^[^\\u0000-\\u001F\\\\]+$": { "$ref": "#/$defs/jsonValue" }
+      },
+      "maxProperties": 16
+    },
+    "locationDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": { "const": "document" },
+        "path": { "$ref": "#/$defs/jsonPointer" }
+      }
+    },
+    "locationState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "domainId", "path"],
+      "properties": {
+        "kind": { "const": "state" },
+        "domainId": { "$ref": "#/$defs/entityIdentityId" },
+        "path": { "$ref": "#/$defs/jsonPointer" }
+      }
+    },
+    "locationSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaId", "path"],
+      "properties": {
+        "kind": { "const": "schema" },
+        "schemaId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "path": { "$ref": "#/$defs/jsonPointer" }
+      }
+    },
+    "locationEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "transactionId", "revision", "sequence"],
+      "properties": {
+        "kind": { "const": "event" },
+        "transactionId": { "$ref": "#/$defs/entityIdentityId" },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "path": { "$ref": "#/$defs/jsonPointer" }
+      }
+    },
+    "locationBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "transactionId", "previousRevision", "revision"],
+      "properties": {
+        "kind": { "const": "batch" },
+        "transactionId": { "$ref": "#/$defs/entityIdentityId" },
+        "previousRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      }
+    },
+    "location": {
+      "oneOf": [
+        { "$ref": "#/$defs/locationDocument" },
+        { "$ref": "#/$defs/locationState" },
+        { "$ref": "#/$defs/locationSchema" },
+        { "$ref": "#/$defs/locationEvent" },
+        { "$ref": "#/$defs/locationBatch" }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "entity",
+            "schema",
+            "state-domain",
+            "condition",
+            "effect",
+            "command",
+            "transaction",
+            "domain-event",
+            "file",
+            "document",
+            "plugin",
+            "system"
+          ]
+        },
+        "id": { "$ref": "#/$defs/entityIdentityId" },
+        "domainId": { "$ref": "#/$defs/entityIdentityId" },
+        "schemaId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "path": { "$ref": "#/$defs/jsonPointer" }
+      }
+    },
+    "relatedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation", "kind"],
+      "properties": {
+        "relation": {
+          "type": "string",
+          "enum": [
+            "causes",
+            "conflicts-with",
+            "derived-from",
+            "duplicates",
+            "references",
+            "related-to",
+            "suppresses"
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "entity",
+            "schema",
+            "state-domain",
+            "condition",
+            "effect",
+            "command",
+            "transaction",
+            "domain-event",
+            "file",
+            "document",
+            "plugin",
+            "system"
+          ]
+        },
+        "id": { "$ref": "#/$defs/entityIdentityId" },
+        "domainId": { "$ref": "#/$defs/entityIdentityId" },
+        "schemaId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "path": { "$ref": "#/$defs/jsonPointer" },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      }
+    },
+    "diagnosticEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractVersion",
+        "schemaId",
+        "schemaVersion",
+        "code",
+        "severity",
+        "category",
+        "phase",
+        "message"
+      ],
+      "properties": {
+        "contractVersion": { "const": "validation-diagnostic@0.1.0" },
+        "schemaId": { "const": "validation-diagnostic" },
+        "schemaVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "ownerContract": { "$ref": "#/$defs/ownerContract" },
+        "diagnosticId": { "$ref": "#/$defs/entityIdentityId" },
+        "code": { "$ref": "#/$defs/code" },
+        "severity": { "$ref": "#/$defs/severity" },
+        "category": { "$ref": "#/$defs/category" },
+        "phase": { "$ref": "#/$defs/phase" },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "location": { "$ref": "#/$defs/location" },
+        "source": { "$ref": "#/$defs/source" },
+        "related": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/relatedReference" }
+        },
+        "expected": { "$ref": "#/$defs/valueDescriptor" },
+        "actual": { "$ref": "#/$defs/valueDescriptor" },
+        "metadata": { "$ref": "#/$defs/metadata" }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["status"] },
+          { "required": ["diagnostics"] }
+        ]
+      }
+    },
+    "aggregateStatus": {
+      "type": "string",
+      "enum": ["valid", "valid-with-warnings", "invalid", "fatal"]
+    },
+    "aggregateEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractVersion",
+        "schemaId",
+        "schemaVersion",
+        "status",
+        "diagnostics"
+      ],
+      "properties": {
+        "contractVersion": { "const": "validation-diagnostic@0.1.0" },
+        "schemaId": { "const": "validation-diagnostic" },
+        "schemaVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "status": { "$ref": "#/$defs/aggregateStatus" },
+        "diagnostics": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/diagnosticEnvelope" }
+        }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["code"] },
+          { "required": ["severity"] },
+          { "required": ["category"] },
+          { "required": ["phase"] },
+          { "required": ["message"] }
+        ]
+      }
+    }
+  }
+}

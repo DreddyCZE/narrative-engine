@@ -1,0 +1,18 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "status": "invalid",
+  "diagnostics": [
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "code": "INVALID_EFFECT_SHAPE",
+      "severity": "error",
+      "category": "shape",
+      "phase": "shape-validation",
+      "message": "An effect envelope is malformed."
+    }
+  ]
+}

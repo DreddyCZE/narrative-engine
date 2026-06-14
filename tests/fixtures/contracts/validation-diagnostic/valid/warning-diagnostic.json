@@ -1,0 +1,10 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "DIAGNOSTIC_OUTPUT_TRUNCATED",
+  "severity": "warning",
+  "category": "budget",
+  "phase": "validation",
+  "message": "Additional diagnostics were truncated."
+}

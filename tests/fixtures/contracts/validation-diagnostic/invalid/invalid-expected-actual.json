@@ -1,0 +1,17 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_EFFECT_SHAPE",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "Expected/actual shape is invalid.",
+  "expected": {
+    "kind": "redacted"
+  },
+  "actual": {
+    "kind": "value",
+    "value": 1
+  }
+}

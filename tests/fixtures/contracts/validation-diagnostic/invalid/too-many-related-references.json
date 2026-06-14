@@ -1,0 +1,29 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_TARGET",
+  "severity": "error",
+  "category": "reference",
+  "phase": "reference-validation",
+  "message": "Too many related references.",
+  "related": [
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.0" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.1" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.2" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.3" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.4" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.5" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.6" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.7" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.8" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.9" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.10" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.11" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.12" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.13" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.14" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.15" },
+    { "relation": "related-to", "kind": "transaction", "id": "transaction.runtime.16" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "VALIDATION_NOTE",
+  "severity": "info",
+  "category": "validation",
+  "phase": "explain",
+  "message": "Executable field is present.",
+  "handler": "return true"
+}

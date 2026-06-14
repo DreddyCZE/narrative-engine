@@ -1,0 +1,18 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_STATE_SHAPE",
+  "severity": "error",
+  "category": "shape",
+  "phase": "shape-validation",
+  "message": "The state shape does not match the expected value.",
+  "expected": {
+    "kind": "value",
+    "value": 42
+  },
+  "actual": {
+    "kind": "value",
+    "value": 41
+  }
+}

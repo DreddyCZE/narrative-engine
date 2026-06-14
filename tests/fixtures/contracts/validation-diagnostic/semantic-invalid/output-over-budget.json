@@ -1,0 +1,107 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "status": "valid",
+  "diagnostics": [
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-0",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "0"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-1",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "1"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-2",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "2"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-3",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "3"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-4",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "4"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-5",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "5"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-6",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "6"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-7",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "7"
+    },
+    {
+      "contractVersion": "validation-diagnostic@0.1.0",
+      "schemaId": "validation-diagnostic",
+      "schemaVersion": 1,
+      "diagnosticId": "validation-diagnostic.runtime.budget-8",
+      "code": "VALIDATION_NOTE",
+      "severity": "info",
+      "category": "validation",
+      "phase": "explain",
+      "message": "8"
+    }
+  ]
+}

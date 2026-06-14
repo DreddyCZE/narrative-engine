@@ -1,0 +1,17 @@
+{
+  "contractVersion": "validation-diagnostic@0.1.0",
+  "schemaId": "validation-diagnostic",
+  "schemaVersion": 1,
+  "code": "INVALID_LOCATION",
+  "severity": "error",
+  "category": "reference",
+  "phase": "reference-validation",
+  "message": "Event location is invalid.",
+  "location": {
+    "kind": "event",
+    "transactionId": "transaction.runtime.open-main-door",
+    "revision": 43,
+    "sequence": 0,
+    "path": "/payload/door"
+  }
+}
