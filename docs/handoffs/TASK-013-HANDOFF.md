@@ -2,10 +2,20 @@
 
 ## Status
 
-DONE. Acceptance review passed locally. The M1 Contract Foundation review outcome is `PASS`.
+DONE. M1 Contract Foundation review outcome is `PASS` after TASK-014 remediation.
 
-The correct GitHub remote for `narrative-engine` is still missing, so push and PR creation remain
-blocked until a remote with shared history is configured.
+## Repository / PR State
+
+The correct GitHub remote is now configured as:
+
+- `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
+
+PR #1 exists for the TASK-013/TASK-014 reconciliation branch:
+
+- `https://github.com/DreddyCZE/narrative-engine/pull/1`
+
+The previous remote problem is resolved for this repository. The old incorrect remote is retained
+only as an isolated historical cleanup item and must not be used for pushes.
 
 ## Scope Reviewed
 
@@ -58,8 +68,9 @@ governance inventory by adding the M1 diagnostic code inventory and refreshing t
 
 ## Next Step
 
-Complete normal review for TASK-013 and TASK-014, then explicitly create and activate the next task
-before any M1 implementation work begins.
+Complete PR #1 review and, if clean, mark the draft PR ready for review. Do not start
+implementation work or create a new task until PR #1 is accepted/closed and the next task is
+explicitly created and activated.
 
 ## Acceptance Notes
 
