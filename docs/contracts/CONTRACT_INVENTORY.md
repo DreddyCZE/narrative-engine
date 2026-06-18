@@ -166,15 +166,15 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Producers:** Game Data, plugins through declared extensions, Editor.
 - **Consumers:** Engine rules, validation, View Model builder, Editor explain tools, tests.
 - **Visibility:** Public.
-- **Stability:** planning.
-- **Versioning:** Contract version plus schema version for condition expression format and extension
+- **Stability:** draft.
+- **Versioning:** Contract version `condition@0.1.0` plus schema version for condition expression format and extension
   capability rules.
 - **Dependencies:** Entity Identity, Schema Versioning, Validation Diagnostic.
 - **Security or migration impact:** High. Conditions gate content, commands, and player-visible
   choices.
 - **Needed for M1:** Yes.
 - **Needed for first vertical slice:** Yes.
-- **Current status:** `DRAFT_REQUIRED`.
+- **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 4, 2A.F, 34.1, 61.1, 61.36.
 
 ### Effect Contract
@@ -529,6 +529,90 @@ draft priority so future READY tasks can be created without changing scope silen
 - Save must persist game state, not UX layout.
 - Event is neither Command nor Effect; it records what happened after commit.
 - View Model is not a copy of internal Engine State; it is a safe projection.
+
+## M1 Diagnostic Code Inventory
+
+This inventory records the diagnostic codes already used or reserved by M1 contract docs and
+contract tests. The registry identity for a diagnostic code is the owner-contract plus code tuple,
+not the bare code string.
+
+| Code | Owner contract | Category | Default severity | Typical phase | Source |
+| --- | --- | --- | --- | --- | --- |
+| `INVALID_STATE_SHAPE` | Engine State | shape | error | shape-validation | Validation Diagnostic Contract |
+| `UNKNOWN_STATE_DOMAIN` | Engine State | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_REFERENCE` | Engine State | reference | error | reference-validation | Validation Diagnostic Contract |
+| `REVISION_CONFLICT` | Engine State | concurrency | error | final-revision-check | Validation Diagnostic Contract |
+| `STATE_PATH_NOT_FOUND` | Engine State | reference | error | reference-validation | Condition, Effect, Command, and Transaction contract tests |
+| `UNKNOWN_CONDITION_TYPE` | Condition | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_OPERAND` | Condition | type | error | schema-validation | Validation Diagnostic Contract |
+| `EVALUATION_BUDGET_EXCEEDED` | Condition | budget | error | condition-evaluation | Validation Diagnostic Contract |
+| `ACCESS_DENIED` | Condition | authorization | error | authorization | Validation Diagnostic Contract |
+| `INVALID_EFFECT_SHAPE` | Effect | shape | error | shape-validation | Validation Diagnostic Contract |
+| `INVALID_TARGET` | Effect | reference | error | semantic-validation | Validation Diagnostic Contract |
+| `UNKNOWN_EFFECT_TYPE` | Effect | schema | error | schema-validation | Validation Diagnostic Contract |
+| `EFFECT_BUDGET_EXCEEDED` | Effect | budget | error | effect-application | Validation Diagnostic Contract |
+| `INVALID_COMMAND_SHAPE` | Command | shape | error | shape-validation | Validation Diagnostic Contract |
+| `UNKNOWN_COMMAND_TYPE` | Command | schema | error | schema-validation | Validation Diagnostic Contract |
+| `SCHEMA_VERSION_UNSUPPORTED` | Command | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_ACTOR` | Command | identity | error | identity-validation | Validation Diagnostic Contract |
+| `INVALID_TARGET` | Command | reference | error | reference-validation | Validation Diagnostic Contract |
+| `INVALID_PAYLOAD` | Command | schema | error | schema-validation | Validation Diagnostic Contract |
+| `REVISION_CONFLICT` | Command | concurrency | error | initial-revision-check | Validation Diagnostic Contract |
+| `PRECONDITION_FAILED` | Command | condition | error | condition-evaluation | Validation Diagnostic Contract |
+| `COMMAND_REJECTED` | Command | validation | error | command-planning | Validation Diagnostic Contract |
+| `IDEMPOTENCY_CONFLICT` | Command | concurrency | error | command-planning | Validation Diagnostic Contract and Command/Transaction contract tests |
+| `HANDLER_NOT_FOUND` | Command | internal | error | command-planning | Validation Diagnostic Contract |
+| `COMMAND_BUDGET_EXCEEDED` | Command | budget | error | command-planning | Validation Diagnostic Contract |
+| `NON_DETERMINISTIC_INPUT` | Command | security | error | parse | Validation Diagnostic Contract |
+| `PLAN_INVALID` | Command | validation | error | command-planning | Validation Diagnostic Contract |
+| `INVALID_TRANSACTION_SHAPE` | Transaction | shape | error | shape-validation | Validation Diagnostic Contract |
+| `INVALID_EFFECT_PLAN` | Transaction | shape | error | shape-validation | Validation Diagnostic Contract |
+| `UNKNOWN_EFFECT_TYPE` | Transaction | schema | error | schema-validation | Validation Diagnostic Contract |
+| `SCHEMA_VERSION_UNSUPPORTED` | Transaction | schema | error | schema-validation | Validation Diagnostic Contract |
+| `REVISION_CONFLICT` | Transaction | concurrency | error | final-revision-check | Validation Diagnostic Contract |
+| `DUPLICATE_TRANSACTION_ID` | Transaction | concurrency | error | command-planning | Transaction contract tests |
+| `EFFECT_ERROR` | Transaction | effect | error | effect-application | Validation Diagnostic Contract |
+| `GUARD_ERROR` | Transaction | condition | error | condition-evaluation | Validation Diagnostic Contract |
+| `ACCESS_DENIED` | Transaction | authorization | error | authorization | Validation Diagnostic Contract |
+| `CANDIDATE_STATE_INVALID` | Transaction | state | error | candidate-validation | Validation Diagnostic Contract |
+| `PROTECTED_METADATA_MUTATION` | Transaction | state | error | candidate-validation | Validation Diagnostic Contract |
+| `RESULTING_STATE_INVALID` | Transaction | state | error | candidate-validation | Validation Diagnostic Contract |
+| `TRANSACTION_BUDGET_EXCEEDED` | Transaction | budget | error | candidate-validation | Validation Diagnostic Contract |
+| `NON_SERIALIZABLE_VALUE` | Transaction | serialization | error | pre-serialization | Validation Diagnostic Contract |
+| `FORBIDDEN_OBJECT_KEY` | Transaction | security | error | pre-serialization | Validation Diagnostic Contract |
+| `ATOMICITY_VIOLATION` | Transaction | internal | fatal | commit | Validation Diagnostic Contract |
+| `INVALID_EVENT_SHAPE` | Domain Event | shape | error | shape-validation | Validation Diagnostic Contract |
+| `UNKNOWN_EVENT_TYPE` | Domain Event | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_EVENT_ID` | Domain Event | identity | error | identity-validation | Validation Diagnostic Contract |
+| `DUPLICATE_EVENT_ID` | Domain Event | identity | error | event-materialization | Domain Event Contract and tests |
+| `DUPLICATE_EVENT_SEQUENCE` | Domain Event | ordering | error | event-materialization | Domain Event Contract and tests |
+| `INVALID_TRANSACTION_REFERENCE` | Domain Event | reference | error | reference-validation | Validation Diagnostic Contract |
+| `INVALID_COMMAND_REFERENCE` | Domain Event | reference | error | reference-validation | Validation Diagnostic Contract |
+| `INVALID_REVISION_BOUNDARY` | Domain Event | concurrency | error | final-revision-check | Validation Diagnostic Contract |
+| `CONFIRMATION_BOUNDARY_VIOLATION` | Domain Event | concurrency | error | event-materialization | Domain Event Contract and tests |
+| `INVALID_SEQUENCE` | Domain Event | ordering | error | event-materialization | Validation Diagnostic Contract |
+| `INVALID_EVENT_PAYLOAD` | Domain Event | schema | error | schema-validation | Validation Diagnostic Contract |
+| `EVENT_MATERIALIZATION_FAILED` | Domain Event | validation | error | event-materialization | Domain Event Contract and tests |
+| `EVENT_BUDGET_EXCEEDED` | Domain Event | budget | error | event-materialization | Validation Diagnostic Contract |
+| `INVALID_VERSION` | Schema Versioning | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_DIAGNOSTIC_SHAPE` | Validation Diagnostic | shape | error | shape-validation | Validation Diagnostic Contract |
+| `INVALID_DIAGNOSTIC_ID` | Validation Diagnostic | identity | error | identity-validation | Validation Diagnostic Contract |
+| `INVALID_DIAGNOSTIC_CODE` | Validation Diagnostic | schema | error | schema-validation | Validation Diagnostic Contract |
+| `NOTE` | Validation Diagnostic | validation | info | explain | Validation Diagnostic Contract |
+| `INVALID_SEVERITY` | Validation Diagnostic | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_CATEGORY` | Validation Diagnostic | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_PHASE` | Validation Diagnostic | schema | error | schema-validation | Validation Diagnostic Contract |
+| `INVALID_LOCATION` | Validation Diagnostic | reference | error | reference-validation | Validation Diagnostic Contract |
+| `INVALID_SOURCE_REFERENCE` | Validation Diagnostic | reference | error | reference-validation | Validation Diagnostic Contract |
+| `INVALID_RELATED_REFERENCE` | Validation Diagnostic | reference | error | reference-validation | Validation Diagnostic Contract |
+| `UNSAFE_DIAGNOSTIC_VALUE` | Validation Diagnostic | security | error | semantic-validation | Validation Diagnostic Contract |
+| `DIAGNOSTIC_BUDGET_EXCEEDED` | Validation Diagnostic | budget | error | validation | Validation Diagnostic Contract |
+| `DIAGNOSTIC_OUTPUT_TRUNCATED` | Validation Diagnostic | budget | warning | validation | Validation Diagnostic Contract |
+| `DUPLICATE_DIAGNOSTIC_FINGERPRINT` | Validation Diagnostic | validation | error | semantic-validation | Validation Diagnostic Contract |
+| `DIAGNOSTIC_REFERENCE_CYCLE` | Validation Diagnostic | reference | error | semantic-validation | Validation Diagnostic Contract |
+| `INVALID_AGGREGATE_STATUS` | Validation Diagnostic | validation | error | semantic-validation | Validation Diagnostic Contract |
+| `VALIDATION_NOTE` | Validation Diagnostic | validation | info | explain | Validation Diagnostic Contract |
+| `VALIDATION_DEPRECATED_USAGE` | Validation Diagnostic | validation | warning | authoring | Validation Diagnostic Contract |
 
 ## ADR Assessment
 
