@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW. No commit has been created for this task.
+DONE. Remediation accepted locally.
 
 ## Scope Completed
 
@@ -42,3 +42,10 @@ engine warning; CI remains pinned to Node 22 via `.nvmrc`.
 ## Follow-up
 
 TASK-013 can now perform the final acceptance review against the reconciled inventory.
+
+## Acceptance Notes
+
+- The inventory is reconciled for M1 diagnostic codes.
+- `Condition Contract` inventory metadata is fixed to `draft` / `DRAFTED`.
+- No runtime semantics were changed.
+- No active task remains.

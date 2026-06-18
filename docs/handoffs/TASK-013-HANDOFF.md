@@ -2,7 +2,10 @@
 
 ## Status
 
-REVIEW. No commit has been created for this task.
+DONE. Acceptance review passed locally. The M1 Contract Foundation review outcome is `PASS`.
+
+The correct GitHub remote for `narrative-engine` is still missing, so push and PR creation remain
+blocked until a remote with shared history is configured.
 
 ## Scope Reviewed
 
@@ -57,3 +60,12 @@ governance inventory by adding the M1 diagnostic code inventory and refreshing t
 
 Complete normal review for TASK-013 and TASK-014, then explicitly create and activate the next task
 before any M1 implementation work begins.
+
+## Acceptance Notes
+
+- TASK-013 is moved to `docs/tasks/done/`.
+- TASK-014 is moved to `docs/tasks/done/`.
+- No active task remains.
+- No runtime implementation was started.
+- No State Store, Command Bus, Transaction Manager, Event Store, Save system, registry, UI, or game
+  content change was introduced.
