@@ -30,7 +30,13 @@ importers:
         specifier: ^3.2.3
         version: 3.2.6(@types/node@22.19.21)
 
-  packages/engine-contracts: {}
+  packages/core: {}
+
+  packages/engine-contracts:
+    dependencies:
+      '@narrative-engine/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/engine-kernel: {}
 
