@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
+    { "path": "packages/core" },
     { "path": "packages/engine-contracts" },
     { "path": "packages/engine-kernel" },
     { "path": "packages/engine-state" },
@@ -9,4 +10,3 @@
     { "path": "packages/test-support" }
   ]
 }
-
