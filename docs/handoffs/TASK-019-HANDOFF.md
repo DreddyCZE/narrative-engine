@@ -6,22 +6,22 @@ TASK-019 - Engine State Shape and Snapshot Validator
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-Implemented the production Engine State validator on top of TASK-016 JSON-safe helpers,
-TASK-017 Entity Identity validation, and TASK-018 Schema Versioning compatibility helpers. The
-validator checks the root snapshot envelope, revision semantics, run/meta domain collections,
-canonical domain ordering, and entity identity/reference shape without introducing any condition,
-effect, transaction, save, or event pipeline logic.
+Accepted TASK-019 after validating the production Engine State validator on top of TASK-016
+JSON-safe helpers, TASK-017 Entity Identity validation, and TASK-018 Schema Versioning
+compatibility helpers. The validator checks the root snapshot envelope, revision semantics,
+run/meta domain collections, canonical domain ordering, and entity identity/reference shape
+without introducing any condition, effect, transaction, save, or event pipeline logic.
 
 ## Changed Files
 
 - `packages/engine-contracts/src/engine-state/engine-state.ts`
 - `packages/engine-contracts/src/index.ts`
 - `tests/engine-state-validator.test.ts`
-- `docs/tasks/review/TASK-019-engine-state-shape-and-snapshot-validator.md`
+- `docs/tasks/done/TASK-019-engine-state-shape-and-snapshot-validator.md`
 - `docs/status/CURRENT_STATE.md`
 
 ## API Summary

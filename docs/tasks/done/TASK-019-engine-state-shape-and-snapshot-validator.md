@@ -14,7 +14,7 @@ M2B - State Read/Write Primitives
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -129,8 +129,8 @@ domains.
 
 - TASK-019 has a production Engine State validator, focused tests, and validated boundary-safe
   imports.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
-- `docs/handoffs/TASK-019-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-019 as review and the next step as TASK-020 planning
-  or creation after acceptance.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
+- `docs/handoffs/TASK-019-HANDOFF.md` exists after implementation and acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-019 as done and the next step as TASK-020 creation
+  after acceptance.
 - Required checks pass.
