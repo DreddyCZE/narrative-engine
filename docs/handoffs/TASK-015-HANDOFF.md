@@ -81,7 +81,7 @@ warning is unchanged and was treated as environment debt, not a blocker.
 
 Recommended first M2 task:
 
-- `TASK-016 - Shared JSON-safe and canonical serialization utilities`
+- `TASK-016 – Shared JSON-safe and canonical serialization utilities`
 
 Create and activate the first M2A implementation task explicitly. Do not start runtime work before
 that step.
