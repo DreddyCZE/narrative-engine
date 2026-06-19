@@ -14,7 +14,7 @@ M2A - Shared Foundations
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -117,8 +117,8 @@ M2 runtime tasks rely on them.
 ## Definition of Done
 
 - TASK-017 has a production validator, focused tests, and validated boundary-safe imports.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
 - `docs/handoffs/TASK-017-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-017 as review and the next step as TASK-018
-  planning or creation after acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-017 as done and the next step as TASK-018
+  creation after acceptance.
 - Required checks pass.
