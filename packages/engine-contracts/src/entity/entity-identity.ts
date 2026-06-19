@@ -435,7 +435,16 @@ function validateChange(issues: EntityIdentityIssue[], value: unknown): void {
 
 function splitEntityId(value: string): [string, string, string] | null {
   const parts = value.split(".");
-  return parts.length === 3 ? [parts[0]!, parts[1]!, parts[2]!] : null;
+  if (parts.length !== 3) {
+    return null;
+  }
+
+  const [entityType, namespace, localName] = parts;
+  if (entityType === undefined || namespace === undefined || localName === undefined) {
+    return null;
+  }
+
+  return [entityType, namespace, localName];
 }
 
 export function inspectEntityIdentity(value: unknown): readonly EntityIdentityIssue[] {

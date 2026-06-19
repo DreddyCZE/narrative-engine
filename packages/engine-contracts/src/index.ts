@@ -41,3 +41,22 @@ export {
   inspectEntityIdentity,
   isEntityIdentity
 } from "./entity/entity-identity.js";
+export {
+  assertSchemaVersionDescriptor,
+  checkSchemaCompatibility,
+  compareSchemaVersions,
+  formatSchemaVersioningValidationMessage,
+  SCHEMA_VERSIONING_CONTRACT_VERSION,
+  type SchemaCompatibilityResult,
+  type SchemaCompatibilityStatus,
+  type SchemaDescriptor,
+  type SchemaMigration,
+  type SchemaReaderSupport,
+  type SchemaVersionEntry,
+  type SchemaVersionIssue,
+  type SchemaVersionIssueCode,
+  type SchemaVersionStatus,
+  SchemaVersioningValidationError,
+  inspectSchemaVersionDescriptor,
+  isSchemaVersionDescriptor
+} from "./schema-versioning/schema-versioning.js";
