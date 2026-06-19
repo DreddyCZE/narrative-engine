@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted after TASK-020 review passed and PR #7 was merged into `origin/main`.
 
 ## Summary
 
