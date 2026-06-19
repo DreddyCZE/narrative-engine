@@ -27,3 +27,17 @@ export const initialContracts: readonly ContractDescriptor[] = [
   { id: "localization-api", owner: "game-data", stability: "draft" }
 ];
 
+export {
+  assertEntityIdentity,
+  ENTITY_IDENTITY_CONTRACT_VERSION,
+  type EntityIdentity,
+  type EntityIdentityAlias,
+  type EntityIdentityChange,
+  type EntityIdentityIssue,
+  type EntityIdentityIssueCode,
+  type EntityIdentityProvenance,
+  EntityIdentityValidationError,
+  formatEntityIdentityValidationMessage,
+  inspectEntityIdentity,
+  isEntityIdentity
+} from "./entity/entity-identity.js";

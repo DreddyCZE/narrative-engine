@@ -14,7 +14,7 @@ M2A - Shared Foundations
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -119,9 +119,8 @@ UI, editor, plugin, or gameplay behavior.
 
 ## Definition of Done
 
-- TASK-016 is moved to `docs/tasks/review/` with status `REVIEW`.
-- `docs/handoffs/TASK-016-HANDOFF.md` exists.
-- `docs/status/CURRENT_STATE.md` records the active task and next boundary correctly during work,
-  then no active task after review handoff.
+- TASK-016 is moved to `docs/tasks/done/` with status `DONE`.
+- `docs/handoffs/TASK-016-HANDOFF.md` exists and records acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-016 as done and the next step as TASK-017 creation.
 - Required checks pass.
-- No commit is created until implementation is complete.
+- No runtime implementation beyond the shared JSON-safe utilities was introduced.
