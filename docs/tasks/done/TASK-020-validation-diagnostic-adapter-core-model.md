@@ -14,7 +14,7 @@ M2A/M2B - Shared Diagnostic Foundation
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -124,8 +124,8 @@ adapter boundary those validators emit.
 ## Definition of Done
 
 - TASK-020 has a production validation diagnostic model and focused tests.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
 - `docs/handoffs/TASK-020-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-020 as review and the next step as TASK-021
-  creation after acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-020 as done and the next step as TASK-021 creation
+  after acceptance.
 - Required checks pass.

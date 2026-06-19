@@ -3,18 +3,18 @@
 **Date:** 2026-06-19
 **Milestone:** M2A/M2B - Shared Diagnostic Foundation
 **Active task:** none
-**Status:** TASK-020 is in review. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-021 is in review. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
 1. **Current milestone:** M2A/M2B - Shared Diagnostic Foundation.
-2. **Current state:** TASK-020 is in review; no ACTIVE task exists.
-3. **Single next most important task:** Review TASK-020 Validation Diagnostic adapter/core model.
+2. **Current state:** TASK-021 is in review; no ACTIVE task exists.
+3. **Single next most important task:** Review TASK-021 Condition evaluator.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content, or
    any new domain contract.
-5. **How completion is recognized:** TASK-020 is reviewed and accepted; the next scoped task is
+5. **How completion is recognized:** TASK-021 is reviewed and accepted; the next scoped task is
    explicitly created and activated.
 
 ## Notes
@@ -27,7 +27,7 @@
 - M1 contract foundation is locally complete after TASK-013/TASK-014 acceptance.
 - M2 planning is locally complete after TASK-015 acceptance; TASK-018 implementation is complete
   and accepted. TASK-019 implementation is complete and accepted. TASK-020 validation-diagnostic
-  work is complete and under review.
+  work is complete and accepted. TASK-021 condition work is in review.
 
 ## Repository / PR State
 
@@ -40,7 +40,8 @@
 - TASK-016 has been accepted and TASK-017 has been accepted.
 - TASK-018 implementation is complete and accepted.
 - TASK-019 is done.
-- TASK-020 is in review.
+- TASK-020 is done.
+- TASK-021 is in review.
 
 ## Last Checks
 
@@ -67,5 +68,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-Do not start TASK-021 until TASK-020 is reviewed and accepted, and the next scoped task is
+Do not start TASK-022 until TASK-021 is reviewed and accepted, and the next scoped task is
 explicitly created and activated.

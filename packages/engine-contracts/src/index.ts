@@ -28,6 +28,21 @@ export const initialContracts: readonly ContractDescriptor[] = [
 ];
 
 export {
+  CONDITION_CONTRACT_VERSION,
+  CONDITION_SCHEMA_ID,
+  CONDITION_SCHEMA_VERSION,
+  evaluateCondition,
+  formatConditionEvaluationIssues,
+  inspectCondition,
+  type ConditionComparisonOperator,
+  type ConditionEvaluationContext,
+  type ConditionEvaluationIssue,
+  type ConditionEvaluationIssueCode,
+  type ConditionEvaluationOptions,
+  type ConditionEvaluationResult,
+  type ConditionType
+} from "./condition/condition.js";
+export {
   assertEntityIdentity,
   ENTITY_IDENTITY_CONTRACT_VERSION,
   type EntityIdentity,

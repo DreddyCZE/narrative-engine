@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted after TASK-020 review passed and PR #7 was merged into `origin/main`.
 
 ## Summary
 
@@ -69,7 +73,7 @@ behavior.
 ## Known Non-Blockers
 
 - Local Node is `v24.16.0` while the repository expects Node 22.
-- `wrong-purgatorium-vii` still exists historically but was not used.
+- The old incorrect remote still exists historically but was not used.
 
 ## M2-F001 Status
 
