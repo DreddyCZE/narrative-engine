@@ -6,7 +6,7 @@ TASK-016 - Shared JSON-safe and Canonical Serialization Utilities
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -51,8 +51,12 @@ warning is environment debt only because all checks passed.
 
 ## Outcome
 
-The task is ready for review. `Active task` is now `none`, and the next step is to review TASK-016
-before creating TASK-017.
+Acceptance passed. `Active task` is now `none`, TASK-016 is DONE, and the next step is to create
+and activate TASK-017 Entity Identity validator on the updated main branch.
+
+## Next Recommended Task
+
+- `TASK-017 - Entity Identity validator`
 
 ## Risks / Follow-up
 
@@ -60,3 +64,4 @@ before creating TASK-017.
   runtime framework.
 - `packages/core` is a new production package, so future package boundaries should continue to keep
   docs/tests/fixtures out of runtime imports.
+- TASK-016 produced 281 passing tests after validation.
