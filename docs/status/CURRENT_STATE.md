@@ -3,19 +3,19 @@
 **Date:** 2026-06-19
 **Milestone:** M2A - Shared Foundations
 **Active task:** none
-**Status:** TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-019 is in review. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
 1. **Current milestone:** M2A - Shared Foundations.
-2. **Current state:** TASK-018 is done; no ACTIVE task exists.
-3. **Single next most important task:** Create and activate TASK-019 Schema Versioning compatibility follow-up only after the scoped next task is explicitly defined.
+2. **Current state:** TASK-019 is in review; no ACTIVE task exists.
+3. **Single next most important task:** Review TASK-019 Engine State shape and snapshot validator.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content, or
    any new domain contract.
-5. **How completion is recognized:** TASK-018 is accepted; the next scoped task is explicitly
-   created and activated.
+5. **How completion is recognized:** TASK-019 is reviewed and accepted; the next scoped task is
+   explicitly created and activated.
 
 ## Notes
 
@@ -26,7 +26,7 @@
   current state. It did not introduce runtime systems or new contract semantics.
 - M1 contract foundation is locally complete after TASK-013/TASK-014 acceptance.
 - M2 planning is locally complete after TASK-015 acceptance; TASK-018 implementation is complete
-  and accepted.
+  and accepted. TASK-019 implementation is complete and under review.
 
 ## Repository / PR State
 
@@ -38,6 +38,7 @@
 - TASK-015 planning docs exist and have been accepted.
 - TASK-016 has been accepted and TASK-017 has been accepted.
 - TASK-018 implementation is complete and accepted.
+- TASK-019 is in review.
 
 ## Last Checks
 
@@ -64,4 +65,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-Do not start TASK-019 until the next scoped task is explicitly created and activated.
+Do not start TASK-020 until TASK-019 is reviewed and accepted, and the next scoped task is
+explicitly created and activated.
