@@ -14,7 +14,7 @@ M2B - State Read/Write Primitives
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -126,8 +126,8 @@ evaluation context.
 ## Definition of Done
 
 - TASK-021 has a production readonly condition evaluator and focused tests.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
 - `docs/handoffs/TASK-021-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-021 as review and the next step as TASK-022
+- `docs/status/CURRENT_STATE.md` records TASK-021 as done and the next step as TASK-022
   creation after acceptance.
 - Required checks pass.

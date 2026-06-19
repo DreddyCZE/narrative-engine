@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted after TASK-021 review passed and PR #8 was merged into `origin/main`.
 
 ## Summary
 
@@ -13,7 +17,7 @@ transaction, event store, save, UI, or plugin runtime behavior.
 ## Changed Files
 
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-021-condition-evaluator.md`
+- `docs/tasks/done/TASK-021-condition-evaluator.md`
 - `docs/handoffs/TASK-021-HANDOFF.md`
 - `packages/engine-contracts/src/condition/condition.ts`
 - `packages/engine-contracts/src/index.ts`
