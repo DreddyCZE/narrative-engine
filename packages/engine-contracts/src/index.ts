@@ -42,6 +42,23 @@ export {
   isEntityIdentity
 } from "./entity/entity-identity.js";
 export {
+  assertEngineStateSnapshot,
+  ENGINE_STATE_CONTRACT_VERSION,
+  formatEngineStateValidationMessage,
+  type EngineStateDomain,
+  type EngineStateDomainAuthority,
+  type EngineStateIssue,
+  type EngineStateIssueCode,
+  type EngineStateMeta,
+  type EngineStatePersistence,
+  type EngineStateRun,
+  type EngineStateSnapshot,
+  type EngineStateValidationResult,
+  inspectEngineStateSnapshot,
+  isEngineStateSnapshot,
+  validateEngineStateSnapshot
+} from "./engine-state/engine-state.js";
+export {
   assertSchemaVersionDescriptor,
   checkSchemaCompatibility,
   compareSchemaVersions,
