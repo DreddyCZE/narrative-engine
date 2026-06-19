@@ -6,7 +6,7 @@ TASK-017 - Entity Identity Validator
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -86,6 +86,11 @@ warning is environment debt only because all checks passed.
 ## Next Recommended Task
 
 - `TASK-018 - Schema Versioning compatibility helper`
+
+## Acceptance Review
+
+Acceptance passed after PR #4 merged into `origin/main`. The validator remained within scope,
+validation passed, and the task was moved to `docs/tasks/done/`.
 
 ## Active Task
 
