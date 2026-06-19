@@ -77,3 +77,30 @@ export {
   inspectSchemaVersionDescriptor,
   isSchemaVersionDescriptor
 } from "./schema-versioning/schema-versioning.js";
+export {
+  adaptEngineStateIssues,
+  adaptEntityIdentityIssues,
+  adaptJsonSafetyIssues,
+  adaptSchemaVersioningIssues,
+  assertValidationDiagnostic,
+  createValidationDiagnostic,
+  formatValidationDiagnostic,
+  formatValidationDiagnosticMessage,
+  type ValidationDiagnostic,
+  type ValidationDiagnosticAdapterOptions,
+  type ValidationDiagnosticCategory,
+  type ValidationDiagnosticInput,
+  type ValidationDiagnosticIssue,
+  type ValidationDiagnosticIssueCode,
+  type ValidationDiagnosticPhase,
+  type ValidationDiagnosticSeverity,
+  type ValidationDiagnosticSource,
+  VALIDATION_DIAGNOSTIC_CONTRACT_VERSION,
+  VALIDATION_DIAGNOSTIC_SCHEMA_ID,
+  VALIDATION_DIAGNOSTIC_SCHEMA_VERSION,
+  inspectValidationDiagnostic,
+  isValidationDiagnostic,
+  normalizeValidationDiagnostics,
+  sortValidationDiagnostics,
+  ValidationDiagnosticValidationError
+} from "./validation-diagnostic/validation-diagnostic.js";
