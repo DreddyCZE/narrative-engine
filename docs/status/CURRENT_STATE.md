@@ -27,7 +27,7 @@
   current state. It did not introduce runtime systems or new contract semantics.
 - M1 contract foundation is locally complete after TASK-013/TASK-014 acceptance.
 - M2 planning is locally complete after TASK-015 acceptance; the first implementation task is now
-  active.
+  in review.
 
 ## Repository / PR State
 
