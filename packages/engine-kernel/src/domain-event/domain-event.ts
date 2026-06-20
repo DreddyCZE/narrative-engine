@@ -580,6 +580,7 @@ function validateEventBatch(
   const events: DomainEventEnvelope[] = [];
   const eventIds = new Set<string>();
   const sequences = new Set<number>();
+  let previousSequence = -1;
 
   for (let index = 0; index < eventsValue.length; index += 1) {
     const eventResult = validateEventEnvelope(eventsValue[index], `${prefix}/events/${String(index)}`);
@@ -597,7 +598,7 @@ function validateEventBatch(
     if (event.previousRevision !== previousRevisionValue || event.revision !== revisionValue) {
       addIssue(issues, "INVALID_REVISION_BOUNDARY", `${prefix}/events/${String(index)}/revision`, "event revision boundary does not match batch revision boundary.");
     }
-    if (event.sequence !== index) {
+    if (event.sequence < previousSequence) {
       addIssue(issues, "INVALID_SEQUENCE", `${prefix}/events/${String(index)}/sequence`, "event sequence is not in canonical order.");
     }
     if (eventIds.has(event.eventId)) {
@@ -608,6 +609,7 @@ function validateEventBatch(
     }
     eventIds.add(event.eventId);
     sequences.add(event.sequence);
+    previousSequence = event.sequence;
     events.push(event);
   }
 

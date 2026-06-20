@@ -2,7 +2,12 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+TASK-025 was accepted on `main` after merge plus a narrow post-merge contract alignment for sparse
+ascending event sequences.
 
 ## Summary
 
@@ -41,7 +46,9 @@ runtime delivery pipeline.
 - Only committed transactions can materialize confirmed events.
 - Transaction wrappers carry revision boundaries and optional transaction binding metadata.
 - Candidate single events are normalized into a single-event confirmed batch.
-- Candidate batches preserve ordering and are validated without re-sorting by event type.
+- Candidate batches preserve ascending `sequence` ordering and are validated without re-sorting by
+  event type.
+- Sparse ascending `sequence` values are accepted; duplicate or descending sequences are rejected.
 - Empty confirmed batches are allowed for committed transactions with no public event.
 - Duplicate transaction materialization is handled through in-memory history deduplication.
 
@@ -78,6 +85,7 @@ runtime delivery pipeline.
 - forbidden key and cyclic input rejection
 - unknown event type and invalid payload rejection
 - duplicate event id and duplicate sequence rejection
+- sparse ascending sequence acceptance
 - revision mismatch rejection
 - command binding mismatch rejection
 - deterministic output
@@ -87,7 +95,7 @@ runtime delivery pipeline.
 
 ## Validation
 
-- `corepack pnpm test -- tests/domain-event-materializer.test.ts` - pass
+- `corepack pnpm test -- tests/domain-event-materializer.test.ts` - pass, 16 tests
 - `corepack pnpm lint` - pass
 - `corepack pnpm typecheck` - pass
 - `corepack pnpm test` - pass, 21 test files / 378 tests

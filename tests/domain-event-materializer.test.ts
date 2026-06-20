@@ -193,13 +193,13 @@ describe("Domain Event Materializer", () => {
     }
   });
 
-  it("rejects sequence gaps", () => {
+  it("allows sequence gaps while preserving ascending sequence order", () => {
     const candidate = readFixture("semantic-invalid/sequence-gap.json");
     const result = materializeDomainEvents(createCommittedInput(candidate));
 
-    expect(result.status).toBe("error");
-    if (result.status === "error") {
-      expect(result.diagnostics.some((issue) => issue.code === "INVALID_SEQUENCE")).toBe(true);
+    expect(result.status).toBe("materialized");
+    if (result.status === "materialized") {
+      expect(result.events.map((event) => event.sequence)).toEqual([0, 2]);
     }
   });
 
@@ -255,6 +255,8 @@ describe("Domain Event Materializer", () => {
 
     expect(result.status).toBe("materialized");
     if (result.status === "materialized") {
+      expect(canonicalizeJson(input.transaction)).toBe(beforeTransaction);
+      expect(canonicalizeJson(candidate)).toBe(beforeCandidate);
       (input.transaction as Record<string, unknown>).transactionId = "transaction.runtime.changed";
       if (isRecord(candidate)) {
         candidate.transactionId = "transaction.runtime.changed";
