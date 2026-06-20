@@ -16,3 +16,20 @@ export {
   type CommandPlanningStatus,
   type PlanningHistory
 } from "./command/command.js";
+
+export {
+  TRANSACTION_CONTRACT_VERSION,
+  TRANSACTION_SCHEMA_ID,
+  TRANSACTION_SCHEMA_VERSION,
+  applyTransaction,
+  inspectTransaction,
+  runCommandTransaction,
+  runTransaction,
+  type TransactionHistory,
+  type TransactionHistoryEntry,
+  type TransactionIssue,
+  type TransactionIssueCode,
+  type TransactionOptions,
+  type TransactionResult,
+  type TransactionStatus
+} from "./transaction/transaction.js";

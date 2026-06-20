@@ -14,7 +14,7 @@ M2C - Transaction Pipeline Preparation
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -134,5 +134,5 @@ primitives.
 - TASK-023 has a deterministic production Command planning boundary and focused tests.
 - The task is moved to `docs/tasks/review/` with status `REVIEW`.
 - `docs/handoffs/TASK-023-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-023 as review and the next step as review of TASK-023.
+- `docs/status/CURRENT_STATE.md` records TASK-023 as done and the next step as TASK-024.
 - Required checks pass.
