@@ -2,11 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Acceptance
 
-Implementation and validation are complete. TASK-022 is ready for review.
+TASK-022 was accepted after PR #9 merged into `origin/main`.
 
 ## Summary
 
@@ -18,7 +18,7 @@ save, UI, or runtime pipeline behavior.
 ## Changed Files
 
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-022-effect-applicator.md`
+- `docs/tasks/done/TASK-022-effect-applicator.md`
 - `docs/handoffs/TASK-022-HANDOFF.md`
 - `packages/engine-contracts/src/effect/effect.ts`
 - `packages/engine-contracts/src/index.ts`
@@ -73,7 +73,7 @@ save, UI, or runtime pipeline behavior.
 
 - `corepack pnpm lint` - pass
 - `corepack pnpm typecheck` - pass
-- `corepack pnpm test` - pass, 11/11
+- `corepack pnpm test` - pass, 18 test files / 336 tests
 - `corepack pnpm build` - pass
 - `corepack pnpm validate` - pass
 - `git diff --check` - pass
