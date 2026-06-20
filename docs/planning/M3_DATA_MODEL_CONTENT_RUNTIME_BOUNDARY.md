@@ -108,7 +108,7 @@ M3 should plan for generic data categories, not game-specific content:
 - domain event materialization mappings
 
 These categories should remain optional and composable so the repository stays genre-neutral and
-does not drift into a Purgatorium-specific structure.
+does not drift into a game-specific structure.
 
 ## 6. Validation Pipeline
 
@@ -193,8 +193,8 @@ Recommended M3 task sequence:
 
 - How broad should the content model be before it becomes hard to validate or too coupled to a
   specific game shape?
-- How do we keep the engine generic and prevent Purgatorium-style hardcoded structures from leaking
-  into shared packages?
+- How do we keep the engine generic and prevent game-specific hardcoded structures from leaking into
+  shared packages?
 - Should content packages be a single package envelope or a graph of smaller package modules?
 - How should localization and text references be versioned and validated before a UI layer exists?
 - How should asset references be represented before an asset pipeline exists?
