@@ -3,19 +3,19 @@
 **Date:** 2026-06-20
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
 1. **Current milestone:** M2C - Transaction Pipeline.
-2. **Current state:** TASK-027 is in review after the M2 Gate Review report was produced.
-3. **Single next most important task:** Review and accept TASK-027 before starting any next-milestone work.
+2. **Current state:** TASK-028 is in review after the M3 Data Model / Content Runtime Boundary plan was produced.
+3. **Single next most important task:** Review and accept TASK-028 before starting any M3 implementation task.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content, or
    any new domain contract.
-5. **How completion is recognized:** TASK-027 is reviewed and accepted, the M2 gate verdict is
-   accepted, and only then may the next milestone be activated.
+5. **How completion is recognized:** TASK-028 is reviewed and accepted, and only then may
+   `TASK-029` or any other M3 implementation task start.
 
 ## Notes
 
@@ -46,7 +46,11 @@
 - TASK-024 is done.
 - TASK-025 is done.
 - TASK-026 is done.
-- TASK-027 is in review.
+- TASK-027 is done.
+- M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`.
+- TASK-028 is in review.
+- M3 planning is in review.
+- No M3 implementation task has been created.
 
 ## Last Checks
 
@@ -96,6 +100,11 @@
 - `corepack pnpm test` - passed on 2026-06-20 for TASK-027 M2 Gate Review; 22 test files, 381 tests.
 - `corepack pnpm build` - passed on 2026-06-20 for TASK-027 M2 Gate Review.
 - `corepack pnpm validate` - passed on 2026-06-20 for TASK-027 M2 Gate Review.
+- `corepack pnpm lint` - passed on 2026-06-20 for TASK-027 acceptance on main.
+- `corepack pnpm typecheck` - passed on 2026-06-20 for TASK-027 acceptance on main.
+- `corepack pnpm test` - passed on 2026-06-20 for TASK-027 acceptance on main; 22 test files, 381 tests.
+- `corepack pnpm build` - passed on 2026-06-20 for TASK-027 acceptance on main.
+- `corepack pnpm validate` - passed on 2026-06-20 for TASK-027 acceptance on main.
 
 Local note: checks were run through `corepack pnpm` because `pnpm` was not directly available in
 PATH. The local Node runtime was `v24.16.0`, so pnpm emitted an engine warning; CI is pinned to
@@ -103,4 +112,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-Do not start the next milestone until TASK-027 is reviewed and accepted.
+M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. TASK-029 must not start
+until TASK-028 planning is reviewed and accepted.
