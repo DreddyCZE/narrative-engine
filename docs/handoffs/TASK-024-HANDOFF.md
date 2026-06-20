@@ -2,11 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Acceptance
 
-TASK-024 was accepted after implementation on `codex/task-024-transaction-manager-reference`.
+TASK-024 was accepted after implementation and merge on `main`.
 
 ## Summary
 
@@ -20,7 +20,7 @@ introducing persistence, event storage, save, UI, or runtime pipeline behavior.
 
 - `docs/handoffs/TASK-024-HANDOFF.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-024-transaction-manager-reference-implementation.md`
+- `docs/tasks/done/TASK-024-transaction-manager-reference-implementation.md`
 - `packages/engine-kernel/src/index.ts`
 - `packages/engine-kernel/src/transaction/transaction.ts`
 - `tests/transaction-manager-reference.test.ts`

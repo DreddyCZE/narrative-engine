@@ -33,3 +33,18 @@ export {
   type TransactionResult,
   type TransactionStatus
 } from "./transaction/transaction.js";
+
+export {
+  DOMAIN_EVENT_CONTRACT_VERSION,
+  DOMAIN_EVENT_SCHEMA_ID,
+  DOMAIN_EVENT_SCHEMA_VERSION,
+  materializeDomainEvents,
+  type DomainEventBatch,
+  type DomainEventEnvelope,
+  type DomainEventMaterializationHistory,
+  type DomainEventMaterializationIssue,
+  type DomainEventMaterializationIssueCode,
+  type DomainEventMaterializationOptions,
+  type DomainEventMaterializationResult,
+  type DomainEventMaterializationStatus
+} from "./domain-event/domain-event.js";

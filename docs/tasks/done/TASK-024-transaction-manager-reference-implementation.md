@@ -14,7 +14,7 @@ M2C - Transaction Pipeline
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -133,7 +133,7 @@ TASK-024 applies an in-memory Transaction Manager above those primitives.
 
 - TASK-024 has a deterministic production Transaction Manager reference implementation and focused
   tests.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
-- `docs/handoffs/TASK-024-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-024 as review and the next step as TASK-025.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
+- `docs/handoffs/TASK-024-HANDOFF.md` exists after implementation and acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-024 as done and the next step as TASK-025.
 - Required checks pass.
