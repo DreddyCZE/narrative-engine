@@ -14,7 +14,7 @@ M2D - Event Materialization
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -124,7 +124,7 @@ Domain Event materialization above those primitives.
 ## Definition of Done
 
 - TASK-025 has a deterministic production Domain Event materializer and focused tests.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
-- `docs/handoffs/TASK-025-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-025 as review and the next step as TASK-026.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
+- `docs/handoffs/TASK-025-HANDOFF.md` exists after implementation and acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-025 as done and the next step as TASK-026.
 - Required checks pass.
