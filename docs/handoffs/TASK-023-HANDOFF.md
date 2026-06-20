@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+TASK-023 was accepted after PR #10 merged into `origin/main`.
 
 ## Summary
 
