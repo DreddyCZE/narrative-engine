@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #14 merged and acceptance validation passed.
 
 ## Gate Verdict
 
@@ -38,7 +42,7 @@ gameplay content.
 
 - `corepack pnpm lint` - pass
 - `corepack pnpm typecheck` - pass
-- `corepack pnpm test` - pass
+- `corepack pnpm test` - pass, 22 test files / 381 tests
 - `corepack pnpm build` - pass
 - `corepack pnpm validate` - pass
 - `git diff --check` - pass
@@ -61,6 +65,10 @@ gameplay content.
 
 - Accept TASK-027 and close M2.
 - Next recommended milestone: `M3 Data Model / Content Runtime Boundary`.
+
+## Next Recommended Task
+
+- `TASK-028 - Plan M3 Data Model / Content Runtime Boundary`
 
 ## Active Task
 
