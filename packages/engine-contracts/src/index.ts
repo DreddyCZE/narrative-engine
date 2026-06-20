@@ -43,6 +43,23 @@ export {
   type ConditionType
 } from "./condition/condition.js";
 export {
+  applyEffect,
+  EFFECT_CONTRACT_VERSION,
+  EFFECT_SCHEMA_ID,
+  EFFECT_SCHEMA_VERSION,
+  formatEffectApplicationIssues,
+  inspectEffect,
+  type EffectApplicationIssue,
+  type EffectApplicationIssueCode,
+  type EffectApplicationOptions,
+  type EffectApplicationResult,
+  type EffectApplicationStatus,
+  type EffectChange,
+  type EffectEnvelope,
+  type EffectTarget,
+  type EffectType
+} from "./effect/effect.js";
+export {
   assertEntityIdentity,
   ENTITY_IDENTITY_CONTRACT_VERSION,
   type EntityIdentity,
