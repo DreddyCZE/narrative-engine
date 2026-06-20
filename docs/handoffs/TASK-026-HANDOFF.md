@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+TASK-026 was accepted on `main` after PR #13 merged and acceptance validation passed.
 
 ## Summary
 
@@ -75,10 +79,10 @@ event bus, UI, plugin runtime, or gameplay content.
 
 ## Validation
 
-- `corepack pnpm test -- tests/minimal-e2e-contract-pipeline.test.ts`
+- `corepack pnpm test -- tests/minimal-e2e-contract-pipeline.test.ts` - pass, 3 tests
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - pass, 22 test files / 381 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`

@@ -14,7 +14,7 @@ M2E Integration Gate
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
