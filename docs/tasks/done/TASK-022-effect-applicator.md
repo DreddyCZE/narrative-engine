@@ -14,7 +14,7 @@ M2B - State Read/Write Primitives
 
 ## Status
 
-REVIEW
+DONE
 
 ## Priority
 
@@ -129,8 +129,7 @@ data to a candidate Engine State copy and returns stable diagnostics.
 ## Definition of Done
 
 - TASK-022 has a production deterministic Effect applicator and focused tests.
-- The task is moved to `docs/tasks/review/` with status `REVIEW`.
+- The task is moved to `docs/tasks/done/` with status `DONE`.
 - `docs/handoffs/TASK-022-HANDOFF.md` exists after implementation.
-- `docs/status/CURRENT_STATE.md` records TASK-022 as review and the next step as TASK-023
-  creation after acceptance.
+- `docs/status/CURRENT_STATE.md` records TASK-022 as done and TASK-023 as active.
 - Required checks pass.
