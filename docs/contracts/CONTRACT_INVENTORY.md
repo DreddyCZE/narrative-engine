@@ -207,6 +207,28 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
 
+### Content to M2 Primitive Integration Contract
+
+- **Purpose:** Defines the data-only binding rules between content package records and the accepted
+  M2 primitive surface, including deterministic diagnostics and test-only integration boundaries.
+- **Owner:** Future content-model contract area with architecture, validation, and M2 contract
+  owners.
+- **Contract document:** `docs/contracts/CONTENT_M2_PRIMITIVE_INTEGRATION.md`.
+- **Producers:** Future content-model adapters, test-only integration checks, validation tooling.
+- **Consumers:** TASK-035 integration tests, future runtime host adapters, M3 gate review, CI.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-m2-primitive-integration@0.1.0`; bindings must stay
+  compatible with the accepted M2 primitive contracts and upstream content contracts.
+- **Dependencies:** Content Package, Content Loader Boundary, Condition, Effect, Command,
+  Transaction, Domain Event, Validation Diagnostic.
+- **Security or migration impact:** Medium. Weak or implicit bindings could smuggle runtime
+  semantics into content data or make content-to-engine integration nondeterministic.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,

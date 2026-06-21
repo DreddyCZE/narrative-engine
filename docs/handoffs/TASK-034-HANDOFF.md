@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted after PR #21 merged into `origin/main`.
 
 ## Summary
 
@@ -27,6 +31,7 @@ diagnostics expectations, and the relationship to the minimal neutral content fi
 
 ## Validation
 
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - pass, 1 test file / 5 tests
 - `corepack pnpm lint` - pass
 - `corepack pnpm typecheck` - pass
 - `corepack pnpm test` - pass, 23 test files / 386 tests

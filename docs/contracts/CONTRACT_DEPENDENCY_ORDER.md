@@ -176,6 +176,7 @@ with:
 3. Content validation diagnostic adapters
 4. Content package cross-reference validation
 5. Validated content graph and loader boundary contract
+6. Content package integration with M2 primitives
 
 Rationale:
 
@@ -189,4 +190,7 @@ Rationale:
   later tasks can rely on stable reference semantics instead of inventing ad hoc package wiring.
 - The loader-boundary contract should exist before any M2 integration task so later work can
   consume a stable validated-content value instead of coupling directly to raw package JSON.
+- Content-to-M2 integration should remain downstream from the loader-boundary contract and the
+  minimal neutral fixture so the first integration checks exercise public M2 APIs without inventing
+  a runtime host.
 - Loader work must remain downstream from validated package shape and diagnostics.
