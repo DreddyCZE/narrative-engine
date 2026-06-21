@@ -194,6 +194,9 @@ graph assembly.
 TASK-033 should add one minimal neutral content fixture so TASK-034 and TASK-035 can consume a
 shared data-only sample without introducing runtime loading or game-specific content.
 
+TASK-034 should define `docs/contracts/CONTENT_LOADER_BOUNDARY.md` so TASK-035 can integrate with a
+documented validated-content value boundary instead of coupling directly to raw fixture data.
+
 ## 10. Non-Goals
 
 - no Save system

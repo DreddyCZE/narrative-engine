@@ -187,4 +187,6 @@ Rationale:
   emit stable content-domain diagnostics without redesigning the reporting boundary.
 - Cross-reference validation should exist before neutral fixtures and loader-boundary contracts so
   later tasks can rely on stable reference semantics instead of inventing ad hoc package wiring.
+- The loader-boundary contract should exist before any M2 integration task so later work can
+  consume a stable validated-content value instead of coupling directly to raw package JSON.
 - Loader work must remain downstream from validated package shape and diagnostics.
