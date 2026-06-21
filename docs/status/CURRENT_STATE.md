@@ -3,20 +3,20 @@
 **Date:** 2026-06-21
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is done. TASK-037 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is done. TASK-037 is done. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
-1. **Current milestone:** M4 Planning.
-2. **Current state:** TASK-036 is accepted, and TASK-037 M4 planning is complete and in review.
-3. **Single next most important task:** Review TASK-037 before any M4 implementation work starts.
+1. **Current milestone:** M4 Content Loader / Validation Implementation.
+2. **Current state:** TASK-037 is accepted, M4 planning is accepted, and TASK-038 has not yet been created.
+3. **Single next most important task:** Create and activate TASK-038 for content loader input/result types.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-037 is accepted, the M4 plan is recorded, and TASK-038
-   does not start before that acceptance.
+5. **How completion is recognized:** TASK-038 is activated within strict type-only scope, the M4
+   plan remains authoritative, and no production loader or runtime implementation starts early.
 
 ## Notes
 
@@ -60,9 +60,10 @@
 - TASK-035 is done.
 - TASK-036 is done.
 - M3 gate is complete with verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`.
-- TASK-037 is in review.
-- Next milestone implementation must not start before M4 planning is accepted.
-- No loader, runtime host, Save, or Event Store implementation task is active yet.
+- TASK-037 is done.
+- M4 planning is accepted.
+- TASK-038 has not been created yet.
+- No production loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
 
@@ -184,5 +185,8 @@ Node 22 via `.nvmrc`.
 ## Next Task Boundary
 
 M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate is complete with
-verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is now in review; do not start TASK-038 or
-any M4 implementation before TASK-037 is accepted.
+verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. The next task is
+`TASK-038 - Content loader input/result types`, and it must stay in type/data boundary scope only:
+no production loader, file IO, runtime content graph resolver, schema validation engine, reference
+resolver implementation, Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin
+runtime, or runtime host.

@@ -2,14 +2,15 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-TASK-037 adds the M4 planning document for Content Loader / Validation Implementation. The work
-stays in planning and documentation scope only. It defines the M4 goal, architecture boundaries,
-validation stages, implementation boundaries, likely package areas, test strategy, task breakdown,
-risks, and explicit non-goals without introducing loader or runtime implementation.
+TASK-037 adds the M4 planning document for Content Loader / Validation Implementation and is now
+accepted on `main`. The work stays in planning and documentation scope only. It defines the M4
+goal, architecture boundaries, validation stages, implementation boundaries, likely package areas,
+test strategy, task breakdown, risks, and explicit non-goals without introducing loader or runtime
+implementation.
 
 ## Changed Files
 
@@ -56,13 +57,17 @@ risks, and explicit non-goals without introducing loader or runtime implementati
 - schema validation depth may need careful phasing across M4 tasks
 - later Save/Event Store attachment still requires discipline to preserve boundary purity
 
+## Acceptance
+
+- acceptance passed on `main`
+
 ## Validation
 
 - `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts`
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - 24 test files / 389 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`
