@@ -178,6 +178,9 @@ Recommended M3 task sequence:
 7. `TASK-035 - Content package integration with M2 primitives`
 8. `TASK-036 - M3 gate review`
 
+TASK-029 is the first M3 implementation boundary and should produce
+`docs/contracts/CONTENT_PACKAGE_CONTRACT.md` without adding loader or runtime behavior.
+
 ## 10. Non-Goals
 
 - no Save system

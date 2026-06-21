@@ -98,6 +98,28 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFT`.
 - **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
 
+### Content Package Contract
+
+- **Purpose:** Defines the neutral data-only package envelope that future content validation and
+  loader tasks will consume without embedding runtime code or concrete game behavior.
+- **Owner:** Future content-model contract area with validation and `packages/engine-contracts`
+  dependencies.
+- **Contract document:** `docs/contracts/CONTENT_PACKAGE_CONTRACT.md`.
+- **Producers:** Content authors, editor export tooling, future package build tooling.
+- **Consumers:** Future content validation, future loader boundary, runtime host adapters, tests.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-package@0.1.0`; future schema versioning governs the
+  serialized manifest and section envelope.
+- **Dependencies:** Entity Identity, Schema Versioning, Condition, Effect, Command, Domain Event,
+  Validation Diagnostic.
+- **Security or migration impact:** High. This boundary must keep data declarative and prevent
+  executable logic from entering shared engine layers.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,

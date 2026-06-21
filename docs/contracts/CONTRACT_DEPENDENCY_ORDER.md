@@ -165,3 +165,22 @@ flowchart TD
 
 Do not draft implementation tasks for Scheduler, Save, Plugin, Script Extension, Asset, Theme, or
 Editor workflow during M1 unless a later ADR or milestone task explicitly changes scope.
+
+## M3 Next-Step Order
+
+After M2 gate acceptance and M3 planning acceptance, the next contract drafting order should begin
+with:
+
+1. Content Package Contract
+2. Content schema and version manifest
+3. Content validation diagnostic adapters
+4. Content package cross-reference validation
+5. Validated content graph and loader boundary contract
+
+Rationale:
+
+- Content Package Contract establishes the neutral package envelope before schema-specific or loader
+  work begins.
+- Schema and validation details should follow the package boundary rather than inventing content
+  loader behavior first.
+- Loader work must remain downstream from validated package shape and diagnostics.
