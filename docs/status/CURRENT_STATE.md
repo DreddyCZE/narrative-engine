@@ -8,15 +8,15 @@
 ## Current Workflow
 
 1. **Current milestone:** M4 Content Loader / Validation Implementation.
-2. **Current state:** TASK-037 is accepted, M4 planning is accepted, and TASK-038 has not yet been created.
-3. **Single next most important task:** Create and activate TASK-038 for content loader input/result types.
+2. **Current state:** TASK-037 is accepted, M4 planning is accepted, and TASK-038 is in review.
+3. **Single next most important task:** Review TASK-038 before any M4 validation implementation starts.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-038 is activated within strict type-only scope, the M4
-   plan remains authoritative, and no production loader or runtime implementation starts early.
+5. **How completion is recognized:** TASK-038 review confirms data-only loader boundary types and
+   tests without adding production loader or runtime behavior, and TASK-039 does not start early.
 
 ## Notes
 
@@ -62,7 +62,7 @@
 - M3 gate is complete with verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`.
 - TASK-037 is done.
 - M4 planning is accepted.
-- TASK-038 has not been created yet.
+- TASK-038 is in review.
 - No production loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -185,8 +185,8 @@ Node 22 via `.nvmrc`.
 ## Next Task Boundary
 
 M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate is complete with
-verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. The next task is
-`TASK-038 - Content loader input/result types`, and it must stay in type/data boundary scope only:
-no production loader, file IO, runtime content graph resolver, schema validation engine, reference
-resolver implementation, Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin
-runtime, or runtime host.
+verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. `TASK-038 - Content loader
+input/result types` is now in review, and `TASK-039` must not start before that review completes.
+The boundary remains type/data only: no production loader, file IO, runtime content graph
+resolver, schema validation engine, reference resolver implementation, Save, Event Store,
+persistence, UI/editor, gameplay/P0 content, plugin runtime, or runtime host.

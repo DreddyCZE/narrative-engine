@@ -194,3 +194,24 @@ Rationale:
   minimal neutral fixture so the first integration checks exercise public M2 APIs without inventing
   a runtime host.
 - Loader work must remain downstream from validated package shape and diagnostics.
+
+## M4 Initial Implementation Order
+
+After M4 planning acceptance, implementation should begin in this order:
+
+1. Content loader input/result types
+2. Manifest and section validation implementation
+3. Content ID indexing and duplicate detection
+4. Reference validation implementation
+5. M2 primitive binding validation implementation
+6. Validated content graph value builder
+7. Minimal fixture loader boundary integration test
+8. M4 gate review
+
+Rationale:
+
+- TASK-038 defines the type/data boundary first so later validation helpers target stable public
+  shapes rather than ad hoc objects.
+- Validation order should follow the accepted M4 stage order from manifest/section checks toward
+  indexing, references, primitive bindings, and final value construction.
+- Integration testing should stay downstream from type shape, validation, and graph assembly work.

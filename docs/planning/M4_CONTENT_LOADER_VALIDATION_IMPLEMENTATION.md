@@ -100,11 +100,15 @@ M4 MUST NOT:
 Likely implementation areas:
 
 - `packages/engine-contracts/src/content-package/...`
+- `packages/engine-contracts/src/content-loader/content-loader-types.ts`
 - `packages/engine-kernel/src/content-loader/...`
+- `tests/content-loader-input-result-types.test.ts`
 - `tests/content-loader-*.test.ts`
 - reuse of `tests/fixtures/content/minimal-neutral-content-package/...`
 
 These are planning targets only. TASK-037 does not create implementation files in those locations.
+TASK-038 is the first follow-through step and is limited to data-only input and result types plus
+shape tests. It does not implement a loader.
 
 ## 7. Test Strategy
 
@@ -161,3 +165,6 @@ Recommended M4 task sequence:
 First implementation task after this plan is accepted:
 
 - `TASK-038 - Content loader input/result types`
+
+TASK-038 should add only the type and export boundary for loader input, source metadata, load
+status, validated content graph value shape, and result envelope. It must not add loader behavior.
