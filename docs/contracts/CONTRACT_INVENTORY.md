@@ -163,6 +163,29 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
 
+### Content Reference Validation Contract
+
+- **Purpose:** Defines content-package cross-reference validation, reference scopes, duplicate-ID
+  expectations, unresolved-reference diagnostics, and deterministic reporting rules.
+- **Owner:** Future content-model contract area with validation owners.
+- **Contract document:** `docs/contracts/CONTENT_REFERENCE_VALIDATION.md`.
+- **Producers:** Future content validators, package-level reference checks, content-model adapters,
+  tests.
+- **Consumers:** Validation reports, future loader boundary, authoring tools, CI, runtime host
+  adapters.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-reference-validation@0.1.0`; mappings must remain
+  compatible with Content Validation Diagnostics and the generic Validation Diagnostic Contract.
+- **Dependencies:** Content Package, Content Schema and Version Manifest, Content Validation
+  Diagnostics, Entity Identity, Validation Diagnostic.
+- **Security or migration impact:** Medium. Unstable or ambiguous reference validation can hide
+  broken content wiring or permit invalid package graphs into later loader stages.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,
