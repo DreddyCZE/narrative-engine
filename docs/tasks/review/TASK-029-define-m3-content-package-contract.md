@@ -37,4 +37,4 @@ Define the M3 content package contract.
 - no UI/editor
 - no gameplay/P0 content
 - no plugin runtime
-- no Purgatorium-specific content
+- no concrete game-specific content
