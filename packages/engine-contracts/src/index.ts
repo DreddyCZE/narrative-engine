@@ -28,6 +28,20 @@ export const initialContracts: readonly ContractDescriptor[] = [
 ];
 
 export {
+  CONTENT_LOAD_STATUSES,
+  isContentLoadStatus,
+  type ContentLoaderInput,
+  type ContentLoaderResult,
+  type ContentLoaderResultMetadata,
+  type ContentLoaderSourceKind,
+  type ContentLoaderSourceMetadata,
+  type ContentLoadStatus,
+  type ValidatedContentGraph,
+  type ValidatedContentManifest,
+  type ValidatedContentReferenceIndex,
+  type ValidatedContentSections
+} from "./content-loader/content-loader-types.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,

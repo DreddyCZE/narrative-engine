@@ -194,12 +194,14 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Contract document:** `docs/contracts/CONTENT_LOADER_BOUNDARY.md`.
 - **Producers:** Future loader-boundary adapters, validation tooling, tests.
 - **Consumers:** Future runtime host adapters, TASK-035 integration work, CI, authoring tools.
+- **Implementation note:** TASK-038 adds type-only loader input/result exports in
+  `packages/engine-contracts/src/content-loader/content-loader-types.ts` with no loader execution.
 - **Visibility:** Public.
 - **Stability:** draft.
 - **Versioning:** Contract version `content-loader-boundary@0.1.0`; result semantics must remain
   compatible with upstream content contracts and diagnostics contracts.
 - **Dependencies:** Content Package, Content Schema and Version Manifest, Content Validation
-  Diagnostics, Content Reference Validation.
+  Diagnostics, Content Reference Validation, Validation Diagnostic.
 - **Security or migration impact:** Medium. A weak loader boundary could smuggle runtime behavior,
   nondeterministic validation, or invalid content graphs into later integration stages.
 - **Needed for M1:** No.

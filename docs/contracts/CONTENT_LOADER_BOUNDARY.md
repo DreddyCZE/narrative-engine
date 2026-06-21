@@ -74,6 +74,8 @@ The future loader MUST NOT:
 - depend on UI or editor runtime
 
 This task does not implement the loader. It defines only the public boundary.
+TASK-038 may add type-only input and result shapes in `packages/engine-contracts`, but that follow-
+through must remain data-only and must not introduce loader behavior.
 
 ## Input Contract
 
@@ -306,11 +308,30 @@ TASK-034 is complete when:
 
 ## Known Limitations
 
-- no type-level skeleton is defined in this task
 - no production loader exists
 - no graph-builder exists
 - no schema validation engine exists
 - no dependency-package orchestration policy exists beyond already-provided data
+
+## TASK-038 Follow-Through
+
+`TASK-038 - Content loader input/result types` is the first implementation step under this
+boundary.
+
+Its allowed output is limited to:
+
+- data-only loader input types
+- data-only loader result and status types
+- validated content graph value shape skeleton
+- diagnostics array typing and status guards
+
+It MUST NOT add:
+
+- loader execution
+- file IO
+- manifest or section validation logic
+- reference resolver logic
+- runtime content graph building
 
 ## Deferred Decisions
 
