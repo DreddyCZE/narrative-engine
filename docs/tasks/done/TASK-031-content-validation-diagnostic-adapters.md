@@ -1,7 +1,7 @@
 # Task: TASK-031 - Content Validation Diagnostic Adapters
 
 **Milestone:** M3 Data Model / Content Runtime Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal

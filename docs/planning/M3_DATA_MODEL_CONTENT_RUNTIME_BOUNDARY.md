@@ -187,6 +187,10 @@ version semantics before any validation-adapter or loader-boundary work begins.
 TASK-031 should define `docs/contracts/CONTENT_VALIDATION_DIAGNOSTICS.md` so later content validators
 can emit stable content-domain diagnostics before cross-reference or loader-boundary work begins.
 
+TASK-032 should define `docs/contracts/CONTENT_REFERENCE_VALIDATION.md` so later fixture and
+loader-boundary tasks can consume stable cross-reference semantics without implementing runtime
+graph assembly.
+
 ## 10. Non-Goals
 
 - no Save system
