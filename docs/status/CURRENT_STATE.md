@@ -3,20 +3,21 @@
 **Date:** 2026-06-21
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is done. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
-1. **Current milestone:** M3 Gate.
-2. **Current state:** TASK-035 is accepted, and TASK-036 M3 Gate Review is complete and in review.
-3. **Single next most important task:** Review TASK-036 before any M4 planning work starts.
+1. **Current milestone:** M4 Planning.
+2. **Current state:** TASK-036 is accepted, the M3 gate is complete, and the next step is to
+   create the M4 planning task.
+3. **Single next most important task:** Create and activate TASK-037 for M4 planning.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-036 is accepted, the M3 gate verdict is recorded, and no
-   M4 task starts before that acceptance.
+5. **How completion is recognized:** TASK-037 is created as the only active planning task and stays
+   documentation-only.
 
 ## Notes
 
@@ -58,9 +59,10 @@
 - TASK-033 is done.
 - TASK-034 is done.
 - TASK-035 is done.
-- TASK-036 is in review.
-- M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`.
-- M3 implementation tasks are complete pending gate acceptance.
+- TASK-036 is done.
+- M3 gate is complete with verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`.
+- TASK-037 has not been created yet.
+- Next milestone implementation must not start before M4 planning is reviewed.
 - No loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -160,9 +162,19 @@ Node 22 via `.nvmrc`.
   tests.
 - `corepack pnpm build` - passed on 2026-06-21 for TASK-036 M3 gate review.
 - `corepack pnpm validate` - passed on 2026-06-21 for TASK-036 M3 gate review.
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - passed on
+  2026-06-21 for TASK-036 acceptance on main; 1 test file / 5 tests.
+- `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts` - passed on 2026-06-21
+  for TASK-036 acceptance on main; 1 test file / 3 tests.
+- `corepack pnpm lint` - passed on 2026-06-21 for TASK-036 acceptance on main.
+- `corepack pnpm typecheck` - passed on 2026-06-21 for TASK-036 acceptance on main.
+- `corepack pnpm test` - passed on 2026-06-21 for TASK-036 acceptance on main; 24 test files, 389
+  tests.
+- `corepack pnpm build` - passed on 2026-06-21 for TASK-036 acceptance on main.
+- `corepack pnpm validate` - passed on 2026-06-21 for TASK-036 acceptance on main.
 
 ## Next Task Boundary
 
-M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate review is now in
-review with verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. Do not start the next milestone until
-TASK-036 is accepted.
+M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate is complete with
+verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. The next task must be M4 planning only; do not start
+M4 implementation before that plan is reviewed.

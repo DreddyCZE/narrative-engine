@@ -2,7 +2,12 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #23 merged. A narrow post-merge wording fix removed forbidden legacy
+references from the M3 gate report before final acceptance validation.
 
 ## Gate Verdict
 
@@ -77,6 +82,10 @@ Save, Event Store, UI, gameplay, or plugin runtime features.
 
 - next recommended milestone: `M4 Content Loader / Validation Implementation`
 - first likely task after acceptance: `TASK-037 - Plan M4 Content Loader / Validation Implementation`
+
+## Next Recommended Task
+
+- `TASK-037 - Plan M4 Content Loader / Validation Implementation`
 
 ## Active Task
 
