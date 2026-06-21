@@ -197,6 +197,10 @@ shared data-only sample without introducing runtime loading or game-specific con
 TASK-034 should define `docs/contracts/CONTENT_LOADER_BOUNDARY.md` so TASK-035 can integrate with a
 documented validated-content value boundary instead of coupling directly to raw fixture data.
 
+TASK-035 should define `docs/contracts/CONTENT_M2_PRIMITIVE_INTEGRATION.md` and one test-only
+integration path so M3 can verify that content records bind to accepted M2 primitives without
+introducing a runtime host or production loader.
+
 ## 10. Non-Goals
 
 - no Save system
