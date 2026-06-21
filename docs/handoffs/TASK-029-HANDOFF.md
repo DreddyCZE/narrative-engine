@@ -2,7 +2,12 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #16 merged. A narrow post-merge task-file wording fix was applied to
+remove a forbidden legacy reference before final acceptance validation.
 
 ## Summary
 
