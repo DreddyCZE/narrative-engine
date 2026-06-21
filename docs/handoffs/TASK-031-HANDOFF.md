@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -33,6 +33,11 @@ Diagnostic Contract, neutral examples, and explicit non-goals.
 - `corepack pnpm build` - pass
 - `corepack pnpm validate` - pass
 - `git diff --check` - pass
+
+## Acceptance
+
+- Accepted on `main` after PR #18 merge.
+- Validation re-run on accepted `main` state and remained green.
 
 ## Non-Goals
 
