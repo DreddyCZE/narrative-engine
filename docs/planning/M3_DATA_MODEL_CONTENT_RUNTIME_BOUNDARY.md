@@ -191,6 +191,9 @@ TASK-032 should define `docs/contracts/CONTENT_REFERENCE_VALIDATION.md` so later
 loader-boundary tasks can consume stable cross-reference semantics without implementing runtime
 graph assembly.
 
+TASK-033 should add one minimal neutral content fixture so TASK-034 and TASK-035 can consume a
+shared data-only sample without introducing runtime loading or game-specific content.
+
 ## 10. Non-Goals
 
 - no Save system
