@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #15 merged and acceptance validation passed.
 
 ## Summary
 
@@ -57,12 +61,12 @@ explicit non-goals without adding runtime implementation.
 
 ## Validation
 
-- `corepack pnpm lint`
-- `corepack pnpm typecheck`
-- `corepack pnpm test`
-- `corepack pnpm build`
-- `corepack pnpm validate`
-- `git diff --check`
+- `corepack pnpm lint` - pass
+- `corepack pnpm typecheck` - pass
+- `corepack pnpm test` - pass, 22 test files / 381 tests
+- `corepack pnpm build` - pass
+- `corepack pnpm validate` - pass
+- `git diff --check` - pass
 
 ## Next Recommended Task
 
