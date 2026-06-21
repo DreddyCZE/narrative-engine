@@ -1,0 +1,230 @@
+{
+  "manifest": {
+    "id": "content.demo.minimal",
+    "name": "Minimal Neutral Content Package",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "contentVersion": "0.1.0",
+    "engineRange": "^0.1.0",
+    "contractVersion": "content-schema-version-manifest@0.1.0",
+    "dependencies": [],
+    "declaredSections": [
+      "entities",
+      "locations",
+      "actors",
+      "items",
+      "documents",
+      "dialogues",
+      "quests",
+      "systems",
+      "commands",
+      "conditions",
+      "effects",
+      "eventMappings",
+      "localization",
+      "assetReferences",
+      "validationManifest"
+    ],
+    "capabilities": [
+      "content-package"
+    ],
+    "diagnosticsPolicy": {
+      "mode": "strict"
+    }
+  },
+  "sections": {
+    "entities": [
+      {
+        "id": "entity.demo.guide",
+        "entityType": "entity",
+        "namespace": "demo",
+        "schemaVersion": 1
+      },
+      {
+        "id": "entity.demo.key",
+        "entityType": "entity",
+        "namespace": "demo",
+        "schemaVersion": 1
+      },
+      {
+        "id": "entity.demo.note",
+        "entityType": "entity",
+        "namespace": "demo",
+        "schemaVersion": 1
+      },
+      {
+        "id": "entity.demo.start-room",
+        "entityType": "entity",
+        "namespace": "demo",
+        "schemaVersion": 1
+      }
+    ],
+    "locations": [
+      {
+        "id": "location.demo.start",
+        "entityId": "entity.demo.start-room",
+        "titleKey": "text.demo.location.start.title"
+      }
+    ],
+    "actors": [
+      {
+        "id": "actor.demo.guide",
+        "entityId": "entity.demo.guide",
+        "locationId": "location.demo.start",
+        "displayNameKey": "text.demo.actor.guide.name"
+      }
+    ],
+    "items": [
+      {
+        "id": "item.demo.key",
+        "entityId": "entity.demo.key",
+        "locationId": "location.demo.start",
+        "displayNameKey": "text.demo.item.key.name"
+      }
+    ],
+    "documents": [
+      {
+        "id": "document.demo.note",
+        "entityId": "entity.demo.note",
+        "locationId": "location.demo.start",
+        "titleKey": "text.demo.document.note.title",
+        "bodyKey": "text.demo.document.note.body"
+      }
+    ],
+    "dialogues": [
+      {
+        "id": "dialogue.demo.greeting",
+        "locationId": "location.demo.start",
+        "speakerActorId": "actor.demo.guide",
+        "lineKey": "text.demo.dialogue.greeting.line"
+      }
+    ],
+    "quests": [
+      {
+        "id": "quest.demo.open-door",
+        "locationId": "location.demo.start",
+        "requiredItemIds": [
+          "item.demo.key"
+        ],
+        "availableCommandIds": [
+          "command.demo.inspect"
+        ],
+        "titleKey": "text.demo.quest.open-door.title"
+      }
+    ],
+    "systems": [
+      {
+        "id": "system.demo.access",
+        "stateDomainId": "state-domain.demo.access",
+        "descriptionKey": "text.demo.system.access.description"
+      }
+    ],
+    "commands": [
+      {
+        "id": "command.demo.inspect",
+        "commandType": "demo.inspect",
+        "conditionRefs": [
+          "condition.demo.has-key"
+        ],
+        "effectRefs": [
+          "effect.demo.mark-inspected"
+        ],
+        "targetLocationId": "location.demo.start",
+        "labelKey": "text.demo.command.inspect.label"
+      }
+    ],
+    "conditions": [
+      {
+        "contractVersion": "condition@0.1.0",
+        "schemaId": "condition",
+        "schemaVersion": 1,
+        "conditionId": "condition.demo.has-key",
+        "type": "constant",
+        "value": true
+      }
+    ],
+    "effects": [
+      {
+        "contractVersion": "effect@0.1.0",
+        "schemaId": "effect",
+        "schemaVersion": 1,
+        "effectId": "effect.demo.mark-inspected",
+        "type": "set-field",
+        "target": {
+          "path": "/facts/location.demo.start/inspected"
+        },
+        "value": true
+      }
+    ],
+    "eventMappings": [
+      {
+        "id": "event-mapping.demo.inspect",
+        "eventType": "demo.inspected",
+        "commandId": "command.demo.inspect",
+        "titleKey": "text.demo.event.inspected.title"
+      }
+    ],
+    "localization": [
+      {
+        "key": "text.demo.actor.guide.name",
+        "value": "Guide"
+      },
+      {
+        "key": "text.demo.command.inspect.label",
+        "value": "Inspect"
+      },
+      {
+        "key": "text.demo.dialogue.greeting.line",
+        "value": "A small hello."
+      },
+      {
+        "key": "text.demo.document.note.body",
+        "value": "A neutral note."
+      },
+      {
+        "key": "text.demo.document.note.title",
+        "value": "Short note"
+      },
+      {
+        "key": "text.demo.event.inspected.title",
+        "value": "Inspection complete"
+      },
+      {
+        "key": "text.demo.item.key.name",
+        "value": "Key"
+      },
+      {
+        "key": "text.demo.location.start.title",
+        "value": "Start"
+      },
+      {
+        "key": "text.demo.quest.open-door.title",
+        "value": "Open the way"
+      },
+      {
+        "key": "text.demo.system.access.description",
+        "value": "Access control state"
+      }
+    ],
+    "assetReferences": [
+      {
+        "id": "asset.demo.location.start.thumbnail",
+        "ownerId": "location.demo.start",
+        "kind": "image",
+        "assetKey": "asset.demo.location.start.thumbnail"
+      }
+    ],
+    "validationManifest": {
+      "requiredSections": [
+        "commands",
+        "conditions",
+        "effects",
+        "eventMappings",
+        "localization"
+      ],
+      "forbiddenContentTerms": [
+        "brand-specific-content"
+      ]
+    }
+  }
+}

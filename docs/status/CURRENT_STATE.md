@@ -3,20 +3,20 @@
 **Date:** 2026-06-21
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
 1. **Current milestone:** M2C - Transaction Pipeline.
-2. **Current state:** TASK-031 is accepted, and TASK-032 cross-reference validation work is complete and in review.
-3. **Single next most important task:** Review TASK-032 before any neutral fixture or loader-boundary work starts.
+2. **Current state:** TASK-032 is accepted, and TASK-033 minimal neutral fixture work is complete and in review.
+3. **Single next most important task:** Review TASK-033 before any loader-boundary or content integration work starts.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-032 is reviewed, and TASK-033 does not start before
-   TASK-032 acceptance.
+5. **How completion is recognized:** TASK-033 is reviewed, and TASK-034 does not start before
+   TASK-033 acceptance.
 
 ## Notes
 
@@ -54,7 +54,8 @@
 - TASK-029 is done.
 - TASK-030 is done.
 - TASK-031 is done.
-- TASK-032 is in review.
+- TASK-032 is done.
+- TASK-033 is in review.
 - No loader or runtime implementation task is active yet.
 
 ## Last Checks
@@ -137,5 +138,5 @@ Node 22 via `.nvmrc`.
 
 ## Next Task Boundary
 
-M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. TASK-032 is in review.
-TASK-033 must not start until TASK-032 is accepted.
+M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. TASK-033 is in review.
+TASK-034 must not start until TASK-033 is accepted.
