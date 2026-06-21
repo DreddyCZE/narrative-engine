@@ -186,6 +186,27 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
 
+### Content Loader Boundary Contract
+
+- **Purpose:** Defines the future content-loader boundary, validated content graph value, validation
+  stage order, deterministic diagnostics behavior, and boundary-safe input and output semantics.
+- **Owner:** Future content-model contract area with validation and architecture owners.
+- **Contract document:** `docs/contracts/CONTENT_LOADER_BOUNDARY.md`.
+- **Producers:** Future loader-boundary adapters, validation tooling, tests.
+- **Consumers:** Future runtime host adapters, TASK-035 integration work, CI, authoring tools.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-loader-boundary@0.1.0`; result semantics must remain
+  compatible with upstream content contracts and diagnostics contracts.
+- **Dependencies:** Content Package, Content Schema and Version Manifest, Content Validation
+  Diagnostics, Content Reference Validation.
+- **Security or migration impact:** Medium. A weak loader boundary could smuggle runtime behavior,
+  nondeterministic validation, or invalid content graphs into later integration stages.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,

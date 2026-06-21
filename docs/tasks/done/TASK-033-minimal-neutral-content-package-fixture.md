@@ -1,7 +1,7 @@
 # Task: TASK-033 - Minimal Neutral Content Package Fixture
 
 **Milestone:** M3 Data Model / Content Runtime Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -37,4 +37,4 @@ Create a minimal neutral content package fixture aligned with the M3 content con
 - no UI/editor
 - no gameplay/P0 content
 - no plugin runtime
-- no Purgatorium-specific content
+- no branded or legacy game-specific content

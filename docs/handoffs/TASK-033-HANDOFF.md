@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -68,6 +68,11 @@ absence of forbidden branded terms or runtime-like content.
 - `corepack pnpm build` - pass
 - `corepack pnpm validate` - pass
 - `git diff --check` - pass
+
+## Acceptance
+
+- Accepted after PR #20 merge into `origin/main`.
+- Targeted fixture validation and full repository validation were re-run on the accepted mainline state.
 
 ## Non-Goals
 
