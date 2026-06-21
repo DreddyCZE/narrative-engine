@@ -184,6 +184,9 @@ TASK-029 is the first M3 implementation boundary and should produce
 TASK-030 should define `docs/contracts/CONTENT_SCHEMA_VERSION_MANIFEST.md` and the manifest-specific
 version semantics before any validation-adapter or loader-boundary work begins.
 
+TASK-031 should define `docs/contracts/CONTENT_VALIDATION_DIAGNOSTICS.md` so later content validators
+can emit stable content-domain diagnostics before cross-reference or loader-boundary work begins.
+
 ## 10. Non-Goals
 
 - no Save system
