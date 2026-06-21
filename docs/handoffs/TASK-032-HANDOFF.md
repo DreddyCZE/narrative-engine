@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -33,6 +33,11 @@ into content validation diagnostics, neutral examples, and explicit non-goals.
 - `corepack pnpm build` - pass
 - `corepack pnpm validate` - pass
 - `git diff --check` - pass
+
+## Acceptance
+
+- Accepted after PR #19 merge into `origin/main`.
+- Validation re-run on the accepted mainline state and remained green.
 
 ## Non-Goals
 
