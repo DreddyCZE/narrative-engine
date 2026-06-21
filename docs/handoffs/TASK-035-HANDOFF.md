@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #22 merged and acceptance validation passed.
 
 ## Summary
 
@@ -50,6 +54,7 @@ plugin runtime behavior.
 
 ## Validation
 
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts`
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`

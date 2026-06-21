@@ -3,20 +3,20 @@
 **Date:** 2026-06-21
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is in review. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
 
 ## Current Workflow
 
 1. **Current milestone:** M2C - Transaction Pipeline.
-2. **Current state:** TASK-034 is accepted, and TASK-035 content-to-M2 primitive integration work is complete and in review.
-3. **Single next most important task:** Review TASK-035 before any M3 gate review work starts.
+2. **Current state:** TASK-035 is accepted, and M3 implementation tasks are complete pending gate review.
+3. **Single next most important task:** Create and activate TASK-036 for the M3 gate review.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-035 is reviewed, and TASK-036 does not start before
-   TASK-035 acceptance.
+5. **How completion is recognized:** TASK-036 is created as the only active task and remains
+   documentation/audit only.
 
 ## Notes
 
@@ -57,7 +57,9 @@
 - TASK-032 is done.
 - TASK-033 is done.
 - TASK-034 is done.
-- TASK-035 is in review.
+- TASK-035 is done.
+- TASK-036 has not been created yet.
+- M3 implementation tasks are complete pending gate review.
 - No loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -138,7 +140,17 @@ Local note: checks were run through `corepack pnpm` because `pnpm` was not direc
 PATH. The local Node runtime was `v24.16.0`, so pnpm emitted an engine warning; CI is pinned to
 Node 22 via `.nvmrc`.
 
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - passed on
+  2026-06-21 for TASK-035 acceptance and integration follow-through; 1 test file / 5 tests.
+- `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts` - passed on 2026-06-21
+  for TASK-035 acceptance; 1 test file / 3 tests.
+- `corepack pnpm lint` - passed on 2026-06-21 for TASK-035 acceptance.
+- `corepack pnpm typecheck` - passed on 2026-06-21 for TASK-035 acceptance.
+- `corepack pnpm test` - passed on 2026-06-21 for TASK-035 acceptance; 24 test files, 389 tests.
+- `corepack pnpm build` - passed on 2026-06-21 for TASK-035 acceptance.
+- `corepack pnpm validate` - passed on 2026-06-21 for TASK-035 acceptance.
+
 ## Next Task Boundary
 
-M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. TASK-035 is in review.
-TASK-036 must not start until TASK-035 is accepted.
+M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 implementation work is
+complete through TASK-035. The next task must be TASK-036 as documentation and audit only.
