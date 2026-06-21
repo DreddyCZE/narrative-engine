@@ -201,6 +201,10 @@ TASK-035 should define `docs/contracts/CONTENT_M2_PRIMITIVE_INTEGRATION.md` and 
 integration path so M3 can verify that content records bind to accepted M2 primitives without
 introducing a runtime host or production loader.
 
+After TASK-036 gate acceptance, the next milestone should move to M4 planning for production loader
+and validation implementation while preserving the same non-goal boundaries around runtime host,
+Save, Event Store, UI, gameplay, and plugin runtime work.
+
 ## 10. Non-Goals
 
 - no Save system

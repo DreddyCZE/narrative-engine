@@ -127,7 +127,7 @@ The minimal neutral content package fixture is acceptable for M3 gate scope:
 - M2 primitive bindings are present
 - localization keys are present
 - validation manifest is present
-- no Purgatorium-specific content is present
+- no branded game-specific content is present
 - no runtime side effects are introduced
 
 The fixture remains intentionally minimal and is suitable as a stable sample for future loader and
@@ -175,7 +175,7 @@ integration.
 - The test-only integration path is not a runtime host and should not be treated as one.
 - The neutral fixture is representative but minimal; it does not prove content-complete workflows.
 - Cross-reference validation is still contract-level unless a future validator implements the rules.
-- Future M4 and later milestones must keep Purgatorium-specific or other branded content out of
+- Future M4 and later milestones must keep branded or game-specific content out of
   shared engine packages.
 - The Node version mismatch should be cleaned up to remove local environment drift.
 
