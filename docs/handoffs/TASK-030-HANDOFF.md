@@ -2,7 +2,11 @@
 
 ## Status
 
-REVIEW
+DONE
+
+## Acceptance
+
+Accepted on `main` after PR #17 merged and acceptance validation passed.
 
 ## Summary
 

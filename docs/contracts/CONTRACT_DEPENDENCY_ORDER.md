@@ -183,4 +183,6 @@ Rationale:
   work begins.
 - Schema and manifest details should follow the package boundary rather than inventing content
   loader behavior first.
+- Diagnostic adapters should be defined before cross-reference validation so later validators can
+  emit stable content-domain diagnostics without redesigning the reporting boundary.
 - Loader work must remain downstream from validated package shape and diagnostics.

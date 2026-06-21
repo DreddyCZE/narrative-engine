@@ -142,6 +142,27 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
 
+### Content Validation Diagnostics Contract
+
+- **Purpose:** Defines content-domain validation diagnostic taxonomy, severity policy, path rules,
+  deterministic ordering, and mapping into the generic Validation Diagnostic Contract.
+- **Owner:** Future content-model contract area with validation owners.
+- **Contract document:** `docs/contracts/CONTENT_VALIDATION_DIAGNOSTICS.md`.
+- **Producers:** Future content validators, manifest validators, content-model adapters, tests.
+- **Consumers:** Validation reports, future loader boundary, authoring tools, CI, runtime host
+  adapters.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-validation-diagnostics@0.1.0`; mappings must remain
+  compatible with the generic Validation Diagnostic Contract.
+- **Dependencies:** Content Package, Content Schema and Version Manifest, Validation Diagnostic.
+- **Security or migration impact:** Medium. Poor or unstable content diagnostics can hide invalid
+  content states or make validation nondeterministic.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,
