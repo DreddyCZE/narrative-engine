@@ -181,6 +181,9 @@ Recommended M3 task sequence:
 TASK-029 is the first M3 implementation boundary and should produce
 `docs/contracts/CONTENT_PACKAGE_CONTRACT.md` without adding loader or runtime behavior.
 
+TASK-030 should define `docs/contracts/CONTENT_SCHEMA_VERSION_MANIFEST.md` and the manifest-specific
+version semantics before any validation-adapter or loader-boundary work begins.
+
 ## 10. Non-Goals
 
 - no Save system

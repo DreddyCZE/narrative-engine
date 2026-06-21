@@ -120,6 +120,28 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
 
+### Content Schema and Version Manifest Contract
+
+- **Purpose:** Defines the manifest-specific schema and version semantics for Content Packages,
+  including compatibility policy, declared sections policy, and deterministic validation
+  expectations.
+- **Owner:** Future content-model contract area with validation and `packages/engine-contracts`
+  dependencies.
+- **Contract document:** `docs/contracts/CONTENT_SCHEMA_VERSION_MANIFEST.md`.
+- **Producers:** Content authors, editor export tooling, future package build tooling.
+- **Consumers:** Future content validation, future loader boundary, runtime host adapters, tests.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Contract version `content-schema-version-manifest@0.1.0`; schema versioning rules
+  govern manifest envelope evolution.
+- **Dependencies:** Content Package, Schema Versioning, Entity Identity, Validation Diagnostic.
+- **Security or migration impact:** High. Manifest version drift or ambiguous compatibility policy can
+  cause invalid content acceptance or unsafe loader assumptions.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+- **MASTER_SPEC refs:** 2A.B, 3, 35, 61.3, 61.6, 61.36.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,
