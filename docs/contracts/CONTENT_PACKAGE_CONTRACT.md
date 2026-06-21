@@ -96,6 +96,9 @@ Identity rules MUST remain compatible with `ENTITY_IDENTITY_CONTRACT.md` and
 
 The manifest is the top-level metadata envelope for one Content Package.
 
+Manifest-specific version and compatibility semantics are governed by
+`CONTENT_SCHEMA_VERSION_MANIFEST.md`.
+
 Canonical manifest fields:
 
 1. `id`
@@ -398,6 +401,7 @@ TASK-029 is complete when:
 - no runtime or loader implementation is added
 - content package shape is documented
 - package identity and manifest rules are documented
+- manifest-specific version semantics are delegated to `CONTENT_SCHEMA_VERSION_MANIFEST.md`
 - M2 primitive binding rules are documented
 - validation and diagnostic expectations are documented
 - the next recommended task is `TASK-030 - Content schema and version manifest`

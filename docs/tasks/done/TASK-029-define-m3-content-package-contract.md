@@ -1,7 +1,7 @@
 # Task: TASK-029 - Define M3 Content Package Contract
 
 **Milestone:** M3 Data Model / Content Runtime Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -37,4 +37,4 @@ Define the M3 content package contract.
 - no UI/editor
 - no gameplay/P0 content
 - no plugin runtime
-- no Purgatorium-specific content
+- no concrete game-specific content

@@ -181,6 +181,6 @@ Rationale:
 
 - Content Package Contract establishes the neutral package envelope before schema-specific or loader
   work begins.
-- Schema and validation details should follow the package boundary rather than inventing content
+- Schema and manifest details should follow the package boundary rather than inventing content
   loader behavior first.
 - Loader work must remain downstream from validated package shape and diagnostics.
