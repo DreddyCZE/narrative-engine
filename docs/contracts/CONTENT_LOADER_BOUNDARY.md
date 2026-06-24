@@ -355,6 +355,28 @@ It MUST NOT add:
 - M2 primitive validation
 - runtime content graph building beyond a value-only skeleton
 
+## TASK-040 Follow-Through
+
+`TASK-040 - Content ID indexing and duplicate detection` is the next pure validation step under
+this boundary.
+
+Its allowed output is limited to:
+
+- stable ID extraction from caller-provided sections
+- section-qualified and package-local ID index values
+- duplicate ID diagnostics
+- invalid or missing item ID diagnostics
+- deterministic indexing and path generation
+
+It MUST NOT add:
+
+- file IO
+- loader orchestration
+- reference target validation
+- reference resolver logic
+- M2 primitive validation
+- runtime content graph building
+
 ## Deferred Decisions
 
 - exact future package-batch input shape

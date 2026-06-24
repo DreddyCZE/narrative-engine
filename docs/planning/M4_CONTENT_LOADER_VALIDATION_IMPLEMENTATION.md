@@ -79,6 +79,11 @@ follow-through in this sequence. Its scope is limited to manifest presence and s
 declared section validation over caller-provided objects. It must not add loader orchestration,
 file IO, reference validation, or runtime graph construction.
 
+`TASK-040 - Content ID indexing and duplicate detection` is the next pure validation step. Its
+scope is limited to stable ID extraction, section-qualified and package-local indexing, duplicate ID
+diagnostics, and invalid or missing item ID diagnostics. It must not add reference target
+validation, reference resolution, M2 primitive validation, or runtime graph building.
+
 ## 5. Implementation Boundaries
 
 M4 MAY:
@@ -139,6 +144,14 @@ TASK-039 adds the first focused validation coverage in this stack:
 - missing declared section returns deterministic diagnostics
 - undeclared section behavior is configurable without invoking later validation stages
 
+TASK-040 adds the next focused validation coverage:
+
+- stable ID index output for the minimal fixture
+- duplicate ID diagnostics
+- cross-section duplicate policy handling
+- invalid or missing item ID diagnostics
+- input immutability without later-stage validation behavior
+
 ## 8. M4 Task Breakdown
 
 Recommended M4 task sequence:
@@ -174,10 +187,10 @@ Recommended M4 task sequence:
 
 ## 11. Recommendation
 
-Current implementation follow-through after TASK-038 acceptance:
+Current implementation follow-through after TASK-039 acceptance:
 
-- `TASK-039 - Manifest and section validation implementation`
+- `TASK-040 - Content ID indexing and duplicate detection`
 
-TASK-039 should add only pure manifest validation, declared section validation, deterministic
-diagnostics, and a data-only result boundary for caller-provided objects. It must not add loader
-behavior, file IO, reference validation, or runtime graph building.
+TASK-040 should add only pure ID indexing, duplicate detection, deterministic diagnostics, and
+stable path generation for caller-provided objects. It must not add loader behavior, file IO,
+reference validation, or runtime graph building.

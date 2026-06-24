@@ -3,6 +3,13 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  buildContentIdIndex,
+  type ContentIdIndexEntry,
+  type ContentIdIndexingOptions,
+  type ContentIdIndexingResult
+} from "./content-loader/content-id-indexing.js";
+
+export {
   validateContentManifestAndSections,
   type ContentManifestSectionValidationOptions
 } from "./content-loader/manifest-section-validation.js";

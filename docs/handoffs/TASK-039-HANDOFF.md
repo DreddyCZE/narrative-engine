@@ -2,16 +2,16 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-TASK-039 adds the first pure validation step for the M4 content loader boundary. The implementation
-accepts caller-provided `ContentLoaderInput`, validates manifest presence and shape, validates
-declared section presence and undeclared section policy, returns deterministic
-`ContentLoaderResult` diagnostics, and preserves input immutability. The work stays data-only and
-does not add file IO, loader orchestration, reference validation, or runtime graph behavior beyond
-an empty skeleton value.
+TASK-039 adds the first pure validation step for the M4 content loader boundary and is now accepted
+on `main`. The implementation accepts caller-provided `ContentLoaderInput`, validates manifest
+presence and shape, validates declared section presence and undeclared section policy, returns
+deterministic `ContentLoaderResult` diagnostics, and preserves input immutability. The work stays
+data-only and does not add file IO, loader orchestration, reference validation, or runtime graph
+behavior beyond an empty skeleton value.
 
 ## Changed Files
 
@@ -19,7 +19,7 @@ an empty skeleton value.
 - `docs/handoffs/TASK-039-HANDOFF.md`
 - `docs/planning/M4_CONTENT_LOADER_VALIDATION_IMPLEMENTATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-039-manifest-section-validation-implementation.md`
+- `docs/tasks/done/TASK-039-manifest-section-validation-implementation.md`
 - `packages/engine-kernel/src/content-loader/manifest-section-validation.ts`
 - `packages/engine-kernel/src/index.ts`
 - `tests/content-loader-manifest-section-validation.test.ts`
@@ -61,6 +61,10 @@ an empty skeleton value.
 - no gameplay/P0 content
 - no plugin runtime
 
+## Acceptance
+
+- acceptance passed on `main`
+
 ## Validation
 
 - `corepack pnpm test -- tests/content-loader-manifest-section-validation.test.ts`
@@ -69,7 +73,7 @@ an empty skeleton value.
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - 26 test files / 401 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`
