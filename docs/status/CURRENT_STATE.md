@@ -3,20 +3,21 @@
 **Date:** 2026-06-21
 **Milestone:** M2C - Transaction Pipeline
 **Active task:** none
-**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is done. TASK-037 is done. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done.
+**Status:** TASK-022 is done. TASK-023 is done. TASK-024 is done. TASK-025 is done. TASK-026 is done. TASK-027 is done. TASK-028 is done. TASK-029 is done. TASK-030 is done. TASK-031 is done. TASK-032 is done. TASK-033 is done. TASK-034 is done. TASK-035 is done. TASK-036 is done. TASK-037 is done. TASK-038 is done. TASK-021 is done. TASK-020 is done. TASK-019 is done. TASK-018 is done. TASK-017 is done. TASK-016 is done. TASK-015 is done. M2 planning outcome is READY_FOR_M2A after final acceptance review. M1 Contract Foundation review outcome is PASS after TASK-014 remediation. TASK-013 is done. TASK-014 is done. TASK-012 is done. TASK-011 is done. TASK-010 is done. TASK-004 through TASK-009 are done. TASK-039 is in review.
 
 ## Current Workflow
 
 1. **Current milestone:** M4 Content Loader / Validation Implementation.
-2. **Current state:** TASK-038 is accepted, and TASK-039 has not yet been created.
-3. **Single next most important task:** Create and activate TASK-039 for manifest and declared section validation.
+2. **Current state:** TASK-038 is accepted, and TASK-039 is in review for manifest and declared section validation.
+3. **Single next most important task:** Review TASK-039 before starting any later M4 implementation task.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-039 lands pure manifest and declared section validation
-   without adding loader orchestration, file IO, reference validation, or runtime behavior.
+5. **How completion is recognized:** TASK-039 review confirms pure manifest and declared section
+   validation without adding loader orchestration, file IO, reference validation, ID indexing, or
+   runtime behavior.
 
 ## Notes
 
@@ -63,7 +64,7 @@
 - TASK-037 is done.
 - M4 planning is accepted.
 - TASK-038 is done.
-- TASK-039 has not been created yet.
+- TASK-039 is in review.
 - No production loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -187,8 +188,9 @@ Node 22 via `.nvmrc`.
 
 M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate is complete with
 verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. `TASK-038 - Content loader
-input/result types` is accepted. The next task is `TASK-039 - Manifest and section validation
-implementation`, and it must remain pure validation scope only: no file IO, no production loader
-orchestration, no reference validation, no ID indexing, no M2 primitive validation, no runtime
-content graph builder, no Save, no Event Store, no persistence, no UI/editor, no gameplay/P0
-content, no plugin runtime, and no runtime host.
+input/result types` is accepted. `TASK-039 - Manifest and section validation implementation` is in
+review, and `TASK-040` must not start until that review is accepted. The M4 boundary remains pure:
+no file IO, no production loader orchestration, no reference validation, no ID indexing beyond
+section presence checks, no M2 primitive validation, no runtime content graph builder, no Save, no
+Event Store, no persistence, no UI/editor, no gameplay/P0 content, no plugin runtime, and no
+runtime host.
