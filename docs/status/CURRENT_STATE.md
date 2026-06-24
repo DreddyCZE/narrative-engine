@@ -8,16 +8,17 @@
 ## Current Workflow
 
 1. **Current milestone:** M4 Content Loader / Validation Implementation.
-2. **Current state:** TASK-040 is accepted, and TASK-041 has not yet been created.
-3. **Single next most important task:** Create and activate TASK-041 for reference validation implementation.
+2. **Current state:** TASK-040 is accepted, and TASK-041 is in review for reference validation implementation.
+3. **Single next most important task:** Review TASK-041 before starting any later M4 implementation task.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-041 lands pure data-only reference target validation
-   over caller-provided content data and the TASK-040 ID index without adding loader
-   orchestration, file IO, runtime graph construction, or M2 primitive semantic validation.
+5. **How completion is recognized:** TASK-041 review confirms pure data-only reference target
+   validation over caller-provided content data and the TASK-040 ID index without adding loader
+   orchestration, file IO, runtime graph construction, external package loading, or M2 primitive
+   semantic validation.
 
 ## Notes
 
@@ -66,7 +67,7 @@
 - TASK-038 is done.
 - TASK-039 is done.
 - TASK-040 is done.
-- TASK-041 has not been created yet.
+- TASK-041 is in review.
 - No production loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -191,8 +192,9 @@ Node 22 via `.nvmrc`.
 M2 gate is complete with verdict `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate is complete with
 verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. `TASK-038 - Content loader
 input/result types` is accepted. `TASK-039 - Manifest and section validation implementation` is
-accepted. `TASK-040 - Content ID indexing and duplicate detection` is accepted. The next task is
-`TASK-041 - Reference validation implementation`, and it must remain pure: no file IO, no
-production loader orchestration, no external dependency loading, no runtime content graph builder,
-no M2 primitive semantic validation, no Save, no Event Store, no persistence, no UI/editor, no
-gameplay/P0 content, no plugin runtime, and no runtime host.
+accepted. `TASK-040 - Content ID indexing and duplicate detection` is accepted. `TASK-041 -
+Reference validation implementation` is in review, and `TASK-042` must not start until that
+review is accepted. The M4 boundary remains pure: no file IO, no production loader
+orchestration, no external dependency loading, no runtime content graph builder, no M2 primitive
+semantic validation, no Save, no Event Store, no persistence, no UI/editor, no gameplay/P0
+content, no plugin runtime, and no runtime host.

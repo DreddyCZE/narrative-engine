@@ -10,6 +10,12 @@ export {
 } from "./content-loader/content-id-indexing.js";
 
 export {
+  validateContentReferences,
+  type ContentReferenceValidationOptions,
+  type ContentReferenceValidationResult
+} from "./content-loader/reference-validation.js";
+
+export {
   validateContentManifestAndSections,
   type ContentManifestSectionValidationOptions
 } from "./content-loader/manifest-section-validation.js";

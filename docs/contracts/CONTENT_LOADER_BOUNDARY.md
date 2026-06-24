@@ -377,6 +377,28 @@ It MUST NOT add:
 - M2 primitive validation
 - runtime content graph building
 
+## TASK-041 Follow-Through
+
+`TASK-041 - Reference validation implementation` is the next pure validation step under this
+boundary.
+
+Its allowed output is limited to:
+
+- reference extraction from caller-provided content package data
+- validation against the TASK-040 ID index
+- missing-target diagnostics
+- wrong-section diagnostics
+- unsupported reference-kind diagnostics
+- deterministic reference path generation
+
+It MUST NOT add:
+
+- file IO
+- loader orchestration
+- external dependency package loading
+- runtime content graph building
+- M2 primitive semantic validation
+
 ## Deferred Decisions
 
 - exact future package-batch input shape
