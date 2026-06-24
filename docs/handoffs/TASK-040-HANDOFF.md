@@ -2,15 +2,16 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-TASK-040 adds pure data-only content ID indexing over caller-provided section data. The
-implementation extracts stable IDs from supported section records, builds deterministic `entries`,
-`byId`, and `bySection` indexes, reports duplicate ID and invalid or missing item ID diagnostics,
-and preserves input immutability. The work stays below reference validation and does not introduce
-file IO, loader orchestration, M2 primitive validation, or runtime graph behavior.
+TASK-040 adds pure data-only content ID indexing over caller-provided section data and is now
+accepted on `main`. The implementation extracts stable IDs from supported section records, builds
+deterministic `entries`, `byId`, and `bySection` indexes, reports duplicate ID and invalid or
+missing item ID diagnostics, and preserves input immutability. The work stays below reference
+validation and does not introduce file IO, loader orchestration, M2 primitive validation, or
+runtime graph behavior.
 
 ## Changed Files
 
@@ -18,7 +19,7 @@ file IO, loader orchestration, M2 primitive validation, or runtime graph behavio
 - `docs/handoffs/TASK-040-HANDOFF.md`
 - `docs/planning/M4_CONTENT_LOADER_VALIDATION_IMPLEMENTATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-040-content-id-indexing-duplicate-detection.md`
+- `docs/tasks/done/TASK-040-content-id-indexing-duplicate-detection.md`
 - `packages/engine-kernel/src/content-loader/content-id-indexing.ts`
 - `packages/engine-kernel/src/index.ts`
 - `tests/content-loader-id-indexing.test.ts`
@@ -69,10 +70,14 @@ file IO, loader orchestration, M2 primitive validation, or runtime graph behavio
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - 27 test files / 407 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`
+
+## Acceptance
+
+- acceptance passed on `main`
 
 ## Non-Goals
 
