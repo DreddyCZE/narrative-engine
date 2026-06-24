@@ -2,15 +2,15 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
 TASK-038 adds data-only TypeScript boundary types for future content-loader input and result
-shapes. The work introduces content load status values, source metadata, loader input, validated
-content graph skeleton, result envelope typing, and a status guard. It also adds shape-level tests
-using the minimal neutral content fixture without introducing loader execution, file IO, or runtime
-validation behavior.
+shapes and is now accepted on `main`. The work introduces content load status values, source
+metadata, loader input, validated content graph skeleton, result envelope typing, and a status
+guard. It also adds shape-level tests using the minimal neutral content fixture without introducing
+loader execution, file IO, or runtime validation behavior.
 
 ## Changed Files
 
@@ -51,6 +51,10 @@ validation behavior.
 - `ContentLoaderResultMetadata`
 - `ContentLoaderResult`
 
+## Acceptance
+
+- acceptance passed on `main`
+
 ## Validation
 
 - `corepack pnpm test -- tests/content-loader-input-result-types.test.ts`
@@ -58,7 +62,7 @@ validation behavior.
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - 25 test files / 394 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`

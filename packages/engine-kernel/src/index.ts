@@ -3,6 +3,11 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  validateContentManifestAndSections,
+  type ContentManifestSectionValidationOptions
+} from "./content-loader/manifest-section-validation.js";
+
+export {
   COMMAND_CONTRACT_VERSION,
   COMMAND_SCHEMA_ID,
   COMMAND_SCHEMA_VERSION,

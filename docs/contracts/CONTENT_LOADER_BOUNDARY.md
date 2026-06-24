@@ -333,6 +333,28 @@ It MUST NOT add:
 - reference resolver logic
 - runtime content graph building
 
+## TASK-039 Follow-Through
+
+`TASK-039 - Manifest and section validation implementation` is the first pure validation step
+under this boundary.
+
+Its allowed output is limited to:
+
+- manifest presence and shape validation
+- required manifest field validation
+- declared section presence validation
+- undeclared section diagnostics policy
+- deterministic `ContentLoaderResult` output for caller-provided objects
+
+It MUST NOT add:
+
+- file IO
+- loader orchestration
+- reference validation
+- ID indexing beyond section presence checks
+- M2 primitive validation
+- runtime content graph building beyond a value-only skeleton
+
 ## Deferred Decisions
 
 - exact future package-batch input shape

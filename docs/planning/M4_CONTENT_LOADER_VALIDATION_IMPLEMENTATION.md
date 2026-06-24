@@ -74,6 +74,11 @@ Recommended implementation order:
 
 Each stage should remain deterministic and value-only.
 
+`TASK-039 - Manifest and section validation implementation` is the first pure validation
+follow-through in this sequence. Its scope is limited to manifest presence and shape checks plus
+declared section validation over caller-provided objects. It must not add loader orchestration,
+file IO, reference validation, or runtime graph construction.
+
 ## 5. Implementation Boundaries
 
 M4 MAY:
@@ -127,6 +132,13 @@ M4 should plan coverage for:
 
 Tests should stay fixture-driven, neutral, and deterministic.
 
+TASK-039 adds the first focused validation coverage in this stack:
+
+- valid minimal fixture returns `valid`
+- missing manifest returns deterministic diagnostics
+- missing declared section returns deterministic diagnostics
+- undeclared section behavior is configurable without invoking later validation stages
+
 ## 8. M4 Task Breakdown
 
 Recommended M4 task sequence:
@@ -162,9 +174,10 @@ Recommended M4 task sequence:
 
 ## 11. Recommendation
 
-First implementation task after this plan is accepted:
+Current implementation follow-through after TASK-038 acceptance:
 
-- `TASK-038 - Content loader input/result types`
+- `TASK-039 - Manifest and section validation implementation`
 
-TASK-038 should add only the type and export boundary for loader input, source metadata, load
-status, validated content graph value shape, and result envelope. It must not add loader behavior.
+TASK-039 should add only pure manifest validation, declared section validation, deterministic
+diagnostics, and a data-only result boundary for caller-provided objects. It must not add loader
+behavior, file IO, reference validation, or runtime graph building.
