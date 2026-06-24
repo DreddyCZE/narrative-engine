@@ -2,15 +2,16 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
 TASK-041 adds pure data-only reference validation over caller-provided content package data and the
-TASK-040 ID index. The implementation extracts known reference fields from the neutral content
-fixture shape, validates missing targets and wrong target sections, reports unsupported reference
-kinds deterministically, and preserves input and ID index immutability. The work stays below
-external dependency loading, runtime graph construction, and M2 primitive semantic validation.
+TASK-040 ID index and is now accepted on `main`. The implementation extracts known reference fields
+from the neutral content fixture shape, validates missing targets and wrong target sections,
+reports unsupported reference kinds deterministically, and preserves input and ID index
+immutability. The work stays below external dependency loading, runtime graph construction, and M2
+primitive semantic validation.
 
 ## Changed Files
 
@@ -18,7 +19,7 @@ external dependency loading, runtime graph construction, and M2 primitive semant
 - `docs/handoffs/TASK-041-HANDOFF.md`
 - `docs/planning/M4_CONTENT_LOADER_VALIDATION_IMPLEMENTATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-041-reference-validation-implementation.md`
+- `docs/tasks/done/TASK-041-reference-validation-implementation.md`
 - `packages/engine-kernel/src/content-loader/reference-validation.ts`
 - `packages/engine-kernel/src/index.ts`
 - `tests/content-loader-reference-validation.test.ts`
@@ -68,10 +69,14 @@ external dependency loading, runtime graph construction, and M2 primitive semant
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
-- `corepack pnpm test`
+- `corepack pnpm test` - 28 test files / 412 tests
 - `corepack pnpm build`
 - `corepack pnpm validate`
 - `git diff --check`
+
+## Acceptance
+
+- acceptance passed on `main`
 
 ## Non-Goals
 
