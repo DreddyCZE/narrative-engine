@@ -84,6 +84,12 @@ scope is limited to stable ID extraction, section-qualified and package-local in
 diagnostics, and invalid or missing item ID diagnostics. It must not add reference target
 validation, reference resolution, M2 primitive validation, or runtime graph building.
 
+`TASK-041 - Reference validation implementation` is the next pure validation step after TASK-040.
+Its scope is limited to reference extraction from caller-provided content data, validation against
+the TASK-040 ID index, deterministic missing-target and wrong-section diagnostics, unsupported
+reference-kind reporting, and stable reference paths. It must not add external dependency loading,
+runtime graph building, or M2 primitive semantic validation.
+
 ## 5. Implementation Boundaries
 
 M4 MAY:
@@ -152,6 +158,14 @@ TASK-040 adds the next focused validation coverage:
 - invalid or missing item ID diagnostics
 - input immutability without later-stage validation behavior
 
+TASK-041 adds the next focused validation coverage:
+
+- valid minimal fixture references return no diagnostics
+- missing target diagnostics are deterministic
+- wrong target section diagnostics are deterministic
+- unsupported reference kind handling is deterministic
+- input and ID index immutability remain preserved without runtime behavior
+
 ## 8. M4 Task Breakdown
 
 Recommended M4 task sequence:
@@ -187,10 +201,10 @@ Recommended M4 task sequence:
 
 ## 11. Recommendation
 
-Current implementation follow-through after TASK-039 acceptance:
+Current implementation follow-through after TASK-040 acceptance:
 
-- `TASK-040 - Content ID indexing and duplicate detection`
+- `TASK-041 - Reference validation implementation`
 
-TASK-040 should add only pure ID indexing, duplicate detection, deterministic diagnostics, and
-stable path generation for caller-provided objects. It must not add loader behavior, file IO,
-reference validation, or runtime graph building.
+TASK-041 should add only pure reference extraction and target validation against the TASK-040 ID
+index, deterministic diagnostics, and stable path generation for caller-provided objects. It must
+not add external dependency loading, runtime graph building, or M2 primitive semantic validation.
