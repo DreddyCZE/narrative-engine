@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -76,6 +76,13 @@ materialization as runtime flow, Save, Event Store, UI, gameplay, and plugin run
 - no gameplay/P0 content
 - no plugin runtime
 - no runtime content graph resolver
+
+## Acceptance
+
+- status DONE on `main`
+- acceptance passed at merge commit `d7ca999`
+- full validation passed on `main`
+- full test suite count: `30` files / `425` tests
 
 ## Validation
 

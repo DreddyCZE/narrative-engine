@@ -427,6 +427,34 @@ It MUST NOT add:
 - gameplay/P0 content
 - plugin runtime
 
+## TASK-043 Follow-Through
+
+`TASK-043 - Minimal fixture loader boundary integration test` is the next review step under this
+boundary.
+
+Its allowed output is limited to:
+
+- test-only orchestration over existing pure boundary stages
+- deterministic end-to-end validation over the minimal neutral fixture
+- happy-path and invalid-path regression coverage
+- input immutability and no-runtime-side-effects assertions
+
+It MUST NOT add:
+
+- production loader orchestration
+- production file loader behavior
+- file IO in production code
+- runtime host behavior
+- command execution
+- effect application
+- transaction commit
+- domain event materialization as runtime flow
+- Save system
+- Event Store
+- persistence
+- UI/editor
+- gameplay/P0 content
+- plugin runtime
 ## Deferred Decisions
 
 - exact future package-batch input shape
