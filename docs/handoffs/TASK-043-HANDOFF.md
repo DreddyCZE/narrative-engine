@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -19,6 +19,12 @@ production loader, production orchestration, file IO in production code, or runt
 - `docs/status/CURRENT_STATE.md`
 - `docs/tasks/review/TASK-043-minimal-fixture-loader-boundary-integration-test.md`
 - `tests/content-loader-boundary-minimal-fixture-integration.test.ts`
+
+## Acceptance
+
+- acceptance passed on `main` at merge commit `4efff7d`
+- validation passed on `main`
+- full test suite count: `31` files / `428` tests
 
 ## Test Location
 

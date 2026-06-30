@@ -8,17 +8,16 @@
 ## Current Workflow
 
 1. **Current milestone:** M4 Content Loader / Validation Implementation.
-2. **Current state:** TASK-042 is accepted, and TASK-043 is in review for minimal fixture loader boundary integration.
-3. **Single next most important task:** Review TASK-043 before starting TASK-044.
+2. **Current state:** TASK-043 is accepted, and M4 implementation work is complete pending gate review.
+3. **Single next most important task:** Create and activate TASK-044 for M4 gate review.
 4. **What the next task must not change:** It must not implement runtime registries, State Store,
    Condition Resolver, Effect Executor, Command Bus, Transaction Manager, Event Bus, Event Store,
    Save system, telemetry, localization, editor UI, save migration code, gameplay/P0 content,
    loader/runtime implementation, content graph resolution, full cross-reference resolution, or
    plugin runtime.
-5. **How completion is recognized:** TASK-043 review confirms pure test-only boundary integration
-   over manifest/section validation, ID indexing, reference validation, M2 binding validation, and
-   validated content graph building without production loader orchestration, file IO, runtime
-   execution, runtime graph resolution, or state commits.
+5. **How completion is recognized:** TASK-044 lands an M4 gate report that audits task status,
+   pure validation stages, tests, boundaries, deferred items, and milestone readiness without
+   adding new production behavior.
 ## Notes
 
 - Git is the canonical source of project truth.
@@ -68,7 +67,7 @@
 - TASK-040 is done.
 - TASK-041 is done.
 - TASK-042 is done.
-- TASK-043 is in review.
+- TASK-043 is done.
 - No production file loader, runtime host, Save, or Event Store implementation task is active yet.
 
 ## Last Checks
@@ -209,8 +208,9 @@ verdict `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 planning is accepted. `TASK-038 -
 input/result types` is accepted. `TASK-039 - Manifest and section validation implementation` is
 accepted. `TASK-040 - Content ID indexing and duplicate detection` is accepted. `TASK-041 -
 Reference validation implementation` is accepted. `TASK-042 - M2 binding validation and graph
-builder` is accepted. `TASK-043 - Minimal fixture loader boundary integration test` is in review,
-and `TASK-044 - M4 gate review` must not start until TASK-043 is accepted. The M4 boundary remains
-pure: no file IO, no production loader orchestration, no external dependency loading, no runtime
-host, no runtime content graph resolver, no runtime execution, no state commits, no Save, no Event
-Store, no persistence, no UI/editor, no gameplay/P0 content, and no plugin runtime.
+builder` is accepted. `TASK-043 - Minimal fixture loader boundary integration test` is accepted.
+M4 implementation work is complete pending `TASK-044 - M4 gate review`, which has not yet been
+created. The M4 boundary remains pure: no file IO, no production loader orchestration, no external
+dependency loading, no runtime host, no runtime content graph resolver, no runtime execution, no
+state commits, no Save, no Event Store, no persistence, no UI/editor, no gameplay/P0 content, and
+no plugin runtime.
