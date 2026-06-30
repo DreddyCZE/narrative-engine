@@ -399,6 +399,34 @@ It MUST NOT add:
 - runtime content graph building
 - M2 primitive semantic validation
 
+## TASK-042 Follow-Through
+
+`TASK-042 - M2 binding validation and graph builder` is the next pure validation step under this
+boundary.
+
+Its allowed output is limited to:
+
+- pure M2 primitive binding validation over caller-provided content package data
+- value-only validated content graph building from existing validation step outputs
+- deterministic diagnostics and stable binding paths
+- stable graph summaries for references, dependencies, primitive bindings, localization, and assets
+
+It MUST NOT add:
+
+- file IO
+- loader orchestration with disk or network access
+- runtime host execution
+- command execution
+- effect application
+- transaction commit
+- domain event materialization as runtime flow
+- Save system
+- Event Store
+- persistence
+- UI/editor
+- gameplay/P0 content
+- plugin runtime
+
 ## Deferred Decisions
 
 - exact future package-batch input shape

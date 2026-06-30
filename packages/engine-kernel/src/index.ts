@@ -10,6 +10,17 @@ export {
 } from "./content-loader/content-id-indexing.js";
 
 export {
+  buildValidatedContentGraphValue,
+  type BuildValidatedContentGraphInput
+} from "./content-loader/validated-content-graph-builder.js";
+
+export {
+  validateContentM2PrimitiveBindings,
+  type ContentM2PrimitiveBindingValidationOptions,
+  type ContentM2PrimitiveBindingValidationResult
+} from "./content-loader/m2-primitive-binding-validation.js";
+
+export {
   validateContentReferences,
   type ContentReferenceValidationOptions,
   type ContentReferenceValidationResult

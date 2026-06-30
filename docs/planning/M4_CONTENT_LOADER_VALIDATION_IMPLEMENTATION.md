@@ -174,10 +174,9 @@ Recommended M4 task sequence:
 2. `TASK-039 - Manifest and section validation implementation`
 3. `TASK-040 - Content ID indexing and duplicate detection`
 4. `TASK-041 - Reference validation implementation`
-5. `TASK-042 - M2 primitive binding validation implementation`
-6. `TASK-043 - Validated content graph value builder`
-7. `TASK-044 - Minimal fixture loader boundary integration test`
-8. `TASK-045 - M4 gate review`
+5. `TASK-042 - M2 binding validation and graph builder`
+6. `TASK-043 - Minimal fixture loader boundary integration test`
+7. `TASK-044 - M4 gate review`
 
 ## 9. Non-Goals
 
@@ -201,10 +200,11 @@ Recommended M4 task sequence:
 
 ## 11. Recommendation
 
-Current implementation follow-through after TASK-040 acceptance:
+Current implementation follow-through after TASK-041 acceptance:
 
-- `TASK-041 - Reference validation implementation`
+- `TASK-042 - M2 binding validation and graph builder`
 
-TASK-041 should add only pure reference extraction and target validation against the TASK-040 ID
-index, deterministic diagnostics, and stable path generation for caller-provided objects. It must
-not add external dependency loading, runtime graph building, or M2 primitive semantic validation.
+For acceleration, the originally planned TASK-042 and TASK-043 are consolidated into one larger
+TASK-042 that lands pure M2 primitive binding validation together with the value-only validated
+content graph builder. The next recommended task after TASK-042 is `TASK-043 - Minimal fixture
+loader boundary integration test`, followed by `TASK-044 - M4 gate review`.
