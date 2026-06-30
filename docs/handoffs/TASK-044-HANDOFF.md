@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Gate Verdict
 
@@ -10,29 +10,23 @@ REVIEW
 
 ## Summary
 
-TASK-044 adds the M4 gate review report and audits M4 task completion, implementation stages,
-tests, boundaries, deferred items, risks, and milestone readiness. The work stays documentation-
-and audit-only and does not add any production loader, runtime host, or new feature behavior.
+TASK-044 was accepted on `main` after the M4 gate review report, task audit, boundary audit, and
+recommendation were revalidated. The work remains documentation-and-audit-only and does not add any
+production loader, runtime host, or new feature behavior.
 
 ## Changed Files
 
 - `docs/handoffs/TASK-044-HANDOFF.md`
 - `docs/reviews/M4-GATE-REVIEW.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-044-m4-gate-review.md`
+- `docs/tasks/done/TASK-044-m4-gate-review.md`
 
-## Audit Result
+## Acceptance
 
-- TASK-037 through TASK-043 are `DONE`
-- TASK-044 is `REVIEW`
-- no other active task exists
-- M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`
-- next milestone recommendation is `M5 Runtime Host Boundary / Command Execution Integration`
-
-## Test Count
-
-- targeted TASK-043 integration test: 1 file / 3 tests
+- acceptance passed on `main`
+- validation passed on `main`
 - full suite: 31 test files / 428 tests
+- no active task
 
 ## Validation
 
@@ -57,6 +51,7 @@ and audit-only and does not add any production loader, runtime host, or new feat
 - local Node `v24.16.0` vs repository Node 22 expectation
 - production file loader
 - runtime host
+- runtime content graph resolver
 - Save/Event Store/persistence
 - UI/editor
 - gameplay/P0 content
@@ -64,29 +59,10 @@ and audit-only and does not add any production loader, runtime host, or new feat
 - external package loading
 - full schema validation engine
 
-## Boundary Notes
-
-- no production file loader
-- no production loader orchestration
-- no file IO in production code
-- no runtime host
-- no runtime content graph resolver
-- no command execution
-- no effect application
-- no transaction commit
-- no domain event materialization as runtime flow
-- no Save system
-- no Event Store
-- no persistence
-- no UI/editor
-- no gameplay/P0 content
-- no plugin runtime
-
 ## Recommendation
 
 - next recommended milestone: `M5 Runtime Host Boundary / Command Execution Integration`
-- first likely task: `TASK-045 - Plan M5 Runtime Host Boundary / Command Execution Integration`
-- do not start TASK-045 in this run
+- next recommended task: `TASK-045 - Plan M5 Runtime Host Boundary / Command Execution Integration`
 
 ## Active Task
 
