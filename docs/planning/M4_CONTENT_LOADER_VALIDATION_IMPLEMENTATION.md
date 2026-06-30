@@ -166,6 +166,11 @@ TASK-041 adds the next focused validation coverage:
 - unsupported reference kind handling is deterministic
 - input and ID index immutability remain preserved without runtime behavior
 
+TASK-043 adds the first full boundary integration coverage over the existing pure validation stages.
+Its scope is limited to test-only orchestration of manifest/section validation, ID indexing,
+reference validation, M2 primitive binding validation, and validated content graph value building
+against the minimal neutral fixture. It must not add production loader orchestration, production
+file IO, or a runtime host.
 ## 8. M4 Task Breakdown
 
 Recommended M4 task sequence:
