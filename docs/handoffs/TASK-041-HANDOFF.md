@@ -102,7 +102,7 @@ primitive semantic validation.
 
 ## Next Recommended Task
 
-- `TASK-042 - M2 primitive binding validation implementation`
+- `TASK-042 - M2 binding validation and graph builder`
 
 ## Active Task
 
