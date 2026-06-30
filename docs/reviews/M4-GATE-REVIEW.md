@@ -59,7 +59,10 @@ Environment debt:
 
 - local Node: `v24.16.0`
 - repository expectation: Node 22 via `.nvmrc`
-- result: local `corepack pnpm` emits the known engine warning, but checks still pass
+- result: local corepack pnpm emits the known engine warning, but checks still pass
+- one parallel rerun produced a transient Node 24 s read flake during test startup; a serial
+  rerun and the full suite both passed, so the issue is tracked as environment noise rather than a
+  product blocker
 
 ## 5. Implementation Audit
 
