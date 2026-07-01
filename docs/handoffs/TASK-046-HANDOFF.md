@@ -2,13 +2,20 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-TASK-046 adds data-only runtime host input/result contracts in `engine-contracts`. The implementation defines runtime host status values, command request input, runtime host input/context/metadata shapes, summary-only command plan, transaction, and domain event values, deterministic result metadata, and runtime host result shape.
+TASK-046 accepted the data-only runtime host input/result contracts in `engine-contracts`. The implementation defines runtime host status values, command request input, runtime host input/context/metadata shapes, summary-only command plan, transaction, and domain event values, deterministic result metadata, and runtime host result shape.
 
 No runtime host execution behavior was added.
+
+## Acceptance
+
+- TASK-046 review passed.
+- Acceptance validation passed on main.
+- Runtime host input/result contracts accepted.
+- Active task remains none.
 
 ## Changed Files
 
@@ -16,7 +23,7 @@ No runtime host execution behavior was added.
 - `docs/handoffs/TASK-046-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-046-runtime-host-input-result-contracts.md`
+- `docs/tasks/done/TASK-046-runtime-host-input-result-contracts.md`
 - `packages/engine-contracts/src/index.ts`
 - `packages/engine-contracts/src/runtime-host/runtime-host-types.ts`
 - `tests/runtime-host-input-result-contracts.test.ts`
