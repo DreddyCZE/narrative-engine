@@ -3,6 +3,13 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  adaptRuntimeConditionEffectBindings,
+  type RuntimeAdaptedConditionBinding,
+  type RuntimeAdaptedEffectBinding,
+  type RuntimeConditionEffectBindingAdapterResult
+} from "./runtime-host/runtime-condition-effect-binding-adapter.js";
+
+export {
   resolveRuntimeCommandRequest,
   type RuntimeCommandRequestResolutionResult,
   type RuntimeResolvedCommand

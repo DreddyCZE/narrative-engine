@@ -1,42 +1,42 @@
-# TASK-047 HANDOFF
+# TASK-048 HANDOFF
 
 ## Status
 
-DONE
+REVIEW
 
 ## Summary
 
-TASK-047 adds a pure runtime command request resolver in `engine-kernel`. The resolver accepts caller-provided `RuntimeHostInput`, reads only the provided validated content graph value, resolves a command or action by `commandId`, and returns either a value-only resolved summary or deterministic diagnostics.
+TASK-048 adds a pure runtime condition/effect binding adapter in `engine-kernel`. The adapter accepts caller-provided `RuntimeHostInput` and `RuntimeResolvedCommand`, reads only the provided validated content graph value, resolves condition and effect definitions referenced by the resolved command, and returns value-only adapted binding summaries plus deterministic diagnostics.
 
 No runtime host execution pipeline was added.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-047-HANDOFF.md`
+- `docs/handoffs/TASK-048-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/done/TASK-047-runtime-command-request-resolver.md`
+- `docs/tasks/review/TASK-048-runtime-condition-effect-binding-adapter.md`
 - `packages/engine-kernel/src/index.ts`
-- `packages/engine-kernel/src/runtime-host/runtime-command-request-resolver.ts`
-- `tests/runtime-command-request-resolver.test.ts`
+- `packages/engine-kernel/src/runtime-host/runtime-condition-effect-binding-adapter.ts`
+- `tests/runtime-condition-effect-binding-adapter.test.ts`
 
 ## Production Function Location
 
-- `packages/engine-kernel/src/runtime-host/runtime-command-request-resolver.ts`
+- `packages/engine-kernel/src/runtime-host/runtime-condition-effect-binding-adapter.ts`
 - export: `packages/engine-kernel/src/index.ts`
 
 ## Test Location
 
-- `tests/runtime-command-request-resolver.test.ts`
+- `tests/runtime-condition-effect-binding-adapter.test.ts`
 
-## Supported Resolver Behavior
+## Supported Adapter Behavior
 
-- resolve a command from `validatedContentGraph.sections.commands` by `RuntimeCommandRequest.commandId`
-- resolve an action from `validatedContentGraph.sections.actions` by `RuntimeCommandRequest.commandId`
-- return stable resolve paths
-- return value-only command definition summaries with condition, effect, and event-mapping refs
-- return deterministic diagnostics for missing, invalid, unknown, ambiguous, and graph-invalid command requests
-- preserve input and validated graph immutability
+- resolve condition definitions from `validatedContentGraph.sections.conditions` by `RuntimeResolvedCommand.conditionRefs`
+- resolve effect definitions from `validatedContentGraph.sections.effects` by `RuntimeResolvedCommand.effectRefs`
+- return stable binding ref paths and stable resolved graph paths
+- return value-only condition and effect definition summaries
+- return deterministic diagnostics for missing, invalid, unknown, ambiguous, and graph-invalid condition/effect bindings
+- preserve input, resolved command, and validated graph immutability
 
 ## Unsupported / Deferred Behavior
 
@@ -57,6 +57,7 @@ No runtime host execution pipeline was added.
 
 ## Validation
 
+- `corepack pnpm test -- tests/runtime-condition-effect-binding-adapter.test.ts` - passed, 1 file / 11 tests
 - `corepack pnpm test -- tests/runtime-command-request-resolver.test.ts` - passed, 1 file / 7 tests
 - `corepack pnpm test -- tests/runtime-host-input-result-contracts.test.ts` - passed, 1 file / 5 tests
 - `corepack pnpm test -- tests/content-loader-boundary-minimal-fixture-integration.test.ts` - passed, 1 file / 3 tests
@@ -70,11 +71,10 @@ No runtime host execution pipeline was added.
 - `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts` - passed, 1 file / 3 tests
 - `corepack pnpm lint` - passed
 - `corepack pnpm typecheck` - passed
-- `corepack pnpm test` - passed, 33 files / 440 tests
+- `corepack pnpm test` - passed, 34 files / 451 tests
 - `corepack pnpm build` - passed
 - `corepack pnpm validate` - passed
-- `git diff --check` - passed
-- acceptance passed on `origin/main` merge commit `5491e87`
+- `git diff --check` - passed after doc finalization
 
 ## Non-Goals
 
@@ -95,13 +95,13 @@ No runtime host execution pipeline was added.
 
 ## Risks / Open Questions
 
-- ambiguous command matching currently reports all matching content paths, but later M5 tasks may need stricter command-vs-action precedence rules
-- graph shape assumptions are intentionally narrow to the current validated content graph boundary and may need extension if later M5 tasks widen graph metadata
-- resolver diagnostics are deterministic, but downstream planning and transaction stages must preserve that determinism when they consume resolver output
+- the adapter currently reports ambiguous matches directly from graph section multiplicity, and later runtime stages may need stronger ownership rules if aliases or layered content packages are introduced
+- the minimal fixture effect shape still reflects content-facing shorthand, so later TASK-049 work must stay explicit about when adaptation into executable M2 effect envelopes begins
+- if later M5 tasks widen validated graph metadata, the current narrow section-shape checks may need extension without destabilizing diagnostic paths
 
 ## Next Recommended Task
 
-- `TASK-048 - Runtime condition/effect binding adapter`
+- `TASK-049 - In-memory command execution pipeline`
 
 ## Active Task
 

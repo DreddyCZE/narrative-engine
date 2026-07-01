@@ -240,6 +240,28 @@ TASK-047 does not add:
 - domain event materialization flow
 - Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin runtime, production file loading, or file IO
 
+## TASK-048 Follow-Through
+
+`TASK-048 - Runtime condition/effect binding adapter` delivers only pure data-only condition and effect binding resolution over caller-provided `RuntimeHostInput`, `RuntimeResolvedCommand`, and validated content graph values.
+
+Allowed output is limited to:
+
+- deterministic condition definition lookup by `RuntimeResolvedCommand.conditionRefs`
+- deterministic effect definition lookup by `RuntimeResolvedCommand.effectRefs`
+- stable adapter paths for binding refs and resolved graph records
+- value-only adapted condition and effect summary data
+- deterministic diagnostics for missing, invalid, unknown, ambiguous, or graph-invalid condition/effect bindings
+- input, resolved command, and validated graph immutability
+
+TASK-048 does not add:
+
+- runtime host execution
+- condition evaluation flow
+- effect application flow
+- command execution
+- transaction commit flow
+- domain event materialization flow
+- Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin runtime, production file loading, or file IO
 ## 10. Non-Goals
 
 - no Save system
