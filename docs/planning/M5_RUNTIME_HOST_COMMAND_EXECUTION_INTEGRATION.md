@@ -218,6 +218,27 @@ TASK-046 does not add:
 - transaction commit flow
 - domain event materialization flow
 - Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin runtime, or production file loading
+## TASK-047 Follow-Through
+
+`TASK-047 - Runtime command request resolver` delivers only pure data-only command or action lookup over caller-provided `RuntimeHostInput` and validated content graph values.
+
+Allowed output is limited to:
+
+- deterministic command or action lookup by `RuntimeCommandRequest.commandId`
+- stable resolve paths
+- value-only resolved command summary data
+- deterministic diagnostics for missing, invalid, unknown, ambiguous, or graph-invalid command requests
+- input and validated graph immutability
+
+TASK-047 does not add:
+
+- runtime host execution
+- condition evaluation flow
+- effect application flow
+- command execution
+- transaction commit flow
+- domain event materialization flow
+- Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin runtime, production file loading, or file IO
 
 ## 10. Non-Goals
 

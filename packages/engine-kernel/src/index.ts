@@ -3,6 +3,12 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  resolveRuntimeCommandRequest,
+  type RuntimeCommandRequestResolutionResult,
+  type RuntimeResolvedCommand
+} from "./runtime-host/runtime-command-request-resolver.js";
+
+export {
   buildContentIdIndex,
   type ContentIdIndexEntry,
   type ContentIdIndexingOptions,
