@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -15,7 +15,7 @@ No runtime host execution pipeline was added.
 - `docs/handoffs/TASK-047-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-047-runtime-command-request-resolver.md`
+- `docs/tasks/done/TASK-047-runtime-command-request-resolver.md`
 - `packages/engine-kernel/src/index.ts`
 - `packages/engine-kernel/src/runtime-host/runtime-command-request-resolver.ts`
 - `tests/runtime-command-request-resolver.test.ts`
@@ -74,6 +74,7 @@ No runtime host execution pipeline was added.
 - `corepack pnpm build` - passed
 - `corepack pnpm validate` - passed
 - `git diff --check` - passed
+- acceptance passed on `origin/main` merge commit `5491e87`
 
 ## Non-Goals
 
