@@ -2,26 +2,32 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
-TASK-045 adds the M5 planning document for Runtime Host Boundary / Command Execution Integration.
-The work is planning-only and defines the runtime host boundary, execution sequence, result-shape
-direction, test strategy, risks, and follow-up task breakdown without implementing runtime behavior.
+TASK-045 accepted the M5 Runtime Host Boundary / Command Execution Integration plan. The work remains planning-only and defines the runtime host boundary, execution sequence, result-shape direction, test strategy, risks, and follow-up task breakdown without implementing runtime behavior.
+
+## Acceptance
+
+- TASK-045 review passed.
+- M5 planning accepted.
+- Complete M5 task breakdown is present in the planning document.
+- Acceptance validation passed on main.
+- Active task remains none.
 
 ## Changed Files
 
 - `docs/handoffs/TASK-045-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-045-plan-m5-runtime-host-boundary.md`
+- `docs/tasks/done/TASK-045-plan-m5-runtime-host-boundary.md`
 
 ## M5 Plan Location
 
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 
-## Proposed Task Breakdown
+## Proposed M5 Task Breakdown
 
 - `TASK-046 - Runtime host input/result contracts`
 - `TASK-047 - Runtime command request resolver`
@@ -58,21 +64,21 @@ direction, test strategy, risks, and follow-up task breakdown without implementi
 
 ## Validation
 
-- `corepack pnpm test -- tests/content-loader-boundary-minimal-fixture-integration.test.ts`
-- `corepack pnpm test -- tests/content-loader-m2-primitive-binding-validation.test.ts`
-- `corepack pnpm test -- tests/content-loader-validated-content-graph-builder.test.ts`
-- `corepack pnpm test -- tests/content-loader-reference-validation.test.ts`
-- `corepack pnpm test -- tests/content-loader-id-indexing.test.ts`
-- `corepack pnpm test -- tests/content-loader-manifest-section-validation.test.ts`
-- `corepack pnpm test -- tests/content-loader-input-result-types.test.ts`
-- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts`
-- `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts`
-- `corepack pnpm lint`
-- `corepack pnpm typecheck`
-- `corepack pnpm test`
-- `corepack pnpm build`
-- `corepack pnpm validate`
-- `git diff --check`
+- `corepack pnpm test -- tests/content-loader-boundary-minimal-fixture-integration.test.ts` - passed, 1 file / 3 tests
+- `corepack pnpm test -- tests/content-loader-m2-primitive-binding-validation.test.ts` - passed, 1 file / 7 tests
+- `corepack pnpm test -- tests/content-loader-validated-content-graph-builder.test.ts` - passed, 1 file / 6 tests
+- `corepack pnpm test -- tests/content-loader-reference-validation.test.ts` - passed, 1 file / 5 tests
+- `corepack pnpm test -- tests/content-loader-id-indexing.test.ts` - passed, 1 file / 6 tests
+- `corepack pnpm test -- tests/content-loader-manifest-section-validation.test.ts` - passed, 1 file / 7 tests
+- `corepack pnpm test -- tests/content-loader-input-result-types.test.ts` - passed, 1 file / 5 tests
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - passed, 1 file / 5 tests
+- `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts` - passed, 1 file / 3 tests
+- `corepack pnpm lint` - passed
+- `corepack pnpm typecheck` - passed
+- `corepack pnpm test` - passed, 31 files / 428 tests
+- `corepack pnpm build` - passed
+- `corepack pnpm validate` - passed
+- `git diff --check` - passed
 
 ## Next Recommended Task
 
