@@ -165,7 +165,7 @@ M5 MUST NOT include:
 - editor workflow
 - game UI
 - plugin sandbox/runtime
-- P0 or Purgatorium-specific content
+- P0 or other game-specific content
 
 ## 8. Test Strategy
 
@@ -214,7 +214,7 @@ Recommended task sequence:
 - how to keep the runtime host pure and in-memory while still returning useful commit results
 - how domain event values should be represented without introducing an Event Store
 - how Save/Event Store can attach later without forcing a runtime host rewrite
-- how to prevent hardcoded Purgatorium or other game-specific content drift
+- how to prevent hardcoded game-specific content drift
 - how command failure and rollback semantics should stay aligned with the accepted transaction contract
 - how deterministic output is preserved when multiple internal stages compose
 
