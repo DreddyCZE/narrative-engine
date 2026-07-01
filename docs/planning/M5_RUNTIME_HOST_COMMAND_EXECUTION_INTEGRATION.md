@@ -165,7 +165,7 @@ M5 MUST NOT include:
 - editor workflow
 - game UI
 - plugin sandbox/runtime
-- P0 or Purgatorium-specific content
+- P0 or other game-specific content
 
 ## 8. Test Strategy
 
@@ -196,6 +196,29 @@ Recommended task sequence:
 6. `TASK-051 - Minimal fixture runtime command integration test`
 7. `TASK-052 - M5 gate review`
 
+## TASK-046 Follow-Through
+
+`TASK-046 - Runtime host input/result contracts` delivers only the data boundary for runtime host input and result values.
+
+Allowed output is limited to:
+
+- runtime host status values and status guard
+- runtime command request shape
+- runtime host input, context, and metadata shapes
+- runtime host result metadata shape
+- command plan, transaction, and domain event summary values
+- JSON-safe examples and export tests
+
+TASK-046 does not add:
+
+- command resolver behavior
+- runtime execution
+- condition evaluation flow
+- effect application flow
+- transaction commit flow
+- domain event materialization flow
+- Save, Event Store, persistence, UI/editor, gameplay/P0 content, plugin runtime, or production file loading
+
 ## 10. Non-Goals
 
 - no Save system
@@ -214,7 +237,7 @@ Recommended task sequence:
 - how to keep the runtime host pure and in-memory while still returning useful commit results
 - how domain event values should be represented without introducing an Event Store
 - how Save/Event Store can attach later without forcing a runtime host rewrite
-- how to prevent hardcoded Purgatorium or other game-specific content drift
+- how to prevent hardcoded game-specific content drift
 - how command failure and rollback semantics should stay aligned with the accepted transaction contract
 - how deterministic output is preserved when multiple internal stages compose
 

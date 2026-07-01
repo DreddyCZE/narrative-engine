@@ -231,6 +231,22 @@ draft priority so future READY tasks can be created without changing scope silen
 - **Current status:** `DRAFTED`.
 - **MASTER_SPEC refs:** 35, 58.10, 61.6, 61.36.
 
+### Runtime Host Input/Result Contracts
+
+- **Purpose:** Defines data-only runtime host input and result values for command requests, caller-provided Engine State snapshots, validated content graph input, deterministic metadata, diagnostics, and summary-only command plan, transaction, and domain event return data.
+- **Owner:** `packages/engine-contracts`; runtime host boundary owners.
+- **Implementation note:** TASK-046 adds type-only exports in `packages/engine-contracts/src/runtime-host/runtime-host-types.ts` with no runtime host execution, command resolver, condition evaluation, effect application, transaction commit, or domain event materialization flow.
+- **Producers:** Runtime host callers, tests, future in-memory runtime host helpers.
+- **Consumers:** Future runtime command resolver, in-memory execution pipeline, tests, diagnostics tooling.
+- **Visibility:** Public.
+- **Stability:** draft.
+- **Versioning:** Runtime result metadata may carry a future runtime host version; type shape is introduced under M5 planning.
+- **Dependencies:** Engine State, Content Loader Boundary validated content graph, Command, Transaction, Domain Event, Validation Diagnostic.
+- **Security or migration impact:** Medium. The boundary must remain data-only and must not smuggle execution, persistence, UI, plugin, Save, or Event Store concerns into contracts.
+- **Needed for M1:** No.
+- **Needed for first vertical slice:** No.
+- **Current status:** `DRAFTED`.
+
 ### Engine State Contract
 
 - **Purpose:** Defines the authoritative runtime state boundary, state domains, revision policy,

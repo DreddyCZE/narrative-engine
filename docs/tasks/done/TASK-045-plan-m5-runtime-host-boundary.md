@@ -1,7 +1,7 @@
 # Task: TASK-045 - Plan M5 runtime host boundary
 
 **Milestone:** M5 Planning
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -40,4 +40,3 @@ Prepare the M5 plan for Runtime Host Boundary / Command Execution Integration.
 - no UI/editor implementation
 - no gameplay/P0 content
 - no plugin runtime
-
