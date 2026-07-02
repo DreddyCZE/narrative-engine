@@ -3,6 +3,11 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  executeInMemoryCommand,
+  type InMemoryCommandExecutionPipelineOptions
+} from "./runtime-host/in-memory-command-execution-pipeline.js";
+
+export {
   adaptRuntimeConditionEffectBindings,
   type RuntimeAdaptedConditionBinding,
   type RuntimeAdaptedEffectBinding,

@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -15,7 +15,7 @@ No runtime host execution pipeline was added.
 - `docs/handoffs/TASK-048-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-048-runtime-condition-effect-binding-adapter.md`
+- `docs/tasks/done/TASK-048-runtime-condition-effect-binding-adapter.md`
 - `packages/engine-kernel/src/index.ts`
 - `packages/engine-kernel/src/runtime-host/runtime-condition-effect-binding-adapter.ts`
 - `tests/runtime-condition-effect-binding-adapter.test.ts`
@@ -74,7 +74,8 @@ No runtime host execution pipeline was added.
 - `corepack pnpm test` - passed, 34 files / 451 tests
 - `corepack pnpm build` - passed
 - `corepack pnpm validate` - passed
-- `git diff --check` - passed after doc finalization
+- `git diff --check` - passed
+- acceptance passed on `origin/main` merge commit `7a4b8ce`
 
 ## Non-Goals
 
