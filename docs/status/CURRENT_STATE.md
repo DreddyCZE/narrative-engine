@@ -9,9 +9,9 @@
 
 1. **Current milestone:** M5 Runtime Host Boundary / Command Execution Integration.
 2. **Current state:** TASK-049 is DONE and there is no active task.
-3. **Single next most important task:** Create and activate `TASK-050 - Runtime domain event return values`.
+3. **Single next most important task:** Create and activate the accelerated `TASK-050/TASK-051` batch for runtime domain event return values and minimal fixture runtime command integration.
 4. **What the current scope must not change:** no Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
-5. **How completion is recognized:** TASK-050 returns deterministic runtime domain event values from accepted in-memory execution results without introducing persistence, replay, or external runtime processes.
+5. **How completion is recognized:** the accelerated `TASK-050/TASK-051` batch returns deterministic runtime domain event values and adds minimal fixture runtime command integration coverage without introducing persistence, replay, file IO, or external runtime processes.
 
 ## Repository / PR State
 
@@ -22,11 +22,14 @@
 - PR #33 was merged into `origin/main` at merge commit `0568fa9`.
 - PR #34 was merged into `origin/main` at merge commit `5491e87`.
 - PR #35 was merged into `origin/main` at merge commit `7a4b8ce`.
+- PR #36 was merged into `origin/main` at merge commit `9df6145`.
 - TASK-045 is done.
 - TASK-046 is done.
 - TASK-047 is done.
 - TASK-048 is done.
-- TASK-049 is done and in REVIEW.
+- TASK-049 is done.
+- TASK-050 has not been created yet.
+- TASK-051 has not been created yet.
 - No production Save/Event Store/persistence/file-IO/UI/gameplay/plugin implementation task is active yet.
 
 ## M5 Planning
@@ -52,6 +55,9 @@
 ## Last Checks
 
 - `corepack pnpm test -- tests/in-memory-command-execution-pipeline.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/runtime-condition-effect-binding-adapter.test.ts` - passed, 1 test file / 11 tests.
+- `corepack pnpm test -- tests/runtime-command-request-resolver.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/runtime-host-input-result-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm test` - passed, 35 test files / 458 tests.
@@ -60,4 +66,4 @@
 
 ## Next Task Boundary
 
-Create and activate `TASK-050 - Runtime domain event return values`. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
+Create and activate the accelerated `TASK-050/TASK-051` batch. TASK-050 and TASK-051 are not yet created. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced. TASK-052 must not be created in this run.
