@@ -7,7 +7,6 @@ import {
   sortValidationDiagnostics,
   type EffectEnvelope,
   type EngineStateSnapshot,
-  type RuntimeDomainEventSummary,
   type RuntimeHostInput,
   type RuntimeHostResult,
   type RuntimeHostResultMetadata,
@@ -18,6 +17,7 @@ import {
 import { planCommand } from "../command/command.js";
 import { runTransaction } from "../transaction/transaction.js";
 import { adaptRuntimeConditionEffectBindings } from "./runtime-condition-effect-binding-adapter.js";
+import { buildRuntimeDomainEventReturnValues } from "./runtime-domain-event-return-values.js";
 import { resolveRuntimeCommandRequest, type RuntimeResolvedCommand } from "./runtime-command-request-resolver.js";
 
 const IN_MEMORY_COMMAND_EXECUTION_PIPELINE_VERSION = "in-memory-command-execution-pipeline@0.1.0" as const;
@@ -35,6 +35,7 @@ type PipelineDiagnosticCode =
   | "RUNTIME_EFFECT_TARGET_DOMAIN_AMBIGUOUS"
   | "RUNTIME_TRANSACTION_REJECTED"
   | "RUNTIME_TRANSACTION_ERROR"
+  | "RUNTIME_DOMAIN_EVENT_RETURN_INVALID"
   | "RUNTIME_NEXT_STATE_BUILD_FAILED";
 
 type JsonRecord = Record<string, JsonValue>;
@@ -316,28 +317,6 @@ function adaptEffectsForExecution(
   };
 }
 
-function buildDomainEventSummary(input: RuntimeHostInput, resolvedCommand: RuntimeResolvedCommand): RuntimeDomainEventSummary {
-  const sections = isRecord(input.validatedContentGraph.sections) ? input.validatedContentGraph.sections : {};
-  const eventMappings = Array.isArray(sections.eventMappings) ? sections.eventMappings : [];
-  const eventTypes: string[] = [];
-
-  for (const ref of resolvedCommand.eventMappingRefs) {
-    for (const candidate of eventMappings) {
-      if (!isRecord(candidate) || candidate.id !== ref || !isNonEmptyString(candidate.eventType)) {
-        continue;
-      }
-
-      eventTypes.push(candidate.eventType);
-      break;
-    }
-  }
-
-  return {
-    count: eventTypes.length,
-    eventTypes: Object.freeze(eventTypes)
-  };
-}
-
 function buildNextState(
   currentState: EngineStateSnapshot,
   effects: readonly EffectEnvelope[],
@@ -547,18 +526,36 @@ export function executeInMemoryCommand(
     return buildErrorResult(nextStateResult.diagnostics, options, commandPlanSummary, transactionSummary);
   }
 
+  const runtimeDomainEventValues = buildRuntimeDomainEventReturnValues(
+    input,
+    resolution.resolved,
+    transactionSummary
+  );
+  if (runtimeDomainEventValues.diagnostics.length > 0) {
+    return buildErrorResult(
+      [
+        createPipelineDiagnostic(
+          "RUNTIME_DOMAIN_EVENT_RETURN_INVALID",
+          "validation",
+          ["domainEvents"],
+          "Runtime domain event return values could not be built deterministically.",
+          toDiagnosticDetails(runtimeDomainEventValues.diagnostics)
+        )
+      ],
+      options,
+      commandPlanSummary,
+      transactionSummary
+    );
+  }
+
   return {
     status: "committed",
     nextState: nextStateResult.nextState,
     diagnostics: Object.freeze([]),
     commandPlan: commandPlanSummary,
     transaction: transactionSummary,
-    domainEvents: buildDomainEventSummary(input, resolution.resolved),
+    domainEvents: runtimeDomainEventValues.summary,
+    runtimeDomainEventValues: runtimeDomainEventValues.events,
     metadata: createMetadata(options)
   };
 }
-
-
-
-
-

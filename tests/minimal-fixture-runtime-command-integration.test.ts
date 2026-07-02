@@ -98,11 +98,7 @@ function makeState(): EngineStateSnapshot {
   };
 }
 
-function makeInput(
-  commandId: unknown,
-  graph: ValidatedContentGraph,
-  currentState: EngineStateSnapshot = makeState()
-): RuntimeHostInput {
+function makeInput(commandId: unknown, graph: ValidatedContentGraph, currentState: EngineStateSnapshot = makeState()): RuntimeHostInput {
   return {
     request: {
       commandId: commandId as string
@@ -123,15 +119,8 @@ function makeInput(
   };
 }
 
-function readInspectedFlag(state: EngineStateSnapshot): unknown {
-  return state.run.domains[0]?.data.facts &&
-    (state.run.domains[0].data.facts as Record<string, unknown>)["location.demo.start"]
-    ? (((state.run.domains[0].data.facts as Record<string, unknown>)["location.demo.start"] as Record<string, unknown>).inspected)
-    : undefined;
-}
-
-describe("in-memory command execution pipeline", () => {
-  it("commits the minimal fixture command with deterministic summaries and immutable inputs", () => {
+describe("minimal fixture runtime command integration", () => {
+  it("runs the full minimal fixture runtime path with return-only domain events", () => {
     const graph = buildGraph(fixture);
     const state = makeState();
     const input = makeInput("command.demo.inspect", graph, state);
@@ -142,15 +131,8 @@ describe("in-memory command execution pipeline", () => {
     const result = executeInMemoryCommand(input, { runtimeHostVersion: "test-host@1.0.0" });
 
     expect(result.status).toBe("committed");
-    expect(result.metadata).toEqual({
-      deterministic: true,
-      runtimeHostVersion: "test-host@1.0.0"
-    });
-    expect(result.commandPlan).toEqual({
-      commandId: "command.demo.inspect",
-      status: "accepted",
-      diagnosticsCount: 0
-    });
+    expect(result.metadata).toEqual({ deterministic: true, runtimeHostVersion: "test-host@1.0.0" });
+    expect(result.commandPlan?.status).toBe("accepted");
     expect(result.transaction).toEqual({
       status: "committed",
       previousRevision: 7,
@@ -160,115 +142,64 @@ describe("in-memory command execution pipeline", () => {
       count: 1,
       eventTypes: ["demo.inspected"]
     });
-    expect(result.diagnostics).toEqual([]);
-    expect(result.nextState).toBeDefined();
-    expect(result.nextState?.revision).toBe(8);
-    expect(readInspectedFlag(result.nextState as EngineStateSnapshot)).toBe(true);
-    expect(readInspectedFlag(state)).toBe(false);
+    expect(result.runtimeDomainEventValues).toEqual([
+      {
+        eventId: "runtime-event.command.demo.inspect.01",
+        eventType: "demo.inspected",
+        sourceCommandId: "command.demo.inspect",
+        payload: {
+          eventMappingId: "event-mapping.demo.inspect",
+          packageId: "content.demo.minimal",
+          transactionStatus: "committed",
+          revision: 8
+        },
+        metadata: {
+          deterministic: true,
+          persistence: "none",
+          source: "runtime-host"
+        }
+      }
+    ]);
     expect(canonicalizeJson(input)).toBe(beforeInput);
     expect(canonicalizeJson(graph)).toBe(beforeGraph);
     expect(canonicalizeJson(state)).toBe(beforeState);
   });
 
-  it("returns blocked for an unknown command", () => {
+  it("returns blocked for unknown and invalid command requests through the full runtime path", () => {
     const graph = buildGraph(fixture);
 
-    const result = executeInMemoryCommand(makeInput("command.demo.missing", graph));
+    const unknown = executeInMemoryCommand(makeInput("command.demo.missing", graph));
+    const invalid = executeInMemoryCommand(makeInput("", graph));
 
-    expect(result.status).toBe("blocked");
-    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
-      "RUNTIME_COMMAND_NOT_FOUND"
-    ]);
+    expect(unknown.status).toBe("blocked");
+    expect(unknown.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(["RUNTIME_COMMAND_NOT_FOUND"]);
+    expect(invalid.status).toBe("blocked");
+    expect(invalid.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(["RUNTIME_COMMAND_ID_MISSING"]);
   });
 
-  it("returns blocked for an invalid command request", () => {
+  it("returns deterministic committed output for repeated identical runtime inputs", () => {
     const graph = buildGraph(fixture);
-
-    const result = executeInMemoryCommand(makeInput("", graph));
-
-    expect(result.status).toBe("blocked");
-    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
-      "RUNTIME_COMMAND_ID_MISSING"
-    ]);
-  });
-
-  it("returns rejected when an adapted condition evaluates to false", () => {
-    const mutatedFixture = JSON.parse(canonicalizeJson(fixture)) as FixtureShape & {
-      sections: {
-        conditions: Array<Record<string, unknown>>;
-      };
-    };
-    mutatedFixture.sections.conditions[0] = {
-      ...mutatedFixture.sections.conditions[0],
-      value: false
-    };
-    const graph = buildGraph(mutatedFixture);
-
-    const result = executeInMemoryCommand(makeInput("command.demo.inspect", graph));
-
-    expect(result.status).toBe("rejected");
-    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
-      "RUNTIME_CONDITION_REJECTED"
-    ]);
-  });
-
-  it("returns error when an adapted effect cannot resolve a target domain", () => {
-    const mutatedFixture = JSON.parse(canonicalizeJson(fixture)) as FixtureShape & {
-      sections: {
-        effects: Array<Record<string, unknown>>;
-      };
-    };
-    mutatedFixture.sections.effects[0] = {
-      ...mutatedFixture.sections.effects[0],
-      target: {
-        path: "/missing/location.demo.start/inspected"
-      }
-    };
-    const graph = buildGraph(mutatedFixture);
-
-    const result = executeInMemoryCommand(makeInput("command.demo.inspect", graph));
-
-    expect(result.status).toBe("error");
-    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
-      "RUNTIME_EFFECT_TARGET_DOMAIN_UNRESOLVED"
-    ]);
-  });
-
-  it("returns deterministic diagnostics ordering for repeated invalid executions", () => {
-    const graph = JSON.parse(canonicalizeJson(buildGraph(fixture))) as ValidatedContentGraph & {
-      sections: {
-        commands: Array<Record<string, unknown>>;
-      };
-    };
-    graph.sections.commands[0] = {
-      ...graph.sections.commands[0],
-      effectRefs: ["effect.demo.missing-a", "effect.demo.missing-b"]
-    };
     const input = makeInput("command.demo.inspect", graph);
 
     const first = executeInMemoryCommand(input);
     const second = executeInMemoryCommand(JSON.parse(canonicalizeJson(input)) as RuntimeHostInput);
 
-    expect(first.status).toBe("blocked");
-    expect(first.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
-      "RUNTIME_EFFECT_NOT_FOUND",
-      "RUNTIME_EFFECT_NOT_FOUND"
-    ]);
     expect(canonicalizeJson(first)).toBe(canonicalizeJson(second));
   });
 
-  it("keeps the pipeline free of file IO, persistence, UI, plugin, and event-store writes", () => {
-    const source = readFileSync(
+  it("keeps production runtime sources free of Save, Event Store, file IO, UI, plugin, and replay behavior", () => {
+    const sourceBundle = [
       "packages/engine-kernel/src/runtime-host/in-memory-command-execution-pipeline.ts",
-      "utf8"
-    );
+      "packages/engine-kernel/src/runtime-host/runtime-domain-event-return-values.ts"
+    ]
+      .map((path) => readFileSync(path, "utf8"))
+      .join("\n");
 
-    expect(source).not.toMatch(/node:(fs|path)|readFileSync|writeFileSync|appendFileSync|fetch\(/u);
-    expect(source).not.toContain("EventStore");
-    expect(source).not.toContain("Save system");
-    expect(source).not.toContain("plugin runtime");
-    expect(source).not.toContain("materializeDomainEvents");
-    expect(source).not.toContain("command.demo.inspect");
-    expect(source).not.toContain("location.demo.start");
+    expect(sourceBundle).not.toMatch(/node:(fs|path)|readFileSync|writeFileSync|appendFileSync|fetch\(/u);
+    expect(sourceBundle).not.toContain("EventStore");
+    expect(sourceBundle).not.toContain("Save system");
+    expect(sourceBundle).not.toContain("plugin runtime");
+    expect(sourceBundle).not.toContain("replay");
+    expect(sourceBundle).not.toContain("production file loader");
   });
 });

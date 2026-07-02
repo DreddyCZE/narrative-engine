@@ -46,6 +46,8 @@ export {
   isRuntimeHostStatus,
   type RuntimeCommandPlanSummary,
   type RuntimeCommandRequest,
+  type RuntimeDomainEventReturnValue,
+  type RuntimeDomainEventReturnValueMetadata,
   type RuntimeDomainEventSummary,
   type RuntimeHostContext,
   type RuntimeHostInput,

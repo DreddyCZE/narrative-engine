@@ -3,6 +3,11 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  buildRuntimeDomainEventReturnValues,
+  type RuntimeDomainEventReturnValuesResult
+} from "./runtime-host/runtime-domain-event-return-values.js";
+
+export {
   executeInMemoryCommand,
   type InMemoryCommandExecutionPipelineOptions
 } from "./runtime-host/in-memory-command-execution-pipeline.js";

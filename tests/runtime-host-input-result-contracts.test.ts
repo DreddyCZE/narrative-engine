@@ -139,6 +139,24 @@ describe("runtime host input/result contracts", () => {
         count: 1,
         eventTypes: ["demo.inspected"]
       },
+      runtimeDomainEventValues: [
+        {
+          eventId: "runtime-event.command.demo.inspect.01",
+          eventType: "demo.inspected",
+          sourceCommandId: "command.demo.inspect",
+          payload: {
+            eventMappingId: "event-mapping.demo.inspect",
+            packageId: "content.demo.minimal",
+            transactionStatus: "committed",
+            revision: 8
+          },
+          metadata: {
+            deterministic: true,
+            persistence: "none",
+            source: "runtime-host"
+          }
+        }
+      ],
       metadata: {
         deterministic: true,
         runtimeHostVersion: "runtime-host@0.1.0"
@@ -148,6 +166,7 @@ describe("runtime host input/result contracts", () => {
     expect(result.status).toBe("committed");
     expect(result.nextState?.revision).toBe(8);
     expect(result.domainEvents?.eventTypes).toEqual(["demo.inspected"]);
+    expect(result.runtimeDomainEventValues?.[0]?.metadata.persistence).toBe("none");
     expect(isJsonSafe(result)).toBe(true);
   });
 
