@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Gate Verdict
 
@@ -19,7 +19,7 @@ TASK-052 performs the M5 Gate Review over the completed runtime host boundary / 
 - `docs/handoffs/TASK-052-HANDOFF.md`
 - `docs/reviews/M5-GATE-REVIEW.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-052-m5-gate-review.md`
+- `docs/tasks/done/TASK-052-m5-gate-review.md`
 
 ## Audit Result
 
@@ -92,7 +92,7 @@ TASK-052 performs the M5 Gate Review over the completed runtime host boundary / 
 
 - `M6 Save/Event Store / Persistence Boundary Planning`
 - first likely task: `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary`
-- do not start TASK-053 in this run
+- TASK-053 may start only after this acceptance is landed from `main`
 
 ## Active Task
 

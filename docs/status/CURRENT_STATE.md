@@ -1,17 +1,17 @@
 # Current State
 
 **Date:** 2026-07-02
-**Milestone:** M5 Runtime Host Boundary / Command Execution Integration
+**Milestone:** M6 Save/Event Store / Persistence Boundary Planning
 **Active task:** none
-**Status:** TASK-037 through TASK-051 are DONE. TASK-052 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-052 are DONE. TASK-053 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
-1. **Current milestone:** M5 Runtime Host Boundary / Command Execution Integration.
-2. **Current state:** TASK-049 is DONE, TASK-050 is DONE, TASK-051 is DONE, TASK-052 is in REVIEW, and there is no active task.
-3. **Single next most important task:** Review and land `TASK-052 - M5 gate review`.
-4. **What the current scope must not change:** do not start the next milestone until TASK-052 is accepted. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
-5. **How completion is recognized:** TASK-052 remains review-ready with an explicit M5 gate report and TASK-053 has not been created yet.
+1. **Current milestone:** M6 Save/Event Store / Persistence Boundary Planning.
+2. **Current state:** TASK-052 is DONE, TASK-053 is in REVIEW, and there is no active task.
+3. **Single next most important task:** Review and land `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary`.
+4. **What the current scope must not change:** do not start `TASK-054` until TASK-053 is accepted. No Event Store implementation, no Save system implementation, no persistence implementation, no file IO, no production file loader, no database or storage adapter implementation, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** `docs/planning/M6_SAVE_EVENT_STORE_PERSISTENCE_BOUNDARY.md` is review-ready, TASK-053 is in REVIEW, and TASK-054 has not been created.
 
 ## Repository / PR State
 
@@ -20,35 +20,30 @@
 - The old incorrect remote remains isolated and must not be used for pushes.
 - PR #36 was merged into `origin/main` at merge commit `9df6145`.
 - PR #37 was merged into `origin/main` at merge commit `09e0d8b`.
+- PR #38 was merged into `origin/main` at merge commit `f78d928`.
 - TASK-049 is done.
 - TASK-050 is done.
 - TASK-051 is done.
-- TASK-052 is in review.
-- TASK-053 has not been created.
+- TASK-052 is done.
+- TASK-053 is in review.
+- TASK-054 has not been created.
 - No production Save/Event Store/persistence/file-IO/UI/gameplay/plugin implementation task is active.
 
-## M5 Planning
+## M6 Planning
 
-- M5 plan location: `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`.
-- Completed sequence:
-  - `TASK-049 - In-memory command execution pipeline` DONE
-  - `TASK-050 - Runtime domain event return values` DONE
-  - `TASK-051 - Minimal fixture runtime command integration test` DONE
-- Gate review sequence:
-  - `TASK-052 - M5 gate review` REVIEW
-- Deferred next task:
-  - `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary` not created
+- M5 gate verdict: `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+- M6 plan location: `docs/planning/M6_SAVE_EVENT_STORE_PERSISTENCE_BOUNDARY.md`.
+- Planning sequence:
+  - `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary` REVIEW
+- Next recommended task after acceptance:
+  - `TASK-054 - Persistence envelope/input/result contracts`
 
-## M5 Outcome
+## Boundary Reminder
 
-- Runtime host input/result contracts are accepted.
-- Runtime command request resolver is accepted.
-- Runtime condition/effect binding adapter is accepted.
-- In-memory command execution pipeline is accepted.
-- Runtime domain event return values are accepted as return-only deterministic data.
-- Minimal fixture runtime command integration coverage exercises the full validated-graph to runtime-result in-memory path.
-- M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
-- Runtime boundary remains pure/in-memory with no persistence, no file IO, and no long-running runtime host process.
+- Runtime host remains pure/in-memory.
+- Runtime domain event values remain return-only deterministic data.
+- No Event Store writes may be added to the runtime host.
+- No Save system, persistence, file IO, production file loader, database or storage adapter code, replay system, UI/editor, gameplay/P0 content, plugin runtime, or long-running runtime host process may be introduced in this task.
 
 ## Last Checks
 
@@ -63,4 +58,4 @@
 
 ## Next Task Boundary
 
-Only review and acceptance of `TASK-052 - M5 gate review` is in scope next. Do not start the next milestone until TASK-052 is accepted. Do not create TASK-053 in this run. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
+TASK-054 must not start until TASK-053 is accepted. Until then, scope remains planning/documentation only. Do not implement Event Store, Save system, persistence, file IO, production file loader, database or storage adapter code, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior.
