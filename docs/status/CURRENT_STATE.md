@@ -1,17 +1,17 @@
 # Current State
 
 **Date:** 2026-07-02
-**Milestone:** M5 Runtime Host Boundary / Command Execution Integration
+**Milestone:** M5 Gate Complete
 **Active task:** none
-**Status:** TASK-037 through TASK-051 are DONE. TASK-052 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-052 are DONE. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
-1. **Current milestone:** M5 Runtime Host Boundary / Command Execution Integration.
-2. **Current state:** TASK-049 is DONE, TASK-050 is DONE, TASK-051 is DONE, TASK-052 is in REVIEW, and there is no active task.
-3. **Single next most important task:** Review and land `TASK-052 - M5 gate review`.
-4. **What the current scope must not change:** do not start the next milestone until TASK-052 is accepted. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
-5. **How completion is recognized:** TASK-052 remains review-ready with an explicit M5 gate report and TASK-053 has not been created yet.
+1. **Current milestone:** M5 is accepted; next milestone planning is M6 Save/Event Store / Persistence Boundary Planning.
+2. **Current state:** TASK-049 is DONE, TASK-050 is DONE, TASK-051 is DONE, TASK-052 is DONE, and there is no active task.
+3. **Single next most important task:** Create and activate `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary`.
+4. **What the current scope must not change:** M6 planning may start next, but no Event Store, Save system, persistence, file IO, production file loader, UI/editor, gameplay/P0 content, plugin runtime, external network calls, replay system, or long-running runtime host process may be implemented in acceptance.
+5. **How completion is recognized:** TASK-052 is accepted as DONE, M5 gate completion is recorded, and TASK-053 remains not yet created on `main`.
 
 ## Repository / PR State
 
@@ -20,14 +20,15 @@
 - The old incorrect remote remains isolated and must not be used for pushes.
 - PR #36 was merged into `origin/main` at merge commit `9df6145`.
 - PR #37 was merged into `origin/main` at merge commit `09e0d8b`.
+- PR #38 was merged into `origin/main` at merge commit `f78d928`.
 - TASK-049 is done.
 - TASK-050 is done.
 - TASK-051 is done.
-- TASK-052 is in review.
+- TASK-052 is done.
 - TASK-053 has not been created.
 - No production Save/Event Store/persistence/file-IO/UI/gameplay/plugin implementation task is active.
 
-## M5 Planning
+## M5 / M6 Boundary
 
 - M5 plan location: `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`.
 - Completed sequence:
@@ -35,8 +36,8 @@
   - `TASK-050 - Runtime domain event return values` DONE
   - `TASK-051 - Minimal fixture runtime command integration test` DONE
 - Gate review sequence:
-  - `TASK-052 - M5 gate review` REVIEW
-- Deferred next task:
+  - `TASK-052 - M5 gate review` DONE
+- Next planned task:
   - `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary` not created
 
 ## M5 Outcome
@@ -49,6 +50,7 @@
 - Minimal fixture runtime command integration coverage exercises the full validated-graph to runtime-result in-memory path.
 - M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
 - Runtime boundary remains pure/in-memory with no persistence, no file IO, and no long-running runtime host process.
+- M5 gate is complete and accepted.
 
 ## Last Checks
 
@@ -63,4 +65,4 @@
 
 ## Next Task Boundary
 
-Only review and acceptance of `TASK-052 - M5 gate review` is in scope next. Do not start the next milestone until TASK-052 is accepted. Do not create TASK-053 in this run. No Save system, no Event Store writes, no persistence, no file IO, no production file loader, no UI/editor, no gameplay/P0 content, no plugin runtime, no external network calls, no replay system, and no long-running runtime host process may be introduced.
+The next task may create `TASK-053 - Plan M6 Save/Event Store / Persistence Boundary`, but must remain planning/documentation only. Do not implement Save system, Event Store writes, persistence, file IO, production file loader, UI/editor, gameplay/P0 content, plugin runtime, external network calls, replay system, or long-running runtime host process behavior.
