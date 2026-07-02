@@ -289,3 +289,54 @@ TASK-048 does not add:
 First implementation task after this plan is accepted:
 
 - `TASK-046 - Runtime host input/result contracts`
+
+## TASK-050 Follow-Through
+
+`TASK-050 - Runtime domain event return values` delivers only deterministic return-only runtime domain event values over caller-provided runtime host input, resolved command data, and committed in-memory transaction summaries.
+
+Allowed output is limited to:
+
+- deterministic runtime domain event return value records
+- deterministic runtime domain event summary values
+- optional non-breaking runtime host result integration
+- validation diagnostics for invalid runtime event return-value graph inputs
+- return-only payload summaries with explicit `persistence: "none"`
+
+TASK-050 does not add:
+
+- Event Store writes
+- Save writes
+- persistence
+- replay
+- subscriptions or delivery pipelines
+- file IO
+- UI/editor
+- gameplay/P0 content
+- plugin runtime
+- external network calls
+- long-running runtime host process
+
+## TASK-051 Follow-Through
+
+`TASK-051 - Minimal fixture runtime command integration test` delivers only deterministic integration coverage for the full in-memory runtime path over the existing minimal neutral fixture.
+
+Allowed output is limited to:
+
+- validated graph to runtime command execution integration coverage
+- committed happy-path coverage
+- blocked invalid-request and unknown-command coverage
+- deterministic repeated-run coverage
+- input state and validated graph immutability coverage
+- runtime domain event return-value integration coverage
+
+TASK-051 does not add:
+
+- production file loading
+- Save/Event Store writes
+- persistence
+- replay
+- UI/editor
+- gameplay/P0 content
+- plugin runtime
+- external network calls
+- long-running runtime host process

@@ -55,6 +55,20 @@ export type RuntimeDomainEventSummary = {
   readonly eventTypes: readonly string[];
 };
 
+export type RuntimeDomainEventReturnValueMetadata = {
+  readonly deterministic: true;
+  readonly persistence: "none";
+  readonly source: "runtime-host";
+};
+
+export type RuntimeDomainEventReturnValue = {
+  readonly eventId: string;
+  readonly eventType: string;
+  readonly sourceCommandId: string;
+  readonly payload?: JsonValue;
+  readonly metadata: RuntimeDomainEventReturnValueMetadata;
+};
+
 export type RuntimeHostResultMetadata = {
   readonly deterministic: true;
   readonly runtimeHostVersion?: string;
@@ -67,6 +81,7 @@ export type RuntimeHostResult = {
   readonly commandPlan?: RuntimeCommandPlanSummary;
   readonly transaction?: RuntimeTransactionSummary;
   readonly domainEvents?: RuntimeDomainEventSummary;
+  readonly runtimeDomainEventValues?: readonly RuntimeDomainEventReturnValue[];
   readonly metadata: RuntimeHostResultMetadata;
 };
 
