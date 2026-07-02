@@ -1,7 +1,7 @@
 # Task: TASK-051 - Minimal fixture runtime command integration test
 
 **Milestone:** M5 Runtime Host Boundary / Command Execution Integration
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -11,7 +11,7 @@ Add minimal fixture runtime command integration coverage over the full in-memory
 ## Dependencies
 
 - TASK-049 DONE
-- TASK-050 ACTIVE
+- TASK-050 DONE
 - Minimal neutral fixture
 - Validated content graph boundary
 - Runtime host execution pipeline
