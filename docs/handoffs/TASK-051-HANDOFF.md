@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -13,7 +13,7 @@ TASK-051 adds minimal fixture runtime command integration coverage over the full
 - `docs/handoffs/TASK-051-HANDOFF.md`
 - `docs/planning/M5_RUNTIME_HOST_COMMAND_EXECUTION_INTEGRATION.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-051-minimal-fixture-runtime-command-integration-test.md`
+- `docs/tasks/done/TASK-051-minimal-fixture-runtime-command-integration-test.md`
 - `tests/minimal-fixture-runtime-command-integration.test.ts`
 
 ## Test Location

@@ -1,7 +1,7 @@
 # Task: TASK-050 - Runtime domain event return values
 
 **Milestone:** M5 Runtime Host Boundary / Command Execution Integration
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
