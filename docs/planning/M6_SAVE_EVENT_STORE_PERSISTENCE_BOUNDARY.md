@@ -307,11 +307,15 @@ First implementation task after this plan is accepted:
 
 ## 14. Implementation Progress
 
-Current M6 implementation progress after the accelerated TASK-054/TASK-055/TASK-056 batch:
+Current M6 implementation progress after TASK-057:
 
 - TASK-054 delivered persistence envelope/input/result contracts.
 - TASK-055 delivered a pure in-memory Event Store boundary.
 - TASK-056 delivered a pure in-memory Save snapshot boundary.
+- TASK-057 delivered a pure runtime result to Event Store adapter.
+- the adapter maps return-only runtime event values into persistence event records.
+- optional append uses the public in-memory Event Store boundary.
 - no production storage adapter was added.
 - no production file IO was added.
-- next task remains `TASK-057 - Runtime result to Event Store adapter`.
+- no replay runtime behavior was added.
+- next task remains `TASK-058 - In-memory persistence integration test`.

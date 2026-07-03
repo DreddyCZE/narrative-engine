@@ -17,6 +17,13 @@ export {
   saveSnapshot,
   type InMemorySaveSnapshotStore
 } from "./persistence/in-memory-save-snapshot-store.js";
+export {
+  adaptRuntimeResultToEventStoreRecords,
+  appendRuntimeResultToInMemoryEventStore,
+  type AppendRuntimeResultToInMemoryEventStoreInput,
+  type RuntimeResultEventStoreAdapterInput,
+  type RuntimeResultEventStoreAdapterResult
+} from "./persistence/runtime-result-event-store-adapter.js";
 
 export {
   buildRuntimeDomainEventReturnValues,
