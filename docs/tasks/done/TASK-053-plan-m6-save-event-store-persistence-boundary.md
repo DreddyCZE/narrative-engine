@@ -1,7 +1,7 @@
 # Task: TASK-053 - Plan M6 Save/Event Store / Persistence Boundary
 
 **Milestone:** M6 Save/Event Store / Persistence Boundary Planning
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
