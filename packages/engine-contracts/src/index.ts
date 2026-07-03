@@ -42,6 +42,34 @@ export {
   type ValidatedContentSections
 } from "./content-loader/content-loader-types.js";
 export {
+  createPersistenceResult,
+  assertPersistenceEventEnvelope,
+  assertPersistenceSnapshotRecord,
+  formatPersistenceSnapshotStateMessage,
+  formatPersistenceValidationMessage,
+  inspectPersistenceEventEnvelope,
+  inspectPersistenceEventRecord,
+  inspectPersistenceSnapshotEnvelope,
+  inspectPersistenceSnapshotRecord,
+  isPersistenceStatus,
+  validatePersistenceSnapshotState,
+  PERSISTENCE_STATUSES,
+  type PersistenceAppendEventsInput,
+  type PersistenceDiagnostic,
+  type PersistenceEventEnvelope,
+  type PersistenceEventRange,
+  type PersistenceEventRecord,
+  type PersistenceEventRecordMetadata,
+  type PersistenceLoadSnapshotInput,
+  type PersistenceResult,
+  type PersistenceResultMetadata,
+  type PersistenceSaveSnapshotInput,
+  type PersistenceSnapshotEnvelope,
+  type PersistenceSnapshotRecord,
+  type PersistenceSnapshotRecordMetadata,
+  type PersistenceStatus
+} from "./persistence/persistence-types.js";
+export {
   RUNTIME_HOST_STATUSES,
   isRuntimeHostStatus,
   type RuntimeCommandPlanSummary,

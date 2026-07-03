@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -14,7 +14,7 @@ TASK-053 creates the M6 planning boundary for Save / Event Store / Persistence w
 - `docs/handoffs/TASK-053-HANDOFF.md`
 - `docs/planning/M6_SAVE_EVENT_STORE_PERSISTENCE_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-053-plan-m6-save-event-store-persistence-boundary.md`
+- `docs/tasks/done/TASK-053-plan-m6-save-event-store-persistence-boundary.md`
 
 ## M6 Plan Location
 
