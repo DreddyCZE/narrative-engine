@@ -1,7 +1,7 @@
 # Task: TASK-055 - In-memory Event Store boundary
 
 **Milestone:** M6 Save/Event Store / Persistence Boundary Planning
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
