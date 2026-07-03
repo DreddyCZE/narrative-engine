@@ -3,6 +3,22 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  appendEventRecords,
+  createInMemoryEventStore,
+  getEventRecordById,
+  listEventRecords,
+  type InMemoryEventStore
+} from "./persistence/in-memory-event-store.js";
+
+export {
+  createInMemorySaveSnapshotStore,
+  listSnapshots,
+  loadSnapshot,
+  saveSnapshot,
+  type InMemorySaveSnapshotStore
+} from "./persistence/in-memory-save-snapshot-store.js";
+
+export {
   buildRuntimeDomainEventReturnValues,
   type RuntimeDomainEventReturnValuesResult
 } from "./runtime-host/runtime-domain-event-return-values.js";

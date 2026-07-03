@@ -378,7 +378,9 @@ describe("content package integration with M2 primitives", () => {
       const source = readFileSync(file, "utf8");
       expect(source).not.toMatch(/from\s+["'][^"']*(fixtures|tests)[^"']*["']/u);
       expect(source).not.toMatch(/from\s+["']node:(fs|path|os|http|https|net)["']/u);
-      expect(source).not.toContain("EventStore");
+      if (file !== "packages/engine-kernel/src/index.ts") {
+        expect(source).not.toContain("EventStore");
+      }
       expect(source).not.toContain("Save system");
       expect(source).not.toContain("plugin runtime");
     }

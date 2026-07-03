@@ -304,3 +304,14 @@ Key risks and open questions:
 First implementation task after this plan is accepted:
 
 - `TASK-054 - Persistence envelope/input/result contracts`
+
+## 14. Implementation Progress
+
+Current M6 implementation progress after the accelerated TASK-054/TASK-055/TASK-056 batch:
+
+- TASK-054 delivered persistence envelope/input/result contracts.
+- TASK-055 delivered a pure in-memory Event Store boundary.
+- TASK-056 delivered a pure in-memory Save snapshot boundary.
+- no production storage adapter was added.
+- no production file IO was added.
+- next task remains `TASK-057 - Runtime result to Event Store adapter`.
