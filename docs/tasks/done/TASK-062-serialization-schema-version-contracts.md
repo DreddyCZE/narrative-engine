@@ -1,29 +1,30 @@
-# Task: TASK-061 - Storage adapter interface contracts
+# Task: TASK-062 - Serialization and schema version contracts
 
 **Milestone:** M7 Production Storage Adapter / Replay Planning
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
 
-Add data-only storage adapter interface contracts for the future production storage boundary.
+Add data-only serialization and schema version contracts for the future production storage and replay boundary.
 
 ## Dependencies
 
 - TASK-060 DONE
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - persistence contracts
-- in-memory Event Store boundary
-- in-memory Save snapshot boundary
+- Engine State contract
+- Domain Event contract
 
 ## Scope
 
-- data-only storage adapter interface and input/result contracts
-- storage adapter capability definitions
-- storage operation kinds for append, list/read events, save snapshot, load snapshot, and health check
-- storage diagnostics and metadata
+- serialization envelope contracts
+- schema version contracts
+- deterministic serialization metadata
+- checksum and hash metadata contracts
+- migration plan and descriptor stubs as data-only types
 - JSON-safe examples and validation helpers
-- no implementation
+- no serializer implementation and no migration runtime
 
 ## Out of Scope
 
@@ -31,8 +32,8 @@ Add data-only storage adapter interface contracts for the future production stor
 - concrete file adapter implementation
 - database adapter implementation
 - external storage adapter implementation
-- actual storage backend behavior
 - replay runtime behavior
+- migration runtime behavior
 - UI/editor save-load flow
 - gameplay/P0 content
 - plugin runtime

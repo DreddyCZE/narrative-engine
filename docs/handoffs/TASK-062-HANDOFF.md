@@ -13,7 +13,7 @@ TASK-062 adds data-only serialization and schema version contracts for the futur
 - `docs/handoffs/TASK-062-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-062-serialization-schema-version-contracts.md`
+- `docs/tasks/done/TASK-062-serialization-schema-version-contracts.md`
 - `packages/engine-contracts/src/index.ts`
 - `packages/engine-contracts/src/storage/serialization-schema-types.ts`
 - `tests/serialization-schema-contracts.test.ts`
