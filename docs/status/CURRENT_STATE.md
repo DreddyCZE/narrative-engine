@@ -3,22 +3,22 @@
 **Date:** 2026-07-04
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-063 are DONE or REVIEW. TASK-060, TASK-061, and TASK-062 are DONE. TASK-063 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-064 are DONE or REVIEW. TASK-060, TASK-061, TASK-062, and TASK-063 are DONE. TASK-064 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-062 are DONE. TASK-063 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-063 - File storage adapter boundary`.
-4. **What the current scope must not change:** do not create `TASK-064` until `TASK-063` is accepted. No DB adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-063 remains review-ready with file IO isolated to the explicit file storage adapter boundary and runtime/storage separation preserved.
+2. **Current state:** TASK-053 through TASK-063 are DONE. TASK-064 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-064 - Replay planning and contract boundary`.
+4. **What the current scope must not change:** do not create `TASK-065` until `TASK-064` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-064 remains review-ready with replay kept contract-only and runtime/storage separation preserved.
 
 ## Repository / PR State
 
 - Correct GitHub remote is configured:
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
-- PR #45 was merged into `origin/main` at merge commit `89086cc`.
+- PR #46 was merged into `origin/main` at merge commit `d586a90`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -29,26 +29,30 @@
 - TASK-060 is done.
 - TASK-061 is done.
 - TASK-062 is done.
-- TASK-063 is in review.
-- TASK-064 has not been created.
-- No DB adapter, external storage adapter, replay, UI, gameplay, or plugin implementation task is active.
+- TASK-063 is done.
+- TASK-064 is in review.
+- TASK-065 has not been created.
+- No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
 
 - M7 plan location: `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`.
+- Replay plan location: `docs/planning/M7_REPLAY_BOUNDARY.md`.
 - Accepted:
   - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` DONE
   - `TASK-061 - Storage adapter interface contracts` DONE
   - `TASK-062 - Serialization and schema version contracts` DONE
+  - `TASK-063 - File storage adapter boundary` DONE
 - In review:
-  - `TASK-063 - File storage adapter boundary`
+  - `TASK-064 - Replay planning and contract boundary`
 - Next task after acceptance:
-  - `TASK-064 - Replay planning and contract boundary` not created
+  - `TASK-065 - Storage adapter conformance tests` not created
 
 ## Boundary Reminder
 
 - Runtime host remains pure/in-memory.
 - File IO exists only in the explicit file storage adapter boundary.
+- Replay work remains contract-only and planning-only.
 - No DB adapter.
 - No external storage adapter.
 - No replay runtime behavior.
@@ -58,12 +62,13 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/replay-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts` - passed, 1 test file / 4 tests.
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
-- `corepack pnpm test` - passed, 45 test files / 507 tests.
+- `corepack pnpm test` - passed, 46 test files / 513 tests.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
 - `git diff --check` - passed.
@@ -71,4 +76,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-063` next. Keep file IO isolated to the explicit file storage adapter boundary. Do not start `TASK-064`. No DB adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-064` next. Keep replay work contract-only and planning-only. Do not start `TASK-065`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.

@@ -281,13 +281,14 @@ First implementation task after this plan is accepted:
 
 ## 14. Implementation Progress
 
-Current M7 implementation progress after TASK-062:
+Current M7 implementation progress after TASK-064:
 
 - TASK-061 delivered data-only storage adapter interface contracts for adapter kinds, capabilities, operation statuses, operation kinds, diagnostics, metadata, and append/read/save/load inputs.
 - TASK-062 delivered data-only serialization and schema version contracts for serialization envelopes, schema version metadata, checksum metadata, and migration-plan descriptors.
-- no production file IO was added.
-- no concrete file adapter was added.
+- TASK-063 delivered the explicit file storage adapter boundary with root-scoped file IO isolated to the file adapter.
+- TASK-064 delivered data-only replay contracts, replay source descriptors, replay input/result/status/diagnostic helpers, and a dedicated replay planning document.
+- no replay runtime execution was added.
+- no file IO was added to replay contracts.
 - no database adapter was added.
 - no external storage adapter was added.
-- no replay runtime behavior was added.
-- next task remains TASK-063 - File storage adapter boundary.
+- next task remains TASK-065 - Storage adapter conformance tests.

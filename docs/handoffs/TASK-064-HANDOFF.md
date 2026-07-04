@@ -1,48 +1,55 @@
-# TASK-063 HANDOFF
+# TASK-064 HANDOFF
 
 ## Status
 
-DONE
+REVIEW
 
 ## Summary
 
-TASK-063 adds an explicit file storage adapter boundary for M7. The adapter keeps file IO root-scoped inside a dedicated storage boundary, serializes event records and snapshots deterministically as JSON envelopes, validates storage and persistence contracts on read/write, and returns deterministic diagnostics for duplicates, corruption, missing files, and path traversal attempts.
+TASK-064 adds the replay planning and contract boundary for M7 without implementing replay execution. The task introduces data-only replay contracts for replay statuses, source descriptors, inputs, results, diagnostics, metadata, and replay plans, plus a dedicated replay planning document that keeps replay separate from runtime execution, storage writes, and adapter implementation details.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-063-HANDOFF.md`
+- `docs/handoffs/TASK-064-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
+- `docs/planning/M7_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-063-file-storage-adapter-boundary.md`
-- `packages/engine-kernel/src/index.ts`
-- `packages/engine-kernel/src/storage/file-storage-adapter.ts`
-- `tests/file-storage-adapter-boundary.test.ts`
+- `docs/tasks/review/TASK-064-replay-planning-and-contract-boundary.md`
+- `packages/engine-contracts/src/index.ts`
+- `packages/engine-contracts/src/replay/replay-types.ts`
+- `tests/replay-contracts.test.ts`
 
-## Production Function Location
+## Contract Location
 
-- `packages/engine-kernel/src/storage/file-storage-adapter.ts`
-- `packages/engine-kernel/src/index.ts`
+- `packages/engine-contracts/src/replay/replay-types.ts`
+- `packages/engine-contracts/src/index.ts`
+
+## Planning Doc Location
+
+- `docs/planning/M7_REPLAY_BOUNDARY.md`
+- `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 
 ## Test Location
 
-- `tests/file-storage-adapter-boundary.test.ts`
+- `tests/replay-contracts.test.ts`
 
-## Supported File Adapter Behavior
+## Supported Replay Contract Behavior
 
-- explicit root-scoped file storage adapter creation
-- deterministic JSON file layout for event order, event records, and snapshots
-- append events with idempotent identical duplicates and rejected conflicting duplicates
-- list/read events in deterministic persisted order with optional filters
-- save snapshots with idempotent identical duplicates and rejected conflicting duplicates
-- load snapshots with deterministic blocked/error diagnostics for missing or corrupt files
-- path traversal and root-escape rejection
-- no runtime host direct storage writes
+- replay status and source-kind contracts
+- data-only replay source descriptors for snapshot-only, event-stream-only, snapshot-and-events, and storage-adapter sourced plans
+- replay input validation with deterministic diagnostics
+- replay result, metadata, plan, and step descriptors
+- deterministic replay policy metadata
+- no storage adapter invocation and no runtime execution
 
 ## Unsupported / Deferred Behavior
 
+- no replay runtime execution
+- no event stream replay implementation
+- no state rebuild implementation
+- no production file IO in replay contracts
 - no DB adapter
 - no external storage adapter
-- no replay runtime behavior
 - no UI/editor save-load flow
 - no gameplay/P0 content
 - no plugin runtime
@@ -50,6 +57,7 @@ TASK-063 adds an explicit file storage adapter boundary for M7. The adapter keep
 
 ## Validation
 
+- `corepack pnpm test -- tests/replay-contracts.test.ts`
 - `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts`
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts`
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts`
@@ -82,7 +90,7 @@ TASK-063 adds an explicit file storage adapter boundary for M7. The adapter keep
 
 ## Next Recommended Task
 
-- `TASK-064 - Replay planning and contract boundary`
+- `TASK-065 - Storage adapter conformance tests`
 
 ## Active Task
 
