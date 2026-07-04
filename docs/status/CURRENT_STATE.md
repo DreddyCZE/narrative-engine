@@ -3,28 +3,30 @@
 **Date:** 2026-07-04
 **Milestone:** M6 Save/Event Store / Persistence Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-058 are DONE or REVIEW. TASK-057 is DONE. TASK-058 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-059 are DONE or REVIEW. TASK-058 is DONE. TASK-059 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M6 Save/Event Store / Persistence Boundary.
-2. **Current state:** TASK-054, TASK-055, TASK-056, and TASK-057 are DONE. TASK-058 is in REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-058 - In-memory persistence integration test`.
-4. **What the current scope must not change:** do not create `TASK-059` until `TASK-058` is accepted. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-058 remains review-ready, validation is green, and `TASK-059` has not been created.
+2. **Current state:** TASK-053 through TASK-058 are DONE. TASK-059 is in REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-059 - M6 Gate Review`.
+4. **What the current scope must not change:** do not create `TASK-060` until `TASK-059` is accepted. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-059 remains review-ready, validation is green, and `TASK-060` has not been created.
 
 ## Repository / PR State
 
 - Correct GitHub remote is configured:
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
-- PR #41 was merged into `origin/main` at merge commit `46664af`.
+- PR #42 was merged into `origin/main` at merge commit `daeafd6`.
+- TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
 - TASK-056 is done.
 - TASK-057 is done.
-- TASK-058 is in review.
-- TASK-059 has not been created.
+- TASK-058 is done.
+- TASK-059 is in review.
+- TASK-060 has not been created.
 - No production Event Store backend, Save system, persistence backend, file-IO, storage-adapter, replay, UI, gameplay, or plugin implementation task is active.
 
 ## M6 Implementation
@@ -35,15 +37,18 @@
   - `TASK-055 - In-memory Event Store boundary` DONE
   - `TASK-056 - Save snapshot boundary` DONE
   - `TASK-057 - Runtime result to Event Store adapter` DONE
+  - `TASK-058 - In-memory persistence integration test` DONE
 - In review:
-  - `TASK-058 - In-memory persistence integration test`
+  - `TASK-059 - M6 gate review`
 - Next task after acceptance:
-  - `TASK-059 - M6 gate review` not created
+  - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` not created
 
 ## Boundary Reminder
 
 - Runtime host remains pure/in-memory.
 - Persistence work remains pure/in-memory.
+- Event Store remains in-memory only.
+- Save snapshot store remains in-memory only.
 - No production file IO.
 - No database adapter.
 - No external storage adapter.
@@ -79,9 +84,9 @@
 - `corepack pnpm test` - passed, 42 test files / 492 tests.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed, with only known CRLF normalization warnings.
+- `git diff --check` - passed.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-058` next. Do not create `TASK-059` in this run. Keep all new behavior limited to in-memory integration coverage over existing runtime and persistence boundaries. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-059` next. Do not create `TASK-060` in this run. Keep all new behavior limited to M6 gate audit and documentation. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.

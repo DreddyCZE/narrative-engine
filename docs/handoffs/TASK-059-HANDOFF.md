@@ -1,50 +1,39 @@
-# TASK-058 HANDOFF
+# TASK-059 HANDOFF
 
 ## Status
 
-DONE
+REVIEW
+
+## Gate Verdict
+
+`M6_GATE_PASS_WITH_DEFERRED_ITEMS`
 
 ## Summary
 
-TASK-058 adds in-memory integration coverage across the accepted M6 persistence boundaries. The test drives the minimal fixture runtime path through validated graph build, in-memory command execution, runtime-result to Event Store adaptation, in-memory Event Store append, and in-memory Save snapshot save/load without introducing production storage backends, file IO, replay runtime behavior, UI/editor, gameplay, or plugin scope.
+TASK-059 adds the M6 gate review report. The review confirms that the accepted M6 persistence scope is complete for planning, contracts, in-memory boundaries, adapter flow, and in-memory integration coverage while keeping production storage backends, replay runtime behavior, UI/editor, gameplay, plugin runtime, and external network behavior deferred.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-058-HANDOFF.md`
-- `docs/planning/M6_SAVE_EVENT_STORE_PERSISTENCE_BOUNDARY.md`
+- `docs/handoffs/TASK-059-HANDOFF.md`
+- `docs/reviews/M6-GATE-REVIEW.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-058-in-memory-persistence-integration-test.md`
-- `tests/in-memory-persistence-integration.test.ts`
+- `docs/tasks/review/TASK-059-m6-gate-review.md`
 
-## Test Location
+## Audit Result
 
-- `tests/in-memory-persistence-integration.test.ts`
+- TASK-053 through TASK-058 audited as DONE
+- M6 persistence boundary audited as pure/in-memory only
+- test and validation audit confirmed green
+- runtime vs persistence separation preserved
+- deferred items remain explicit and out of scope
 
-## Covered Integration Path
+## Test Count
 
-- minimal fixture content package input
-- validated graph build through existing M4 pure stages
-- `RuntimeHostInput` construction
-- `executeInMemoryCommand` full in-memory runtime execution
-- return-only runtime domain event values
-- runtime result to Event Store adapter
-- append through the public in-memory Event Store boundary
-- snapshot save/load through the public in-memory Save snapshot boundary
-- deterministic committed, blocked, idempotent, and immutability checks
-
-## Unsupported / Deferred Behavior
-
-- no production Event Store backend
-- no production Save system
-- no production persistence backend
-- no production file IO
-- no database adapter
-- no external storage adapter
-- no replay runtime behavior
-- no UI/editor
-- no gameplay/P0 content
-- no plugin runtime
-- no external network calls
+- targeted persistence integration: 1 file / 4 tests
+- targeted persistence boundary: 4 files / 22 tests
+- targeted runtime regression: 6 files / 38 tests
+- targeted loader and M2 regression: 9 files / 47 tests
+- full suite: 42 files / 492 tests
 
 ## Validation
 
@@ -75,9 +64,29 @@ TASK-058 adds in-memory integration coverage across the accepted M6 persistence 
 - `corepack pnpm validate`
 - `git diff --check`
 
-## Next Recommended Task
+## Deferred Items
 
-- `TASK-059 - M6 gate review`
+- Node 22 local alignment
+- production file IO
+- DB/storage adapter
+- replay runtime
+- UI/editor save/load flow
+- gameplay/P0 content
+- plugin runtime
+- external package loading
+- migration/schema evolution
+
+## Boundary Notes
+
+- runtime host remains pure/in-memory
+- persistence boundary remains explicit and in-memory only
+- adapter uses public Event Store boundary
+- no production file IO, DB, external storage, replay, UI, gameplay, plugin, or network behavior was added
+
+## Recommendation
+
+- next milestone: `M7 Production Storage Adapter / Replay Planning`
+- next recommended task: `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary`
 
 ## Active Task
 
