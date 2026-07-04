@@ -3,15 +3,15 @@
 **Date:** 2026-07-04
 **Milestone:** M6 Save/Event Store / Persistence Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-058 are DONE. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-059 are DONE or REVIEW. TASK-058 is DONE. TASK-059 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M6 Save/Event Store / Persistence Boundary.
-2. **Current state:** TASK-054 through TASK-058 are DONE. M6 implementation work is complete pending gate review. There is no active task.
-3. **Single next most important task:** Create `TASK-059 - M6 Gate Review`.
-4. **What the current scope must not change:** `TASK-059` may remain documentation and audit only. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-058 is accepted, validation is green on `main`, and `TASK-059` has not been created yet.
+2. **Current state:** TASK-053 through TASK-058 are DONE. TASK-059 is in REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-059 - M6 Gate Review`.
+4. **What the current scope must not change:** do not create `TASK-060` until `TASK-059` is accepted. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-059 remains review-ready, validation is green, and `TASK-060` has not been created.
 
 ## Repository / PR State
 
@@ -19,12 +19,14 @@
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
 - PR #42 was merged into `origin/main` at merge commit `daeafd6`.
+- TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
 - TASK-056 is done.
 - TASK-057 is done.
 - TASK-058 is done.
-- TASK-059 has not been created.
+- TASK-059 is in review.
+- TASK-060 has not been created.
 - No production Event Store backend, Save system, persistence backend, file-IO, storage-adapter, replay, UI, gameplay, or plugin implementation task is active.
 
 ## M6 Implementation
@@ -36,8 +38,10 @@
   - `TASK-056 - Save snapshot boundary` DONE
   - `TASK-057 - Runtime result to Event Store adapter` DONE
   - `TASK-058 - In-memory persistence integration test` DONE
+- In review:
+  - `TASK-059 - M6 gate review`
 - Next task after acceptance:
-  - `TASK-059 - M6 gate review` not created
+  - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` not created
 
 ## Boundary Reminder
 
@@ -60,6 +64,21 @@
 - `corepack pnpm test -- tests/persistence-envelope-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/in-memory-event-store-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/in-memory-save-snapshot-boundary.test.ts` - passed, 1 test file / 5 tests.
+- `corepack pnpm test -- tests/runtime-domain-event-return-values.test.ts` - passed, 1 test file / 4 tests.
+- `corepack pnpm test -- tests/minimal-fixture-runtime-command-integration.test.ts` - passed, 1 test file / 4 tests.
+- `corepack pnpm test -- tests/in-memory-command-execution-pipeline.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/runtime-condition-effect-binding-adapter.test.ts` - passed, 1 test file / 11 tests.
+- `corepack pnpm test -- tests/runtime-command-request-resolver.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/runtime-host-input-result-contracts.test.ts` - passed, 1 test file / 5 tests.
+- `corepack pnpm test -- tests/content-m2-primitive-integration.test.ts` - passed, 1 test file / 3 tests.
+- `corepack pnpm test -- tests/content-loader-boundary-minimal-fixture-integration.test.ts` - passed, 1 test file / 3 tests.
+- `corepack pnpm test -- tests/content-loader-m2-primitive-binding-validation.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/content-loader-validated-content-graph-builder.test.ts` - passed, 1 test file / 6 tests.
+- `corepack pnpm test -- tests/content-loader-reference-validation.test.ts` - passed, 1 test file / 5 tests.
+- `corepack pnpm test -- tests/content-loader-id-indexing.test.ts` - passed, 1 test file / 6 tests.
+- `corepack pnpm test -- tests/content-loader-manifest-section-validation.test.ts` - passed, 1 test file / 7 tests.
+- `corepack pnpm test -- tests/content-loader-input-result-types.test.ts` - passed, 1 test file / 5 tests.
+- `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm test` - passed, 42 test files / 492 tests.
@@ -70,4 +89,4 @@
 
 ## Next Task Boundary
 
-Create `TASK-059` next. Keep all new behavior limited to M6 gate audit and documentation. Do not start `TASK-060` in this run. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-059` next. Do not create `TASK-060` in this run. Keep all new behavior limited to M6 gate audit and documentation. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
