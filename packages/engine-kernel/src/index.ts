@@ -3,6 +3,12 @@ export type EngineLayer = "engine";
 export const engineLayer: EngineLayer = "engine";
 
 export {
+  createFileStorageAdapter,
+  type FileStorageAdapter,
+  type FileStorageAdapterOptions
+} from "./storage/file-storage-adapter.js";
+
+export {
   appendEventRecords,
   createInMemoryEventStore,
   getEventRecordById,

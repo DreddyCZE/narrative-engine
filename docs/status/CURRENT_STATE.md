@@ -1,17 +1,17 @@
 # Current State
 
 **Date:** 2026-07-04
-**Milestone:** M7 Production Storage Adapter / Replay Planning
+**Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-062 are DONE or REVIEW. TASK-060, TASK-061, and TASK-062 are DONE. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-063 are DONE or REVIEW. TASK-060, TASK-061, and TASK-062 are DONE. TASK-063 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
-1. **Current milestone:** M7 Production Storage Adapter / Replay Planning.
-2. **Current state:** TASK-053 through TASK-062 are DONE. There is no active task.
-3. **Single next most important task:** Create and implement `TASK-063 - File storage adapter boundary`.
+1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
+2. **Current state:** TASK-053 through TASK-062 are DONE. TASK-063 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-063 - File storage adapter boundary`.
 4. **What the current scope must not change:** do not create `TASK-064` until `TASK-063` is accepted. No DB adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-063 is created and isolated to the explicit file storage adapter boundary, with runtime/storage separation preserved.
+5. **How completion is recognized:** TASK-063 remains review-ready with file IO isolated to the explicit file storage adapter boundary and runtime/storage separation preserved.
 
 ## Repository / PR State
 
@@ -29,7 +29,8 @@
 - TASK-060 is done.
 - TASK-061 is done.
 - TASK-062 is done.
-- TASK-063 has not been created.
+- TASK-063 is in review.
+- TASK-064 has not been created.
 - No DB adapter, external storage adapter, replay, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
@@ -39,13 +40,15 @@
   - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` DONE
   - `TASK-061 - Storage adapter interface contracts` DONE
   - `TASK-062 - Serialization and schema version contracts` DONE
-- Next task:
-  - `TASK-063 - File storage adapter boundary` not created
+- In review:
+  - `TASK-063 - File storage adapter boundary`
+- Next task after acceptance:
+  - `TASK-064 - Replay planning and contract boundary` not created
 
 ## Boundary Reminder
 
 - Runtime host remains pure/in-memory.
-- Persistence work remains explicit and boundary-scoped.
+- File IO exists only in the explicit file storage adapter boundary.
 - No DB adapter.
 - No external storage adapter.
 - No replay runtime behavior.
@@ -55,11 +58,12 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts` - passed, 1 test file / 4 tests.
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
-- `corepack pnpm test` - passed, 44 test files / 503 tests.
+- `corepack pnpm test` - passed, 45 test files / 507 tests.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
 - `git diff --check` - passed.
@@ -67,4 +71,4 @@
 
 ## Next Task Boundary
 
-Start `TASK-063` next. Keep all file IO isolated inside the explicit file storage adapter boundary. Do not start `TASK-064` in this run. No DB adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-063` next. Keep file IO isolated to the explicit file storage adapter boundary. Do not start `TASK-064`. No DB adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
