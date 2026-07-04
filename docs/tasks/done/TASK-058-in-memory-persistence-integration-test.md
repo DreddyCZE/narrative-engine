@@ -1,7 +1,7 @@
 # Task: TASK-058 - In-memory persistence integration test
 
 **Milestone:** M6 Save/Event Store / Persistence Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -37,4 +37,3 @@ Add in-memory persistence integration coverage across the full M6 runtime-to-per
 - gameplay/P0 content
 - plugin runtime
 - external network
-
