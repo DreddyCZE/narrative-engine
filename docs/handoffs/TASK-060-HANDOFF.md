@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Summary
 
@@ -13,7 +13,7 @@ TASK-060 creates the M7 planning boundary for production storage adapter and rep
 - `docs/handoffs/TASK-060-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-060-plan-m7-production-storage-adapter-replay-boundary.md`
+- `docs/tasks/done/TASK-060-plan-m7-production-storage-adapter-replay-boundary.md`
 
 ## M7 Plan Location
 
