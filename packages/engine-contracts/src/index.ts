@@ -28,6 +28,52 @@ export const initialContracts: readonly ContractDescriptor[] = [
 ];
 
 export {
+  createSerializationResult,
+  createDeserializationResult,
+  formatSerializationValidationMessage,
+  inspectSchemaMigrationPlan,
+  inspectSerializationEnvelope,
+  isSerializationFormat,
+  SERIALIZATION_FORMATS,
+  type ChecksumMetadata,
+  type DeserializationResult,
+  type SchemaMigrationDescriptor,
+  type SchemaMigrationPlan,
+  type SchemaVersion,
+  type SerializationDiagnostic,
+  type SerializationEnvelope,
+  type SerializationFormat,
+  type SerializationMetadata,
+  type SerializationResult,
+  type SerializedPayload
+} from "./storage/serialization-schema-types.js";
+export {
+  createStorageOperationResult,
+  formatStorageAdapterValidationMessage,
+  inspectStorageAppendEventsInput,
+  inspectStorageLoadSnapshotInput,
+  inspectStorageReadEventsInput,
+  inspectStorageSaveSnapshotInput,
+  isStorageAdapterKind,
+  isStorageOperationKind,
+  isStorageOperationStatus,
+  STORAGE_ADAPTER_KINDS,
+  STORAGE_OPERATION_KINDS,
+  STORAGE_OPERATION_STATUSES,
+  type StorageAdapterCapability,
+  type StorageAdapterContract,
+  type StorageAdapterDiagnostic,
+  type StorageAdapterKind,
+  type StorageAdapterMetadata,
+  type StorageAppendEventsInput,
+  type StorageLoadSnapshotInput,
+  type StorageOperationKind,
+  type StorageOperationResult,
+  type StorageOperationStatus,
+  type StorageReadEventsInput,
+  type StorageSaveSnapshotInput
+} from "./storage/storage-adapter-types.js";
+export {
   CONTENT_LOAD_STATUSES,
   isContentLoadStatus,
   type ContentLoaderInput,

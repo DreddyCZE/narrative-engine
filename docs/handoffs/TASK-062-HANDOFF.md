@@ -1,54 +1,59 @@
-# TASK-060 HANDOFF
+# TASK-062 HANDOFF
 
 ## Status
 
-DONE
+REVIEW
 
 ## Summary
 
-TASK-060 creates the M7 planning boundary for production storage adapter and replay work without implementing any production storage, replay, UI, gameplay, plugin, or network behavior. The plan defines how future file and DB adapters, deterministic serialization, migration policy, and replay boundaries should layer on top of the accepted M6 in-memory persistence boundary while keeping runtime execution pure and in-memory.
+TASK-062 adds data-only serialization and schema version contracts for the future production storage and replay boundary. The contracts define serialization formats, schema version metadata, checksum metadata, serialization envelopes, serialized payload descriptors, migration descriptors, migration plans, and deterministic serialization result helpers without introducing serializer IO or migration runtime execution.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-060-HANDOFF.md`
+- `docs/handoffs/TASK-062-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/done/TASK-060-plan-m7-production-storage-adapter-replay-boundary.md`
+- `docs/tasks/review/TASK-062-serialization-schema-version-contracts.md`
+- `packages/engine-contracts/src/index.ts`
+- `packages/engine-contracts/src/storage/serialization-schema-types.ts`
+- `tests/serialization-schema-contracts.test.ts`
 
-## M7 Plan Location
+## Contract Locations
 
-- `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
+- `packages/engine-contracts/src/storage/serialization-schema-types.ts`
+- `packages/engine-contracts/src/index.ts`
 
-## Proposed Task Breakdown
+## Test Location
 
-1. `TASK-061 - Storage adapter interface contracts`
-2. `TASK-062 - Serialization and schema version contracts`
-3. `TASK-063 - File storage adapter boundary`
-4. `TASK-064 - Replay planning and contract boundary`
-5. `TASK-065 - Storage adapter conformance tests`
-6. `TASK-066 - M7 gate review`
+- `tests/serialization-schema-contracts.test.ts`
 
-## Non-Goals
+## Supported Behavior
 
-- no production storage implementation in TASK-060
-- no file IO in TASK-060
-- no DB implementation
-- no external network or cloud storage
-- no replay runtime implementation
+- serialization formats and format guard
+- required schema version metadata for serialization envelopes
+- checksum metadata contracts
+- data-only serialized payload descriptors
+- data-only migration descriptor and migration plan contracts
+- deterministic serialization and deserialization result helpers
+
+## Unsupported / Deferred Behavior
+
+- no production file IO
+- no concrete file adapter implementation
+- no database adapter implementation
+- no external storage adapter implementation
+- no serializer runtime behavior
+- no runtime migration execution
+- no replay runtime behavior
 - no UI/editor save-load flow
 - no gameplay/P0 content
 - no plugin runtime
-
-## Risks / Open Questions
-
-- deterministic timestamp policy for production persistence metadata remains open
-- atomic file write and corruption detection strategy remains future work
-- migration and schema evolution complexity must stay explicit and testable
-- replay semantics must remain deterministic and separate from live runtime execution
-- future storage adapters must not call runtime execution logic or bypass persistence contracts
+- no external network calls
 
 ## Validation
 
+- `corepack pnpm test -- tests/storage-adapter-contracts.test.ts`
+- `corepack pnpm test -- tests/serialization-schema-contracts.test.ts`
 - `corepack pnpm test -- tests/in-memory-persistence-integration.test.ts`
 - `corepack pnpm test -- tests/runtime-result-event-store-adapter.test.ts`
 - `corepack pnpm test -- tests/persistence-envelope-contracts.test.ts`
@@ -78,7 +83,7 @@ TASK-060 creates the M7 planning boundary for production storage adapter and rep
 
 ## Next Recommended Task
 
-- `TASK-061 - Storage adapter interface contracts`
+- `TASK-063 - File storage adapter boundary`
 
 ## Active Task
 
