@@ -28,6 +28,34 @@ export const initialContracts: readonly ContractDescriptor[] = [
 ];
 
 export {
+  assertReplayInput,
+  createReplayPlan,
+  createReplayResult,
+  formatReplayValidationMessage,
+  inspectReplayInput,
+  inspectReplayPlan,
+  isReplaySourceKind,
+  isReplayStatus,
+  REPLAY_SOURCE_KINDS,
+  REPLAY_STATUSES,
+  type ReplayDeterminismPolicy,
+  type ReplayDiagnostic,
+  type ReplayEventRange,
+  type ReplayEventStreamSource,
+  type ReplayInput,
+  type ReplayMetadata,
+  type ReplayPlan,
+  type ReplayResult,
+  type ReplaySnapshotAndEventsSource,
+  type ReplaySnapshotSource,
+  type ReplaySourceDescriptor,
+  type ReplaySourceKind,
+  type ReplayStatus,
+  type ReplayStepDescriptor,
+  type ReplayStorageAdapterSource,
+  type ReplayStorageReference
+} from "./replay/replay-types.js";
+export {
   createSerializationResult,
   createDeserializationResult,
   formatSerializationValidationMessage,
