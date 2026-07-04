@@ -3,15 +3,15 @@
 **Date:** 2026-07-04
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-064 are DONE or REVIEW. TASK-060 through TASK-064 are DONE. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-065 are DONE or REVIEW. TASK-060 through TASK-064 are DONE. TASK-065 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-064 are DONE. There is no active task.
-3. **Single next most important task:** Create `TASK-065 - Storage adapter conformance tests`.
+2. **Current state:** TASK-053 through TASK-064 are DONE. TASK-065 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-065 - Storage adapter conformance tests`.
 4. **What the current scope must not change:** do not create `TASK-066` until `TASK-065` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-065 reaches review-ready conformance coverage across public storage adapter boundaries without introducing new production adapters.
+5. **How completion is recognized:** TASK-065 remains review-ready with conformance coverage over public storage adapter boundaries and no new backend implementation.
 
 ## Repository / PR State
 
@@ -31,7 +31,8 @@
 - TASK-062 is done.
 - TASK-063 is done.
 - TASK-064 is done.
-- TASK-065 has not been created.
+- TASK-065 is in review.
+- TASK-066 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
@@ -44,14 +45,17 @@
   - `TASK-062 - Serialization and schema version contracts` DONE
   - `TASK-063 - File storage adapter boundary` DONE
   - `TASK-064 - Replay planning and contract boundary` DONE
-- Next task:
-  - `TASK-065 - Storage adapter conformance tests` not created
+- In review:
+  - `TASK-065 - Storage adapter conformance tests`
+- Next task after acceptance:
+  - `TASK-066 - M7 gate review` not created
 
 ## Boundary Reminder
 
 - Runtime host remains pure/in-memory.
 - File IO exists only in the explicit file storage adapter boundary.
 - Replay work remains contract-only and planning-only.
+- Storage conformance work remains test-only.
 - No DB adapter.
 - No external storage adapter.
 - No replay runtime behavior.
@@ -61,13 +65,14 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/storage-adapter-conformance.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/replay-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts` - passed, 1 test file / 4 tests.
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
-- `corepack pnpm test` - passed, 46 test files / 513 tests.
+- `corepack pnpm test` - passed, 47 test files / 518 tests.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
 - `git diff --check` - passed.
@@ -75,4 +80,4 @@
 
 ## Next Task Boundary
 
-Create `TASK-065` next. Keep the work focused on storage adapter conformance tests through public boundaries only. Do not start `TASK-066`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-065` next. Keep the work focused on storage adapter conformance tests through public boundaries only. Do not start `TASK-066`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
