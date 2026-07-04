@@ -2,7 +2,7 @@
 
 ## Status
 
-REVIEW
+DONE
 
 ## Gate Verdict
 
@@ -17,7 +17,7 @@ TASK-059 adds the M6 gate review report. The review confirms that the accepted M
 - `docs/handoffs/TASK-059-HANDOFF.md`
 - `docs/reviews/M6-GATE-REVIEW.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-059-m6-gate-review.md`
+- `docs/tasks/done/TASK-059-m6-gate-review.md`
 
 ## Audit Result
 

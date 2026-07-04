@@ -1,7 +1,7 @@
 # Task: TASK-059 - M6 Gate Review
 
 **Milestone:** M6 Gate
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -46,4 +46,3 @@ Perform the M6 Gate Review and decide whether the M6 persistence boundary is rea
 - plugin runtime
 - external network
 - next milestone task
-
