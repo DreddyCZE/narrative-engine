@@ -1,4 +1,4 @@
-# TASK-062 HANDOFF
+# TASK-063 HANDOFF
 
 ## Status
 
@@ -6,44 +6,42 @@ REVIEW
 
 ## Summary
 
-TASK-062 adds data-only serialization and schema version contracts for the future production storage and replay boundary. The contracts define serialization formats, schema version metadata, checksum metadata, serialization envelopes, serialized payload descriptors, migration descriptors, migration plans, and deterministic serialization result helpers without introducing serializer IO or migration runtime execution.
+TASK-063 adds an explicit file storage adapter boundary for M7. The adapter keeps file IO root-scoped inside a dedicated storage boundary, serializes event records and snapshots deterministically as JSON envelopes, validates storage and persistence contracts on read/write, and returns deterministic diagnostics for duplicates, corruption, missing files, and path traversal attempts.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-062-HANDOFF.md`
+- `docs/handoffs/TASK-063-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/done/TASK-062-serialization-schema-version-contracts.md`
-- `packages/engine-contracts/src/index.ts`
-- `packages/engine-contracts/src/storage/serialization-schema-types.ts`
-- `tests/serialization-schema-contracts.test.ts`
+- `docs/tasks/review/TASK-063-file-storage-adapter-boundary.md`
+- `packages/engine-kernel/src/index.ts`
+- `packages/engine-kernel/src/storage/file-storage-adapter.ts`
+- `tests/file-storage-adapter-boundary.test.ts`
 
-## Contract Locations
+## Production Function Location
 
-- `packages/engine-contracts/src/storage/serialization-schema-types.ts`
-- `packages/engine-contracts/src/index.ts`
+- `packages/engine-kernel/src/storage/file-storage-adapter.ts`
+- `packages/engine-kernel/src/index.ts`
 
 ## Test Location
 
-- `tests/serialization-schema-contracts.test.ts`
+- `tests/file-storage-adapter-boundary.test.ts`
 
-## Supported Behavior
+## Supported File Adapter Behavior
 
-- serialization formats and format guard
-- required schema version metadata for serialization envelopes
-- checksum metadata contracts
-- data-only serialized payload descriptors
-- data-only migration descriptor and migration plan contracts
-- deterministic serialization and deserialization result helpers
+- explicit root-scoped file storage adapter creation
+- deterministic JSON file layout for event order, event records, and snapshots
+- append events with idempotent identical duplicates and rejected conflicting duplicates
+- list/read events in deterministic persisted order with optional filters
+- save snapshots with idempotent identical duplicates and rejected conflicting duplicates
+- load snapshots with deterministic blocked/error diagnostics for missing or corrupt files
+- path traversal and root-escape rejection
+- no runtime host direct storage writes
 
 ## Unsupported / Deferred Behavior
 
-- no production file IO
-- no concrete file adapter implementation
-- no database adapter implementation
-- no external storage adapter implementation
-- no serializer runtime behavior
-- no runtime migration execution
+- no DB adapter
+- no external storage adapter
 - no replay runtime behavior
 - no UI/editor save-load flow
 - no gameplay/P0 content
@@ -52,6 +50,7 @@ TASK-062 adds data-only serialization and schema version contracts for the futur
 
 ## Validation
 
+- `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts`
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts`
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts`
 - `corepack pnpm test -- tests/in-memory-persistence-integration.test.ts`
@@ -83,7 +82,7 @@ TASK-062 adds data-only serialization and schema version contracts for the futur
 
 ## Next Recommended Task
 
-- `TASK-063 - File storage adapter boundary`
+- `TASK-064 - Replay planning and contract boundary`
 
 ## Active Task
 

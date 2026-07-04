@@ -13,7 +13,7 @@ TASK-061 adds data-only storage adapter interface contracts for the future produ
 - `docs/handoffs/TASK-061-HANDOFF.md`
 - `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-061-storage-adapter-interface-contracts.md`
+- `docs/tasks/done/TASK-061-storage-adapter-interface-contracts.md`
 - `packages/engine-contracts/src/index.ts`
 - `packages/engine-contracts/src/storage/storage-adapter-types.ts`
 - `tests/storage-adapter-contracts.test.ts`
