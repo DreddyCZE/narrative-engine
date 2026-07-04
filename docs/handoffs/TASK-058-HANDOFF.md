@@ -1,46 +1,41 @@
-# TASK-057 HANDOFF
+# TASK-058 HANDOFF
 
 ## Status
 
-DONE
+REVIEW
 
 ## Summary
 
-TASK-057 adds a pure adapter from committed `RuntimeHostResult.runtimeDomainEventValues` into persistence event records and envelopes. The adapter can also append through the existing in-memory Event Store boundary without adding runtime-host storage writes, production file IO, database behavior, external storage adapters, or replay runtime behavior.
+TASK-058 adds in-memory integration coverage across the accepted M6 persistence boundaries. The test drives the minimal fixture runtime path through validated graph build, in-memory command execution, runtime-result to Event Store adaptation, in-memory Event Store append, and in-memory Save snapshot save/load without introducing production storage backends, file IO, replay runtime behavior, UI/editor, gameplay, or plugin scope.
 
 ## Changed Files
 
-- `docs/handoffs/TASK-057-HANDOFF.md`
+- `docs/handoffs/TASK-058-HANDOFF.md`
 - `docs/planning/M6_SAVE_EVENT_STORE_PERSISTENCE_BOUNDARY.md`
 - `docs/status/CURRENT_STATE.md`
-- `docs/tasks/review/TASK-057-runtime-result-to-event-store-adapter.md`
-- `packages/engine-kernel/src/index.ts`
-- `packages/engine-kernel/src/persistence/runtime-result-event-store-adapter.ts`
-- `tests/runtime-result-event-store-adapter.test.ts`
-
-## Production Function Location
-
-- `packages/engine-kernel/src/persistence/runtime-result-event-store-adapter.ts`
-- export surface: `packages/engine-kernel/src/index.ts`
+- `docs/tasks/review/TASK-058-in-memory-persistence-integration-test.md`
+- `tests/in-memory-persistence-integration.test.ts`
 
 ## Test Location
 
-- `tests/runtime-result-event-store-adapter.test.ts`
+- `tests/in-memory-persistence-integration.test.ts`
 
-## Supported Adapter Behavior
+## Covered Integration Path
 
-- committed runtime results convert return-only domain event values into persistence event records
-- deterministic event envelope construction and validation before append
-- non-committed runtime results return deterministic blocked results and do not append
-- missing runtime domain event values return deterministic blocked diagnostics
-- invalid runtime event value metadata returns deterministic rejected diagnostics
-- optional append flows through the public in-memory Event Store boundary
-- duplicate append behavior follows the existing Event Store contract, including idempotent identical duplicates and rejected conflicting duplicates
+- minimal fixture content package input
+- validated graph build through existing M4 pure stages
+- `RuntimeHostInput` construction
+- `executeInMemoryCommand` full in-memory runtime execution
+- return-only runtime domain event values
+- runtime result to Event Store adapter
+- append through the public in-memory Event Store boundary
+- snapshot save/load through the public in-memory Save snapshot boundary
+- deterministic committed, blocked, idempotent, and immutability checks
 
 ## Unsupported / Deferred Behavior
 
 - no production Event Store backend
-- no Save system implementation
+- no production Save system
 - no production persistence backend
 - no production file IO
 - no database adapter
@@ -53,6 +48,7 @@ TASK-057 adds a pure adapter from committed `RuntimeHostResult.runtimeDomainEven
 
 ## Validation
 
+- `corepack pnpm test -- tests/in-memory-persistence-integration.test.ts`
 - `corepack pnpm test -- tests/runtime-result-event-store-adapter.test.ts`
 - `corepack pnpm test -- tests/persistence-envelope-contracts.test.ts`
 - `corepack pnpm test -- tests/in-memory-event-store-boundary.test.ts`
@@ -81,7 +77,7 @@ TASK-057 adds a pure adapter from committed `RuntimeHostResult.runtimeDomainEven
 
 ## Next Recommended Task
 
-- `TASK-058 - In-memory persistence integration test`
+- `TASK-059 - M6 gate review`
 
 ## Active Task
 

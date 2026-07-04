@@ -1,7 +1,7 @@
 # Task: TASK-057 - Runtime result to Event Store adapter
 
 **Milestone:** M6 Save/Event Store / Persistence Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
