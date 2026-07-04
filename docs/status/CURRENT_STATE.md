@@ -3,15 +3,15 @@
 **Date:** 2026-07-04
 **Milestone:** M6 Save/Event Store / Persistence Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-057 are DONE. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-058 are DONE or REVIEW. TASK-057 is DONE. TASK-058 is in REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M6 Save/Event Store / Persistence Boundary.
-2. **Current state:** TASK-054, TASK-055, TASK-056, and TASK-057 are DONE. There is no active task.
-3. **Single next most important task:** Create `TASK-058 - In-memory persistence integration test`.
-4. **What the current scope must not change:** `TASK-058` may add only in-memory integration coverage over the existing runtime pipeline, runtime-result adapter, in-memory Event Store boundary, and in-memory snapshot boundary. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-057 is accepted, validation is green on `main`, and `TASK-058` has not been created yet.
+2. **Current state:** TASK-054, TASK-055, TASK-056, and TASK-057 are DONE. TASK-058 is in REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-058 - In-memory persistence integration test`.
+4. **What the current scope must not change:** do not create `TASK-059` until `TASK-058` is accepted. No production file IO, no database adapter, no external storage adapter, no replay runtime behavior, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-058 remains review-ready, validation is green, and `TASK-059` has not been created.
 
 ## Repository / PR State
 
@@ -23,7 +23,8 @@
 - TASK-055 is done.
 - TASK-056 is done.
 - TASK-057 is done.
-- TASK-058 has not been created.
+- TASK-058 is in review.
+- TASK-059 has not been created.
 - No production Event Store backend, Save system, persistence backend, file-IO, storage-adapter, replay, UI, gameplay, or plugin implementation task is active.
 
 ## M6 Implementation
@@ -32,10 +33,12 @@
 - Accepted:
   - `TASK-054 - Persistence envelope/input/result contracts` DONE
   - `TASK-055 - In-memory Event Store boundary` DONE
-  - TASK-056 - Save snapshot boundary DONE
-- TASK-057 - Runtime result to Event Store adapter DONE
+  - `TASK-056 - Save snapshot boundary` DONE
+  - `TASK-057 - Runtime result to Event Store adapter` DONE
+- In review:
+  - `TASK-058 - In-memory persistence integration test`
 - Next task after acceptance:
-  - `TASK-058 - In-memory persistence integration test` not created
+  - `TASK-059 - M6 gate review` not created
 
 ## Boundary Reminder
 
@@ -51,6 +54,7 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/in-memory-persistence-integration.test.ts` - passed, 1 test file / 4 tests.
 - `corepack pnpm test -- tests/runtime-result-event-store-adapter.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/persistence-envelope-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/in-memory-event-store-boundary.test.ts` - passed, 1 test file / 5 tests.
@@ -72,11 +76,12 @@
 - `corepack pnpm test -- tests/minimal-neutral-content-package-fixture.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
-- `corepack pnpm test` - passed, 41 test files / 488 tests.
+- `corepack pnpm test` - passed, 42 test files / 492 tests.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed.
+- `git diff --check` - passed, with only known CRLF normalization warnings.
+- Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Create `TASK-058` next. Keep all new behavior limited to in-memory integration coverage over existing runtime and persistence boundaries. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-058` next. Do not create `TASK-059` in this run. Keep all new behavior limited to in-memory integration coverage over existing runtime and persistence boundaries. No production file IO, database adapter, external storage adapter, replay runtime behavior, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
