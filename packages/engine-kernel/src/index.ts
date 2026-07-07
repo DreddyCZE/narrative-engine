@@ -7,6 +7,11 @@ export {
   type FileStorageAdapter,
   type FileStorageAdapterOptions
 } from "./storage/file-storage-adapter.js";
+export {
+  createMemoryStorageAdapter,
+  type MemoryStorageAdapter,
+  type MemoryStorageAdapterOptions
+} from "./storage/memory-storage-adapter.js";
 
 export {
   appendEventRecords,
