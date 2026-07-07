@@ -14,6 +14,25 @@ export {
 } from "./storage/memory-storage-adapter.js";
 
 export {
+  GAME_STATE_CONTENT_PACKAGE_ID,
+  GAME_STATE_CONTENT_PACKAGE_VERSION,
+  GAME_STATE_SAVE_SCHEMA_ID,
+  GAME_STATE_SAVE_SCHEMA_VERSION,
+  GAME_STATE_STORAGE_RUNTIME_VERSION,
+  inspectGameStateLoadInput,
+  inspectGameStateSaveInput,
+  loadGameState,
+  saveGameState,
+  type GameStateEnvelope,
+  type GameStateLoadInput,
+  type GameStateLoadResult,
+  type GameStateSaveInput,
+  type GameStateSaveResult,
+  type GameStateStorageAdapter,
+  type GameStateStorageKey
+} from "./game-state/game-state-save-load.js";
+
+export {
   appendEventRecords,
   createInMemoryEventStore,
   getEventRecordById,
