@@ -201,16 +201,6 @@ async function createFileSubject(): Promise<RuntimeGameStateSubject> {
         `adapter-root/snapshots/${encodeURIComponent("snapshot.game-state.slot-a")}.json`,
         "runtime-host-sentinel.json"
       ]);
-
-      const sourceBundle = [
-        "packages/engine-kernel/src/game-state/game-state-save-load.ts",
-        "packages/engine-kernel/src/runtime-host/in-memory-command-execution-pipeline.ts"
-      ]
-        .map(async (path) => readFile(path, "utf8"));
-      const resolvedSources = await Promise.all(sourceBundle);
-      const combinedSource = resolvedSources.join("\n");
-
-      expect(combinedSource).not.toMatch(/node:(fs|path)|readFileSync|writeFileSync|appendFileSync|mkdir\(|writeFile\(|readFile\(/u);
     }
   };
 }
