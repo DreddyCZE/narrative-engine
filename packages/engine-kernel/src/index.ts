@@ -31,6 +31,25 @@ export {
   type GameStateStorageAdapter,
   type GameStateStorageKey
 } from "./game-state/game-state-save-load.js";
+export {
+  SAVE_SLOT_MANIFEST_CONTENT_PACKAGE_ID,
+  SAVE_SLOT_MANIFEST_CONTENT_PACKAGE_VERSION,
+  SAVE_SLOT_MANIFEST_RUNTIME_VERSION,
+  SAVE_SLOT_MANIFEST_SCHEMA_ID,
+  SAVE_SLOT_MANIFEST_SCHEMA_VERSION,
+  inspectLoadSaveSlotManifestInput,
+  inspectRecordSaveSlotInput,
+  listSaveSlots,
+  loadSaveSlotManifest,
+  recordSaveSlot,
+  type LoadSaveSlotManifestInput,
+  type LoadSaveSlotManifestResult,
+  type RecordSaveSlotInput,
+  type RecordSaveSlotResult,
+  type SaveSlotManifest,
+  type SaveSlotManifestEntry,
+  type SaveSlotManifestStorageAdapter
+} from "./game-state/save-slot-manifest.js";
 
 export {
   appendEventRecords,
