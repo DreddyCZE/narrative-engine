@@ -82,7 +82,7 @@
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - pending final doc-only verification.
+- `git diff --check` - passed.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
