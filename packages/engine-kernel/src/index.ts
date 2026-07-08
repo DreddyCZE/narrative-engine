@@ -50,6 +50,18 @@ export {
   type SaveSlotManifestEntry,
   type SaveSlotManifestStorageAdapter
 } from "./game-state/save-slot-manifest.js";
+export {
+  listSaves,
+  loadGame,
+  saveGame,
+  type ListSavesInput,
+  type ListSavesResult,
+  type LoadGameInput,
+  type LoadGameResult,
+  type SaveGameInput,
+  type SaveGameResult,
+  type SaveLoadServiceStorageAdapter
+} from "./game-state/save-load-service.js";
 
 export {
   appendEventRecords,
