@@ -1,6 +1,6 @@
 # Current State
 
-**Date:** 2026-07-08
+**Date:** 2026-07-09
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
 **Status:** TASK-037 through TASK-071 are DONE or REVIEW. TASK-060 through TASK-070 are DONE. TASK-071 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
@@ -37,8 +37,8 @@
 - TASK-062 is done.
 - TASK-063 is done.
 - TASK-064 is done.
-- TASK-065 is in review.
-- TASK-066 is in review.
+- TASK-065 is done.
+- TASK-066 is done.
 - TASK-067 is done.
 - TASK-068 is done.
 - TASK-069 is done.
@@ -57,13 +57,13 @@
   - `TASK-062 - Serialization and schema version contracts` DONE
   - `TASK-063 - File storage adapter boundary` DONE
   - `TASK-064 - Replay planning and contract boundary` DONE
+  - `TASK-065 - Storage adapter conformance tests` DONE
+  - `TASK-066 - Memory storage adapter conformance` DONE
   - `TASK-067 - Game state save load boundary` DONE
   - `TASK-068 - Minimal runtime game state save/load integration flow` DONE
   - `TASK-069 - Save slot manifest boundary` DONE
   - `TASK-070 - Save/load service facade` DONE
 - In review:
-  - `TASK-065 - Storage adapter conformance tests`
-  - `TASK-066 - Memory storage adapter conformance`
   - `TASK-071 - Save/load diagnostics and recovery policy`
 - Next task after acceptance:
   - `TASK-072` not created
