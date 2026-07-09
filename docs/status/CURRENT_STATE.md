@@ -3,15 +3,15 @@
 **Date:** 2026-07-09
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-072 are DONE or REVIEW. TASK-060 through TASK-071 are DONE. TASK-072 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-073 are DONE or REVIEW. TASK-060 through TASK-072 are DONE. TASK-073 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-071 are DONE. TASK-072 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-072 - Save/load public scenario fixture`.
-4. **What the current scope must not change:** do not create `TASK-073` until `TASK-072` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-072 remains review-ready with a public save/load scenario fixture that demonstrates happy path, empty list, missing save, and manifest mismatch recovery through existing public APIs only.
+2. **Current state:** TASK-053 through TASK-072 are DONE. TASK-073 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-073 - Save/load UI readiness gate`.
+4. **What the current scope must not change:** do not create `TASK-074` until `TASK-073` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-073 remains review-ready with a save/load UI readiness gate document and gate test that confirm the public save/load surface is ready for future UI or editor integration without implementing UI.
 
 ## Repository / PR State
 
@@ -26,6 +26,7 @@
 - PR #52 was merged into `origin/main` at merge commit `1df1b6a`.
 - PR #53 was merged into `origin/main` at merge commit `f4ba2fb`.
 - PR #54 was merged into `origin/main` at merge commit `8db7197`.
+- PR #55 was merged into `origin/main` at merge commit `8e2ad13`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -45,8 +46,9 @@
 - TASK-069 is done.
 - TASK-070 is done.
 - TASK-071 is done.
-- TASK-072 is in review.
-- TASK-073 has not been created.
+- TASK-072 is done.
+- TASK-073 is in review.
+- TASK-074 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
@@ -66,10 +68,11 @@
   - `TASK-069 - Save slot manifest boundary` DONE
   - `TASK-070 - Save/load service facade` DONE
   - `TASK-071 - Save/load diagnostics and recovery policy` DONE
+  - `TASK-072 - Save/load public scenario fixture` DONE
 - In review:
-  - `TASK-072 - Save/load public scenario fixture`
+  - `TASK-073 - Save/load UI readiness gate`
 - Next task after acceptance:
-  - `TASK-073` not created
+  - `TASK-074` not created
 
 ## Boundary Reminder
 
@@ -81,6 +84,7 @@
 - Save/load facade composes only public save/load and manifest boundaries.
 - Save/load diagnostics policy classifies outcomes without mutating service or adapter results.
 - Save/load public scenario fixtures demonstrate usage without expanding runtime behavior.
+- Save/load UI readiness gating documents the supported future UI contract without implementing UI.
 - Replay work remains contract-only and planning-only.
 - No DB adapter.
 - No external storage adapter.
@@ -91,6 +95,7 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/save-load-ui-readiness-gate.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/save-load-public-scenario-fixture.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/save-load-diagnostics-policy.test.ts` - passed, 1 test file / 10 tests.
 - `corepack pnpm test -- tests/save-load-service-facade.test.ts` - passed, 1 test file / 5 tests.
@@ -101,7 +106,7 @@
 - `corepack pnpm test -- tests/file-storage-adapter-boundary.test.ts` - passed, 1 test file / 4 tests.
 - `corepack pnpm test -- tests/storage-adapter-contracts.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/serialization-schema-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 53 test files / 561 tests.
+- `corepack pnpm test` - passed, 54 test files / 566 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -111,4 +116,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-072` next. Keep the work focused on the save/load public scenario fixture only. Do not start `TASK-073`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-073` next. Keep the work focused on the save/load UI readiness gate only. Do not start `TASK-074`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
