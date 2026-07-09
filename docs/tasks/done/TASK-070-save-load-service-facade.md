@@ -1,7 +1,7 @@
 # Task: TASK-070 - Save/load service facade
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal

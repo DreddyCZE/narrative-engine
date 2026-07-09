@@ -62,6 +62,21 @@ export {
   type SaveGameResult,
   type SaveLoadServiceStorageAdapter
 } from "./game-state/save-load-service.js";
+export {
+  inspectListSavesResult,
+  inspectLoadGameResult,
+  inspectLoadGameStateResult,
+  inspectLoadSaveSlotManifestResult,
+  inspectManifestSnapshotMismatch,
+  inspectRecordSaveSlotResult,
+  inspectSaveGameResult,
+  inspectSaveGameStateResult,
+  type ManifestSnapshotMismatchInput,
+  type SaveLoadIssue,
+  type SaveLoadIssueSeverity,
+  type SaveLoadPolicyResult,
+  type SaveLoadRecoveryAction
+} from "./game-state/save-load-diagnostics-policy.js";
 
 export {
   appendEventRecords,
