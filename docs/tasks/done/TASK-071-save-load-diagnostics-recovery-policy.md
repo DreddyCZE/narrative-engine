@@ -1,7 +1,7 @@
 # Task: TASK-071 - Save/load diagnostics and recovery policy
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
