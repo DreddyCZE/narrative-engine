@@ -1,7 +1,7 @@
 # Task: TASK-074 - M7 save/load checkpoint and next-scope decision
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
