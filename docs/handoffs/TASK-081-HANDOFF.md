@@ -14,7 +14,7 @@ REVIEW
 
 ## Commit Hash
 
-- pending final commit
+- 29ef517 TASK-081 add minimal content package loader boundary
 
 ## Summary
 
