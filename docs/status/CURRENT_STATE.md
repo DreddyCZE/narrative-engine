@@ -3,15 +3,15 @@
 **Date:** 2026-07-11
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-080 are DONE or REVIEW. TASK-060 through TASK-079 are DONE. TASK-080 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-081 are DONE or REVIEW. TASK-060 through TASK-080 are DONE. TASK-081 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-079 are DONE. TASK-080 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-080 - Minimal content package contract for P0 micro prototype`.
-4. **What the current scope must not change:** do not create `TASK-081` until `TASK-080` is accepted. No runtime command execution, no UI/editor, no gameplay/P0 content implementation, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-080 remains review-ready with a minimal content package contract, deterministic validation helpers, supported action affordance constants and guards, and contract coverage for references, duplicates, JSON safety, and diagnostics.
+2. **Current state:** TASK-053 through TASK-080 are DONE. TASK-081 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-081 - Minimal content package loader boundary`.
+4. **What the current scope must not change:** do not create `TASK-082` until `TASK-081` is accepted. No runtime command execution, no UI/editor, no gameplay/P0 content implementation, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-081 remains review-ready with a pure content package loader boundary, deterministic validated graph building, mapped validation diagnostics, explicit schema mismatch behavior, and deferred dependency handling without resolution.
 
 ## Repository / PR State
 
@@ -34,6 +34,7 @@
 - PR #60 was merged into `origin/main` at merge commit `652dbf9`.
 - PR #61 was merged into `origin/main` at merge commit `3f86137`.
 - PR #62 was merged into `origin/main` at merge commit `cf135ff`.
+- PR #63 was merged into `origin/main` at merge commit `73aec38`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -61,8 +62,9 @@
 - TASK-077 is done.
 - TASK-078 is done.
 - TASK-079 is done.
-- TASK-080 is in review.
-- TASK-081 has not been created.
+- TASK-080 is done.
+- TASK-081 is in review.
+- TASK-082 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -94,10 +96,11 @@
   - `TASK-077 - Replay plan validation hardening` DONE
   - `TASK-078 - M7 replay contract checkpoint and closure decision` DONE
   - `TASK-079 - Content runtime boundary checkpoint and first prototype path` DONE
+  - `TASK-080 - Minimal content package contract for P0 micro prototype` DONE
 - In review:
-  - `TASK-080 - Minimal content package contract for P0 micro prototype`
+  - `TASK-081 - Minimal content package loader boundary`
 - Next task after acceptance:
-  - `TASK-081` not created
+  - `TASK-082` not created
 
 ## Boundary Reminder
 
@@ -109,24 +112,25 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- No runtime command execution was added in TASK-080.
-- No UI or map/editor implementation was added in TASK-080.
-- No gameplay or P0 content package was authored in TASK-080.
+- TASK-081 adds only a pure object-to-graph loader boundary.
+- TASK-081 does not resolve dependency packages.
+- TASK-081 does not implement runtime commands, gameplay state mutation, UI, or map/editor behavior.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 57 test files / 584 tests.
+- `corepack pnpm test` - passed, 58 test files / 590 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed with only a normal CRLF to LF working-copy warning for `packages/engine-contracts/src/index.ts`.
+- `git diff --check` - passed.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-080` next. Keep the work focused on the minimal content package contract only. Do not start `TASK-081`. Do not implement runtime commands, dialogue runtime, inventory runtime, UI, map editor, gameplay content packages, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-081` next. Keep the work focused on the minimal content package loader boundary only. Do not start `TASK-082`. Do not implement runtime commands, dialogue runtime, inventory runtime, gameplay state mutation, UI, map editor, gameplay content packages, replay runtime, DB adapters, or external storage in this step.
