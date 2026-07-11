@@ -1,7 +1,7 @@
 # Task: TASK-075 - Replay boundary checkpoint and next contract decision
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
