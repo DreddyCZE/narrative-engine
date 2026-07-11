@@ -116,6 +116,22 @@ export {
   type ValidatedContentSections
 } from "./content-loader/content-loader-types.js";
 export {
+  assertContentPackage,
+  CONTENT_ACTION_AFFORDANCES,
+  formatContentPackageValidationMessage,
+  inspectContentPackage,
+  isContentActionAffordance,
+  type ContentActionAffordance,
+  type ContentDialogueDescriptor,
+  type ContentExitDescriptor,
+  type ContentInitialPlayerState,
+  type ContentItemDescriptor,
+  type ContentLocationDescriptor,
+  type ContentNpcDescriptor,
+  type ContentPackage,
+  type ContentPackageDiagnostic
+} from "./content/content-package-types.js";
+export {
   createPersistenceResult,
   assertPersistenceEventEnvelope,
   assertPersistenceSnapshotRecord,

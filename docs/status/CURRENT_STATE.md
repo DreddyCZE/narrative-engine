@@ -3,15 +3,15 @@
 **Date:** 2026-07-11
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-079 are DONE or REVIEW. TASK-060 through TASK-078 are DONE. TASK-079 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-080 are DONE or REVIEW. TASK-060 through TASK-079 are DONE. TASK-080 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-078 are DONE. TASK-079 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-079 - Content runtime boundary checkpoint and first prototype path`.
-4. **What the current scope must not change:** do not create `TASK-080` until `TASK-079` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-079 remains review-ready with a content/runtime boundary checkpoint that defines the safest path toward the first future playable prototype, keeps M7 closed with replay runtime deferred, and recommends a minimal content package contract as the next task.
+2. **Current state:** TASK-053 through TASK-079 are DONE. TASK-080 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-080 - Minimal content package contract for P0 micro prototype`.
+4. **What the current scope must not change:** do not create `TASK-081` until `TASK-080` is accepted. No runtime command execution, no UI/editor, no gameplay/P0 content implementation, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-080 remains review-ready with a minimal content package contract, deterministic validation helpers, supported action affordance constants and guards, and contract coverage for references, duplicates, JSON safety, and diagnostics.
 
 ## Repository / PR State
 
@@ -33,6 +33,7 @@
 - PR #59 was merged into `origin/main` at merge commit `2c33133`.
 - PR #60 was merged into `origin/main` at merge commit `652dbf9`.
 - PR #61 was merged into `origin/main` at merge commit `3f86137`.
+- PR #62 was merged into `origin/main` at merge commit `cf135ff`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -59,11 +60,12 @@
 - TASK-076 is done.
 - TASK-077 is done.
 - TASK-078 is done.
-- TASK-079 is in review.
-- TASK-080 has not been created.
+- TASK-079 is done.
+- TASK-080 is in review.
+- TASK-081 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
-## M7 Planning
+## Planning State
 
 - M7 plan location: `docs/planning/M7_PRODUCTION_STORAGE_ADAPTER_REPLAY_BOUNDARY.md`.
 - Replay plan location: `docs/planning/M7_REPLAY_BOUNDARY.md`.
@@ -91,42 +93,40 @@
   - `TASK-076 - Replay source descriptor conformance tests` DONE
   - `TASK-077 - Replay plan validation hardening` DONE
   - `TASK-078 - M7 replay contract checkpoint and closure decision` DONE
+  - `TASK-079 - Content runtime boundary checkpoint and first prototype path` DONE
 - In review:
-  - `TASK-079 - Content runtime boundary checkpoint and first prototype path`
+  - `TASK-080 - Minimal content package contract for P0 micro prototype`
 - Next task after acceptance:
-  - `TASK-080` not created
+  - `TASK-081` not created
 
 ## Boundary Reminder
 
 - Runtime host remains pure and in-memory.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
-- Game state save/load uses only the public storage adapter contract.
-- Save slot manifest uses only the public storage adapter contract.
-- Save/load facade composes only public save/load and manifest boundaries.
-- Save/load diagnostics policy classifies outcomes without mutating service or adapter results.
-- Save/load public scenario fixtures demonstrate usage without expanding runtime behavior.
-- Save/load UI readiness gating documents the supported future UI contract without implementing UI.
-- Replay runtime remains deferred and M7 is considered closed from the current planning perspective.
-- The next direction is content/runtime foundation planning rather than UI, replay runtime, or map/editor work.
-- Content data must remain separate from engine logic and future UX.
+- Save/load remains behind its public facade and diagnostics surface.
+- Replay runtime remains deferred.
+- Content data must remain separate from engine logic.
+- Future UX must remain separate from content data.
+- P0 story content must not be hardcoded into engine contracts.
+- No runtime command execution was added in TASK-080.
+- No UI or map/editor implementation was added in TASK-080.
+- No gameplay or P0 content package was authored in TASK-080.
 - No DB adapter.
 - No external storage adapter.
-- No replay runtime behavior.
-- No UI/editor implementation.
-- No gameplay or P0 content implementation.
 - No plugin runtime.
 
 ## Last Checks
 
-- `corepack pnpm test` - passed, 56 test files / 578 tests.
+- `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
+- `corepack pnpm test` - passed, 57 test files / 584 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
-- `corepack pnpm validate` - passed.
-- `git diff --check` - passed with only a normal CRLF to LF working-copy warning for `docs/status/CURRENT_STATE.md`.
+- `corepack pnpm validate` - pending rerun after metadata update.
+- `git diff --check` - passed before metadata update with only a normal CRLF to LF working-copy warning for `packages/engine-contracts/src/index.ts`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-079` next. Keep the work focused on the content/runtime boundary checkpoint and first prototype path only. Do not start `TASK-080`. Do not implement runtime commands, UI, map editor, gameplay content, replay runtime, DB adapters, external storage, or plugin runtime in this step.
+Review `TASK-080` next. Keep the work focused on the minimal content package contract only. Do not start `TASK-081`. Do not implement runtime commands, dialogue runtime, inventory runtime, UI, map editor, gameplay content packages, replay runtime, DB adapters, or external storage in this step.

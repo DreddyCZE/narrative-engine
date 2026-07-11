@@ -1,7 +1,7 @@
 # Task: TASK-079 - Content runtime boundary checkpoint and first prototype path
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
