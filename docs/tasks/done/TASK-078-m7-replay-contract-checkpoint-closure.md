@@ -1,7 +1,7 @@
 # Task: TASK-078 - M7 replay contract checkpoint and closure decision
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal

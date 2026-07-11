@@ -3,15 +3,15 @@
 **Date:** 2026-07-11
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-078 are DONE or REVIEW. TASK-060 through TASK-077 are DONE. TASK-078 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-079 are DONE or REVIEW. TASK-060 through TASK-078 are DONE. TASK-079 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-077 are DONE. TASK-078 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-078 - M7 replay contract checkpoint and closure decision`.
-4. **What the current scope must not change:** do not create `TASK-079` until `TASK-078` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-078 remains review-ready with a replay contract closure checkpoint that confirms the replay contract surface is stable, replay runtime remains deferred, and the recommended next scope is content/runtime boundary planning.
+2. **Current state:** TASK-053 through TASK-078 are DONE. TASK-079 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-079 - Content runtime boundary checkpoint and first prototype path`.
+4. **What the current scope must not change:** do not create `TASK-080` until `TASK-079` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-079 remains review-ready with a content/runtime boundary checkpoint that defines the safest path toward the first future playable prototype, keeps M7 closed with replay runtime deferred, and recommends a minimal content package contract as the next task.
 
 ## Repository / PR State
 
@@ -32,6 +32,7 @@
 - PR #58 was merged into `origin/main` at merge commit `68f2a38`.
 - PR #59 was merged into `origin/main` at merge commit `2c33133`.
 - PR #60 was merged into `origin/main` at merge commit `652dbf9`.
+- PR #61 was merged into `origin/main` at merge commit `3f86137`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -57,8 +58,9 @@
 - TASK-075 is done.
 - TASK-076 is done.
 - TASK-077 is done.
-- TASK-078 is in review.
-- TASK-079 has not been created.
+- TASK-078 is done.
+- TASK-079 is in review.
+- TASK-080 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
@@ -68,6 +70,7 @@
 - Save/load checkpoint: `docs/planning/M7_SAVE_LOAD_CHECKPOINT_AND_NEXT_SCOPE.md`.
 - Replay checkpoint: `docs/planning/M7_REPLAY_BOUNDARY_CHECKPOINT_AND_NEXT_CONTRACT.md`.
 - Replay contract closure checkpoint: `docs/planning/M7_REPLAY_CONTRACT_CHECKPOINT_AND_CLOSURE.md`.
+- Content/runtime direction checkpoint: `docs/planning/CONTENT_RUNTIME_BOUNDARY_AND_PROTOTYPE_PATH.md`.
 - Accepted:
   - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` DONE
   - `TASK-061 - Storage adapter interface contracts` DONE
@@ -87,14 +90,15 @@
   - `TASK-075 - Replay boundary checkpoint and next contract decision` DONE
   - `TASK-076 - Replay source descriptor conformance tests` DONE
   - `TASK-077 - Replay plan validation hardening` DONE
+  - `TASK-078 - M7 replay contract checkpoint and closure decision` DONE
 - In review:
-  - `TASK-078 - M7 replay contract checkpoint and closure decision`
+  - `TASK-079 - Content runtime boundary checkpoint and first prototype path`
 - Next task after acceptance:
-  - `TASK-079` not created
+  - `TASK-080` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure/in-memory.
+- Runtime host remains pure and in-memory.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Game state save/load uses only the public storage adapter contract.
@@ -103,24 +107,18 @@
 - Save/load diagnostics policy classifies outcomes without mutating service or adapter results.
 - Save/load public scenario fixtures demonstrate usage without expanding runtime behavior.
 - Save/load UI readiness gating documents the supported future UI contract without implementing UI.
-- The M7 save/load checkpoint closes the save/load workstream and recommends a replay boundary checkpoint before UI implementation.
-- The replay boundary checkpoint confirms replay remains contract-only and recommends replay source descriptor conformance before any runtime execution work.
-- Replay source descriptor conformance freezes the current replay source kind and validation boundary without replay execution.
-- Replay plan validation hardening keeps replay work at the contract level while tightening deterministic validation for step sets and duplicate step ids.
-- The replay contract closure checkpoint now recommends closing the replay contract part of M7 and moving next toward a content/runtime boundary checkpoint.
-- Replay work remains contract-only and planning-only.
+- Replay runtime remains deferred and M7 is considered closed from the current planning perspective.
+- The next direction is content/runtime foundation planning rather than UI, replay runtime, or map/editor work.
+- Content data must remain separate from engine logic and future UX.
 - No DB adapter.
 - No external storage adapter.
 - No replay runtime behavior.
-- No UI/editor.
-- No gameplay/P0 content.
+- No UI/editor implementation.
+- No gameplay or P0 content implementation.
 - No plugin runtime.
 
 ## Last Checks
 
-- `corepack pnpm test -- tests/replay-plan-validation-hardening.test.ts` - passed, 1 test file / 5 tests.
-- `corepack pnpm test -- tests/replay-source-descriptor-conformance.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/replay-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test` - passed, 56 test files / 578 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
@@ -131,4 +129,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-078` next. Keep the work focused on the replay contract checkpoint and closure decision only. Do not start `TASK-079`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-079` next. Keep the work focused on the content/runtime boundary checkpoint and first prototype path only. Do not start `TASK-080`. Do not implement runtime commands, UI, map editor, gameplay content, replay runtime, DB adapters, external storage, or plugin runtime in this step.
