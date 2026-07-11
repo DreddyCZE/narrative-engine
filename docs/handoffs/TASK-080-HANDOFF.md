@@ -14,7 +14,7 @@ REVIEW
 
 ## Commit Hash
 
-- pending final commit
+- 0283f8f TASK-080 add minimal content package contract
 
 ## Summary
 
