@@ -14,7 +14,9 @@ REVIEW
 
 ## Commit Hash
 
-- 0283f8f TASK-080 add minimal content package contract
+- feature commit: `0283f8f` (`TASK-080 add minimal content package contract`)
+- handoff/status follow-up: `c91fca0` (`docs: finalize TASK-080 handoff hash`)
+- final head: `aed4f8ade886ce5a3f8e1e63cfe100c962a3334a`
 
 ## Summary
 
