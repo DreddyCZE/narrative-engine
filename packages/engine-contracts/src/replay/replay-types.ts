@@ -486,6 +486,11 @@ export function inspectReplayPlan(value: unknown): readonly ReplayDiagnostic[] {
     return sortDiagnostics(diagnostics);
   }
   const steps: readonly unknown[] = value.steps;
+  if (steps.length === 0) {
+    diagnostics.push(createDiagnostic("REPLAY_PLAN_INVALID", ["steps"], "steps must contain at least one step."));
+    return sortDiagnostics(diagnostics);
+  }
+  const stepIds = new Set<string>();
   for (let index = 0; index < steps.length; index += 1) {
     const step: unknown = steps[index];
     const path = ["steps", index] as const;
@@ -493,7 +498,15 @@ export function inspectReplayPlan(value: unknown): readonly ReplayDiagnostic[] {
       diagnostics.push(createDiagnostic("REPLAY_PLAN_INVALID", path, "step must be an object."));
       continue;
     }
-    validateStringField(diagnostics, step.stepId, [...path, "stepId"], STEP_ID_PATTERN, "REPLAY_PLAN_INVALID", "stepId is invalid.");
+    const stepId = step.stepId;
+    const hasValidStepId = validateStringField(diagnostics, stepId, [...path, "stepId"], STEP_ID_PATTERN, "REPLAY_PLAN_INVALID", "stepId is invalid.");
+    if (hasValidStepId) {
+      if (stepIds.has(stepId)) {
+        diagnostics.push(createDiagnostic("REPLAY_PLAN_INVALID", [...path, "stepId"], "stepId must be unique."));
+      } else {
+        stepIds.add(stepId);
+      }
+    }
     if (
       step.phase !== "load-records" &&
       step.phase !== "validate-envelopes" &&

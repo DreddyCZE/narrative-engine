@@ -1,17 +1,17 @@
 # Current State
 
-**Date:** 2026-07-10
+**Date:** 2026-07-11
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-076 are DONE or REVIEW. TASK-060 through TASK-075 are DONE. TASK-076 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-077 are DONE or REVIEW. TASK-060 through TASK-076 are DONE. TASK-077 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-053 through TASK-075 are DONE. TASK-076 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-076 - Replay source descriptor conformance tests`.
-4. **What the current scope must not change:** do not create `TASK-077` until `TASK-076` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
-5. **How completion is recognized:** TASK-076 remains review-ready with targeted replay source descriptor conformance tests that cover all current replay source kinds, deterministic validation behavior, and replay plan inspection without introducing runtime execution.
+2. **Current state:** TASK-053 through TASK-076 are DONE. TASK-077 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-077 - Replay plan validation hardening`.
+4. **What the current scope must not change:** do not create `TASK-078` until `TASK-077` is accepted. No replay runtime behavior, no DB adapter, no external storage adapter, no UI/editor, no gameplay/P0 content, and no plugin runtime may be introduced.
+5. **How completion is recognized:** TASK-077 remains review-ready with hardened replay input and plan validation, deterministic diagnostics, and no replay runtime execution behavior.
 
 ## Repository / PR State
 
@@ -30,6 +30,7 @@
 - PR #56 was merged into `origin/main` at merge commit `6d0c976`.
 - PR #57 was merged into `origin/main` at merge commit `e679fb7`.
 - PR #58 was merged into `origin/main` at merge commit `68f2a38`.
+- PR #59 was merged into `origin/main` at merge commit `2c33133`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -53,8 +54,9 @@
 - TASK-073 is done.
 - TASK-074 is done.
 - TASK-075 is done.
-- TASK-076 is in review.
-- TASK-077 has not been created.
+- TASK-076 is done.
+- TASK-077 is in review.
+- TASK-078 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## M7 Planning
@@ -80,10 +82,11 @@
   - `TASK-073 - Save/load UI readiness gate` DONE
   - `TASK-074 - M7 save/load checkpoint and next-scope decision` DONE
   - `TASK-075 - Replay boundary checkpoint and next contract decision` DONE
+  - `TASK-076 - Replay source descriptor conformance tests` DONE
 - In review:
-  - `TASK-076 - Replay source descriptor conformance tests`
+  - `TASK-077 - Replay plan validation hardening`
 - Next task after acceptance:
-  - `TASK-077` not created
+  - `TASK-078` not created
 
 ## Boundary Reminder
 
@@ -98,7 +101,8 @@
 - Save/load UI readiness gating documents the supported future UI contract without implementing UI.
 - The M7 save/load checkpoint closes the save/load workstream and recommends a replay boundary checkpoint before UI implementation.
 - The replay boundary checkpoint confirms replay remains contract-only and recommends replay source descriptor conformance before any runtime execution work.
-- Replay source descriptor conformance now freezes the current replay source kind and validation boundary without introducing replay execution.
+- Replay source descriptor conformance freezes the current replay source kind and validation boundary without replay execution.
+- Replay plan validation hardening keeps replay work at the contract level while tightening deterministic validation for step sets and duplicate step ids.
 - Replay work remains contract-only and planning-only.
 - No DB adapter.
 - No external storage adapter.
@@ -109,16 +113,17 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/replay-plan-validation-hardening.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/replay-source-descriptor-conformance.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/replay-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 55 test files / 573 tests.
+- `corepack pnpm test` - passed, 56 test files / 578 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed with only a normal CRLF to LF working-copy warning for `docs/status/CURRENT_STATE.md`.
+- `git diff --check` - passed with only normal CRLF to LF working-copy warnings for `docs/status/CURRENT_STATE.md` and `packages/engine-contracts/src/replay/replay-types.ts`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-076` next. Keep the work focused on replay source descriptor conformance tests only. Do not start `TASK-077`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.
+Review `TASK-077` next. Keep the work focused on replay plan validation hardening only. Do not start `TASK-078`. No replay runtime behavior, DB adapter, external storage adapter, UI/editor, gameplay/P0 content, plugin runtime, or external network behavior may be introduced.

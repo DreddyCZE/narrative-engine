@@ -1,7 +1,7 @@
 # Task: TASK-076 - Replay source descriptor conformance tests
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
