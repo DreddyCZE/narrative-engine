@@ -123,8 +123,8 @@
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
-- `corepack pnpm validate` - pending rerun after metadata update.
-- `git diff --check` - passed before metadata update with only a normal CRLF to LF working-copy warning for `packages/engine-contracts/src/index.ts`.
+- `corepack pnpm validate` - passed.
+- `git diff --check` - passed with only a normal CRLF to LF working-copy warning for `packages/engine-contracts/src/index.ts`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
