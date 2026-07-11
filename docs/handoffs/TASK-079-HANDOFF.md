@@ -14,7 +14,7 @@ REVIEW
 
 ## Commit Hash
 
-- pending final commit
+- `ed32a9f5487e5d47b5fb3ea3b44bf9972876c18a`
 
 ## Summary
 
