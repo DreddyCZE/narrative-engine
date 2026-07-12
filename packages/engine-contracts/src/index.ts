@@ -121,6 +121,15 @@ export {
   loadContentPackageFromObject
 } from "./content-loader/content-package-loader.js";
 export {
+  assertContentReadModelInput,
+  createContentReadModel,
+  formatContentReadModelValidationMessage,
+  inspectContentReadModelInput,
+  type ContentReadModel,
+  type ContentReadModelDiagnostic,
+  type ContentReadModelInput
+} from "./content-runtime/content-read-model.js";
+export {
   assertContentPackage,
   CONTENT_ACTION_AFFORDANCES,
   formatContentPackageValidationMessage,
