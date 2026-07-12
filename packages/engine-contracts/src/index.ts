@@ -248,6 +248,22 @@ export {
   type RuntimeLookCommandView
 } from "./runtime-host/runtime-look-command-executor.js";
 export {
+  assertRuntimeInventoryCommandExecutionInput,
+  executeRuntimeInventoryCommand,
+  formatRuntimeInventoryCommandExecutionValidationMessage,
+  inspectRuntimeInventoryCommandExecutionInput,
+  RUNTIME_INVENTORY_COMMAND_EXECUTION_STATUSES,
+  RUNTIME_INVENTORY_COMMAND_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeInventoryCommandDiagnostic,
+  type RuntimeInventoryCommandExecutionInput,
+  type RuntimeInventoryCommandExecutionMetadata,
+  type RuntimeInventoryCommandExecutionResult,
+  type RuntimeInventoryCommandExecutionResultMetadata,
+  type RuntimeInventoryCommandExecutionStatus,
+  type RuntimeInventoryCommandItemView,
+  type RuntimeInventoryCommandView
+} from "./runtime-host/runtime-inventory-command-executor.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,

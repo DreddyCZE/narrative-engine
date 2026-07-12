@@ -3,15 +3,15 @@
 **Date:** 2026-07-12
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-086 are DONE or REVIEW. TASK-060 through TASK-085 are DONE. TASK-086 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-087 are DONE or REVIEW. TASK-060 through TASK-086 are DONE. TASK-087 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-085 is DONE. TASK-086 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-086 - Read-only look command executor boundary`.
+2. **Current state:** TASK-086 is DONE. TASK-087 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-087 - Read-only inventory command executor boundary`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation, no UI/editor, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-086 remains review-ready with deterministic executed/rejected/blocked look results, read-only location views, and no mutation or next-state behavior.
+5. **How completion is recognized:** TASK-087 remains review-ready with deterministic executed/rejected/blocked inventory results, read-only inventory views, and no mutation or next-state behavior.
 
 ## Repository / PR State
 
@@ -40,6 +40,7 @@
 - PR #66 was merged into `origin/main` at merge commit `2cc7c74`.
 - PR #67 was merged into `origin/main` at merge commit `e1ada8b`.
 - PR #68 was merged into `origin/main` at merge commit `4c7978a`.
+- PR #69 was merged into `origin/main` at merge commit `9846803`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -73,8 +74,9 @@
 - TASK-083 is done.
 - TASK-084 is done.
 - TASK-085 is done.
-- TASK-086 is in review.
-- TASK-087 has not been created.
+- TASK-086 is done.
+- TASK-087 is in review.
+- TASK-088 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -112,14 +114,15 @@
   - `TASK-083 - Minimal runtime player state contract` DONE
   - `TASK-084 - Runtime command request validation boundary` DONE
   - `TASK-085 - Runtime command planning boundary` DONE
+  - `TASK-086 - Read-only look command executor boundary` DONE
 - In review:
-  - `TASK-086 - Read-only look command executor boundary`
+  - `TASK-087 - Read-only inventory command executor boundary`
 - Next task after acceptance:
-  - `TASK-087` not created
+  - `TASK-088` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the intentionally read-only `look` execution boundary.
+- Runtime host remains pure and in-memory except for the intentionally read-only `look` and `inventory` execution boundaries.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -127,14 +130,15 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-086 adds only a read-only `look` executor over the existing planning, content, and player-state boundaries.
-- TASK-086 does not execute `go`, `talk`, `take`, `use`, `inventory`, `save`, or `load`, and does not mutate gameplay state or generate next state.
+- TASK-087 adds only a read-only `inventory` executor over the existing planning, content, and player-state boundaries.
+- TASK-087 does not execute `look`, `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-inventory-command-executor-boundary.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-look-command-executor-boundary.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-command-planning-boundary.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-command-request-boundary.test.ts` - passed, 1 test file / 6 tests.
@@ -142,7 +146,7 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 63 test files / 620 tests.
+- `corepack pnpm test` - passed, 64 test files / 628 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -152,4 +156,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-086` next. Keep the work focused on the read-only `look` command executor boundary only. Do not introduce generic command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-087` next. Keep the work focused on the read-only `inventory` command executor boundary only. Do not introduce generic command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.
