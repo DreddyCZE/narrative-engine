@@ -230,6 +230,24 @@ export {
   type RuntimeCommandPlanningMetadata
 } from "./runtime-host/runtime-command-planning.js";
 export {
+  assertRuntimeLookCommandExecutionInput,
+  executeRuntimeLookCommand,
+  formatRuntimeLookCommandExecutionValidationMessage,
+  inspectRuntimeLookCommandExecutionInput,
+  RUNTIME_LOOK_COMMAND_EXECUTION_STATUSES,
+  RUNTIME_LOOK_COMMAND_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeLookCommandDiagnostic,
+  type RuntimeLookCommandExecutionInput,
+  type RuntimeLookCommandExecutionMetadata,
+  type RuntimeLookCommandExecutionResult,
+  type RuntimeLookCommandExecutionResultMetadata,
+  type RuntimeLookCommandExecutionStatus,
+  type RuntimeLookCommandExitView,
+  type RuntimeLookCommandItemView,
+  type RuntimeLookCommandNpcView,
+  type RuntimeLookCommandView
+} from "./runtime-host/runtime-look-command-executor.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,

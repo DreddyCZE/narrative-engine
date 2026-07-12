@@ -1,7 +1,7 @@
 # Task: TASK-085 - Runtime command planning boundary
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -26,7 +26,7 @@ Add a minimal runtime command planning boundary that converts a validated `Runti
 - conservative target requirement diagnostics and optional read-only target lookup through the public content read model
 - public engine-contracts exports for the runtime command planning surface
 - targeted public API tests for planned, rejected, and blocked results, deterministic planning, and explicit non-execution scope
-- metadata updates for TASK-084 DONE and TASK-085 REVIEW when complete
+- metadata updates for TASK-084 DONE and TASK-085 DONE when complete
 
 ## Out of Scope
 
