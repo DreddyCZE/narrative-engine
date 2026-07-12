@@ -116,6 +116,11 @@ export {
   type ValidatedContentSections
 } from "./content-loader/content-loader-types.js";
 export {
+  CONTENT_PACKAGE_LOADER_VERSION,
+  createValidatedContentGraphFromPackage,
+  loadContentPackageFromObject
+} from "./content-loader/content-package-loader.js";
+export {
   assertContentPackage,
   CONTENT_ACTION_AFFORDANCES,
   formatContentPackageValidationMessage,
