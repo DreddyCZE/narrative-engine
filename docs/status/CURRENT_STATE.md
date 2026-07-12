@@ -3,15 +3,15 @@
 **Date:** 2026-07-12
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-083 are DONE or REVIEW. TASK-060 through TASK-082 are DONE. TASK-083 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-084 are DONE or REVIEW. TASK-060 through TASK-083 are DONE. TASK-084 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-082 is DONE. TASK-083 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-083 - Minimal runtime player state contract`.
-4. **What the current scope must not change:** do not create `TASK-084` until `TASK-083` is accepted. No runtime command execution, no UI/editor, no gameplay/P0 content implementation, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-083 remains review-ready with a minimal validated runtime player state contract, deterministic initial-state creation from the public content boundary, explicit runtime state diagnostics, and no command or mutation behavior.
+2. **Current state:** TASK-083 is DONE. TASK-084 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-084 - Runtime command request validation boundary`.
+4. **What the current scope must not change:** no runtime command execution, no UI/editor, no gameplay or P0 content implementation, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-084 remains review-ready with deterministic runtime command request diagnostics, content affordance validation, optional runtime player state validation without mutation, and no command execution behavior.
 
 ## Repository / PR State
 
@@ -37,6 +37,7 @@
 - PR #63 was merged into `origin/main` at merge commit `73aec38`.
 - PR #64 was merged into `origin/main` at merge commit `1c6f034`.
 - PR #65 was merged into `origin/main` at merge commit `afd8d68`.
+- PR #66 was merged into `origin/main` at merge commit `2cc7c74`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -67,8 +68,9 @@
 - TASK-080 is done.
 - TASK-081 is done.
 - TASK-082 is done.
-- TASK-083 is in review.
-- TASK-084 has not been created.
+- TASK-083 is done.
+- TASK-084 is in review.
+- TASK-085 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -103,10 +105,11 @@
   - `TASK-080 - Minimal content package contract for P0 micro prototype` DONE
   - `TASK-081 - Minimal content package loader boundary` DONE
   - `TASK-082 - Runtime content read model boundary` DONE
+  - `TASK-083 - Minimal runtime player state contract` DONE
 - In review:
-  - `TASK-083 - Minimal runtime player state contract`
+  - `TASK-084 - Runtime command request validation boundary`
 - Next task after acceptance:
-  - `TASK-084` not created
+  - `TASK-085` not created
 
 ## Boundary Reminder
 
@@ -118,19 +121,20 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-083 adds only a minimal runtime player state contract and deterministic initial-state creation over accepted public content boundaries.
-- TASK-083 does not implement commands, gameplay state mutation, dialogue progression, inventory mutation, or movement.
+- TASK-084 adds only runtime command request validation around the existing request contract plus content and player-state relationship checks.
+- TASK-084 does not implement commands, gameplay state mutation, dialogue progression, inventory mutation, movement, or effect application.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-command-request-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/runtime-player-state-contract.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 60 test files / 600 tests.
+- `corepack pnpm test` - passed, 61 test files / 606 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -140,4 +144,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-083` next. Keep the work focused on the minimal runtime player state contract only. Do not start `TASK-084`. Do not implement runtime commands, gameplay state mutation, dialogue runtime, inventory runtime, UI, map editor, gameplay content packages, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-084` next. Keep the work focused on the runtime command request validation boundary only. Do not implement runtime command execution, gameplay state mutation, dialogue runtime, inventory runtime, UI, map editor, gameplay content packages, replay runtime, DB adapters, or external storage in this step.
