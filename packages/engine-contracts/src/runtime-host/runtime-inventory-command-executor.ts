@@ -325,9 +325,6 @@ function buildView(input: RuntimeInventoryCommandExecutionInput, content: Conten
   const unresolvedItemIds: string[] = [];
 
   for (const itemId of input.playerState.inventoryItemIds) {
-    if (itemId === undefined) {
-      continue;
-    }
     const item = content.getItem(itemId);
     if (item === undefined) {
       unresolvedItemIds.push(itemId);
@@ -522,9 +519,6 @@ export function executeRuntimeInventoryCommand(
     view = buildView(input, content);
     if (view === undefined) {
       for (const [index, itemId] of input.playerState.inventoryItemIds.entries()) {
-        if (itemId === undefined) {
-          continue;
-        }
         if (content.getItem(itemId) === undefined) {
           diagnostics.push(
             createDiagnostic(
