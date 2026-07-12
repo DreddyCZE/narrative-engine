@@ -130,6 +130,20 @@ export {
   type ContentReadModelInput
 } from "./content-runtime/content-read-model.js";
 export {
+  assertRuntimePlayerState,
+  createInitialRuntimePlayerStateFromContent,
+  formatRuntimePlayerStateValidationMessage,
+  inspectRuntimePlayerState,
+  RUNTIME_PLAYER_STATE_SCHEMA_ID,
+  RUNTIME_PLAYER_STATE_SCHEMA_VERSION,
+  type CreateInitialRuntimePlayerStateFromContentInput,
+  type RuntimePlayerInventoryState,
+  type RuntimePlayerProgressState,
+  type RuntimePlayerState,
+  type RuntimePlayerStateDiagnostic,
+  type RuntimePlayerStateMetadata
+} from "./content-runtime/runtime-player-state.js";
+export {
   assertContentPackage,
   CONTENT_ACTION_AFFORDANCES,
   formatContentPackageValidationMessage,

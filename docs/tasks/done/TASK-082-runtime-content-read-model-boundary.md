@@ -1,7 +1,7 @@
 # Task: TASK-082 - Runtime content read model boundary
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** ACTIVE
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
