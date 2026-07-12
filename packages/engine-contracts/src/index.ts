@@ -214,6 +214,22 @@ export {
   type RuntimeCommandRequestValidationInput
 } from "./runtime-host/runtime-command-request-validation.js";
 export {
+  assertRuntimeCommandPlanningInput,
+  createRuntimeCommandPlan,
+  formatRuntimeCommandPlanningValidationMessage,
+  inspectRuntimeCommandPlanningInput,
+  RUNTIME_COMMAND_PLAN_STATUSES,
+  RUNTIME_COMMAND_PLANNING_CONTRACT_VERSION,
+  type RuntimeCommandKind,
+  type RuntimeCommandPlan,
+  type RuntimeCommandPlanDiagnostic,
+  type RuntimeCommandPlanMetadata,
+  type RuntimeCommandPlanStatus,
+  type RuntimeCommandPlanStep,
+  type RuntimeCommandPlanningInput,
+  type RuntimeCommandPlanningMetadata
+} from "./runtime-host/runtime-command-planning.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,
