@@ -10,6 +10,7 @@
 - `docs/handoffs/TASK-087-HANDOFF.md`
 - `docs/status/CURRENT_STATE.md`
 - `docs/tasks/done/TASK-086-read-only-look-command-executor-boundary.md`
+- `docs/tasks/review/TASK-086-read-only-look-command-executor-boundary.md` (removed)
 - `docs/tasks/review/TASK-087-read-only-inventory-command-executor-boundary.md`
 - `packages/engine-contracts/src/index.ts`
 - `packages/engine-contracts/src/runtime-host/runtime-inventory-command-executor.ts`
@@ -27,6 +28,7 @@
 
 - `docs/status/CURRENT_STATE.md`
 - `docs/tasks/done/TASK-086-read-only-look-command-executor-boundary.md`
+- `docs/tasks/review/TASK-086-read-only-look-command-executor-boundary.md` (removed)
 - `docs/tasks/review/TASK-087-read-only-inventory-command-executor-boundary.md`
 
 ## Behavior Summary
