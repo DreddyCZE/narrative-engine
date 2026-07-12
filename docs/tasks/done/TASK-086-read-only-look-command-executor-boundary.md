@@ -1,7 +1,7 @@
 # Task: TASK-086 - Read-only look command executor boundary
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -27,7 +27,7 @@ Add the first intentionally executable runtime command boundary by executing onl
 - rejection of non-look plans and blocking of non-planned look plans or unresolved current locations
 - public engine-contracts exports for the look executor surface
 - targeted public API tests for executed, rejected, and blocked results, deterministic execution, and explicit non-mutation scope
-- metadata updates for TASK-085 DONE and TASK-086 REVIEW when complete
+- metadata updates for TASK-085 DONE and TASK-086 DONE when complete
 
 ## Out of Scope
 
