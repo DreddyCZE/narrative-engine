@@ -1,7 +1,7 @@
 # Task: TASK-083 - Minimal runtime player state contract
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -23,7 +23,7 @@ Define the minimal validated runtime player state contract that future runtime c
 - deterministic initial-state creation helper from the validated content read-model boundary
 - public engine-contracts exports for the runtime player state surface
 - targeted contract tests for valid state, invalid diagnostics, deterministic creation, public content-boundary integration, and non-command scope
-- metadata updates for TASK-082 DONE and TASK-083 REVIEW when complete
+- metadata updates for TASK-082 DONE and TASK-083 DONE when complete
 
 ## Out of Scope
 

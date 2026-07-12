@@ -205,6 +205,15 @@ export {
   type RuntimeTransactionSummary
 } from "./runtime-host/runtime-host-types.js";
 export {
+  assertRuntimeCommandRequest,
+  formatRuntimeCommandRequestValidationMessage,
+  inspectRuntimeCommandRequest,
+  inspectRuntimeCommandRequestAgainstContent,
+  RUNTIME_COMMAND_REQUEST_CONTRACT_VERSION,
+  type RuntimeCommandRequestDiagnostic,
+  type RuntimeCommandRequestValidationInput
+} from "./runtime-host/runtime-command-request-validation.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,
