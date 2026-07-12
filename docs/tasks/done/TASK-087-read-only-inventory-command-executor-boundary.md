@@ -1,7 +1,7 @@
 # Task: TASK-087 - Read-only inventory command executor boundary
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -28,7 +28,7 @@ Add the second intentionally executable runtime command boundary by executing on
 - rejection of non-inventory plans and blocking of non-planned inventory plans or unresolved inventory item ids
 - public engine-contracts exports for the inventory executor surface
 - targeted public API tests for executed, rejected, and blocked results, empty inventory handling, deterministic execution, and explicit non-mutation scope
-- metadata updates for TASK-086 DONE and TASK-087 REVIEW when complete
+- metadata updates for TASK-086 DONE and TASK-087 DONE when complete
 
 ## Out of Scope
 
