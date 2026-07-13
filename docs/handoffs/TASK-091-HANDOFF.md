@@ -2,7 +2,7 @@
 
 - Branch: `codex/task-091-read-only-runtime-transcript-scenario`
 - Base commit: `721994b33ef6dddd642f1d7c505e75ae52469b62`
-- Commit hash: `PENDING_COMMIT_HASH`
+- Commit hash: `0770d52f18c538cb655d8c8a83eac72a118bc562`
 
 ## Changed Files
 
