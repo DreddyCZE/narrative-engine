@@ -3,15 +3,15 @@
 **Date:** 2026-07-13
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-089 are DONE or REVIEW. TASK-060 through TASK-088 are DONE. TASK-089 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-090 are DONE or REVIEW. TASK-060 through TASK-089 are DONE. TASK-090 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-088 is DONE. TASK-089 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-089 - Public read-only runtime smoke scenario`.
+2. **Current state:** TASK-089 is DONE. TASK-090 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-090 - Read-only runtime request execution facade`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation, no UI/editor, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-089 remains review-ready with a deterministic public smoke package and end-to-end read-only smoke result that exercises only `look` and `inventory` with no mutation or next-state behavior.
+5. **How completion is recognized:** TASK-090 remains review-ready with a deterministic read-only request execution facade that plans and executes only `look` and `inventory`, preserves identical initial and final player state snapshots, and emits no next-state behavior.
 
 ## Repository / PR State
 
@@ -43,6 +43,7 @@
 - PR #69 was merged into `origin/main` at merge commit `9846803`.
 - PR #70 was merged into `origin/main` at merge commit `6d9c566`.
 - PR #71 was merged into `origin/main` at merge commit `56968b0`.
+- PR #72 was merged into `origin/main` at merge commit `ff949be`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -79,8 +80,9 @@
 - TASK-086 is done.
 - TASK-087 is done.
 - TASK-088 is done.
-- TASK-089 is in review.
-- TASK-090 has not been created.
+- TASK-089 is done.
+- TASK-090 is in review.
+- TASK-091 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -121,14 +123,15 @@
   - `TASK-086 - Read-only look command executor boundary` DONE
   - `TASK-087 - Read-only inventory command executor boundary` DONE
   - `TASK-088 - Read-only runtime command execution facade` DONE
+  - `TASK-089 - Public read-only runtime smoke scenario` DONE
 - In review:
-  - `TASK-089 - Public read-only runtime smoke scenario`
+  - `TASK-090 - Read-only runtime request execution facade`
 - Next task after acceptance:
-  - `TASK-090` not created
+  - `TASK-091` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, facade, and public smoke scenario boundaries.
+- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, planned facade, public smoke scenario, and request facade boundaries.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -136,14 +139,15 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-089 adds only a public read-only smoke scenario that runs the accepted loader, read model, player-state, planning, and read-only facade boundaries for `look` and `inventory`.
-- TASK-089 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
+- TASK-090 adds only a read-only request execution facade that creates a command plan and routes successful execution only through the accepted read-only facade for `look` and `inventory`.
+- TASK-090 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-readonly-request-execution-facade.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-readonly-smoke-scenario.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-readonly-command-execution-facade.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-inventory-command-executor-boundary.test.ts` - passed, 1 test file / 8 tests.
@@ -154,14 +158,14 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 66 test files / 643 tests.
+- `corepack pnpm test` - passed, 67 test files / 651 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed.
+- `git diff --check` - passed with line-ending normalization warning only for `docs/status/CURRENT_STATE.md`; no whitespace errors.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-089` next. Keep the work focused on the public read-only smoke scenario for only `look` and `inventory`. Do not introduce generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-090` next. Keep the work focused on the read-only runtime request execution facade for only `look` and `inventory`. Do not introduce generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.

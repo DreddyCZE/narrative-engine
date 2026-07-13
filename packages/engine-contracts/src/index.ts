@@ -287,6 +287,20 @@ export {
   type ReadonlyRuntimeSmokeScenarioStep
 } from "./runtime-host/runtime-readonly-smoke-scenario.js";
 export {
+  assertRuntimeReadonlyRequestExecutionInput,
+  executeRuntimeReadonlyRequest,
+  formatRuntimeReadonlyRequestExecutionValidationMessage,
+  inspectRuntimeReadonlyRequestExecutionInput,
+  RUNTIME_READONLY_REQUEST_EXECUTION_STATUSES,
+  RUNTIME_READONLY_REQUEST_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeReadonlyRequestDiagnostic,
+  type RuntimeReadonlyRequestExecutionInput,
+  type RuntimeReadonlyRequestExecutionMetadata,
+  type RuntimeReadonlyRequestExecutionResult,
+  type RuntimeReadonlyRequestExecutionResultMetadata,
+  type RuntimeReadonlyRequestExecutionStatus
+} from "./runtime-host/runtime-readonly-request-execution-facade.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,
