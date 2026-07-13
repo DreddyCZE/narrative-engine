@@ -1,7 +1,7 @@
 # Task: TASK-089 - Public read-only runtime smoke scenario
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -30,7 +30,7 @@ Add a public read-only runtime smoke scenario that proves the accepted content l
 - explicit no-mutation and no-next-state smoke evidence in tests
 - public engine-contracts exports for the smoke scenario surface
 - targeted public API tests for package validity, end-to-end scenario execution, determinism, and strict read-only command scope
-- metadata updates for TASK-088 DONE and TASK-089 REVIEW when complete
+- metadata updates for TASK-088 DONE and TASK-089 DONE when complete
 
 ## Out of Scope
 
