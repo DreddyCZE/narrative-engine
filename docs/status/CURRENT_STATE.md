@@ -1,17 +1,17 @@
 # Current State
 
-**Date:** 2026-07-12
+**Date:** 2026-07-13
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-088 are DONE or REVIEW. TASK-060 through TASK-087 are DONE. TASK-088 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-089 are DONE or REVIEW. TASK-060 through TASK-088 are DONE. TASK-089 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-087 is DONE. TASK-088 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-088 - Read-only runtime command execution facade`.
+2. **Current state:** TASK-088 is DONE. TASK-089 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-089 - Public read-only runtime smoke scenario`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation, no UI/editor, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-088 remains review-ready with deterministic executed/rejected/blocked facade results for only `look` and `inventory`, wrapped read-only views, and no mutation or next-state behavior.
+5. **How completion is recognized:** TASK-089 remains review-ready with a deterministic public smoke package and end-to-end read-only smoke result that exercises only `look` and `inventory` with no mutation or next-state behavior.
 
 ## Repository / PR State
 
@@ -42,6 +42,7 @@
 - PR #68 was merged into `origin/main` at merge commit `4c7978a`.
 - PR #69 was merged into `origin/main` at merge commit `9846803`.
 - PR #70 was merged into `origin/main` at merge commit `6d9c566`.
+- PR #71 was merged into `origin/main` at merge commit `56968b0`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -77,8 +78,9 @@
 - TASK-085 is done.
 - TASK-086 is done.
 - TASK-087 is done.
-- TASK-088 is in review.
-- TASK-089 has not been created.
+- TASK-088 is done.
+- TASK-089 is in review.
+- TASK-090 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -118,14 +120,15 @@
   - `TASK-085 - Runtime command planning boundary` DONE
   - `TASK-086 - Read-only look command executor boundary` DONE
   - `TASK-087 - Read-only inventory command executor boundary` DONE
+  - `TASK-088 - Read-only runtime command execution facade` DONE
 - In review:
-  - `TASK-088 - Read-only runtime command execution facade`
+  - `TASK-089 - Public read-only runtime smoke scenario`
 - Next task after acceptance:
-  - `TASK-089` not created
+  - `TASK-090` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, and read-only facade execution boundaries.
+- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, facade, and public smoke scenario boundaries.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -133,14 +136,15 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-088 adds only a read-only execution facade that delegates to the accepted `look` and `inventory` executors over the existing planning, content, and player-state boundaries.
-- TASK-088 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
+- TASK-089 adds only a public read-only smoke scenario that runs the accepted loader, read model, player-state, planning, and read-only facade boundaries for `look` and `inventory`.
+- TASK-089 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-readonly-smoke-scenario.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-readonly-command-execution-facade.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-inventory-command-executor-boundary.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-look-command-executor-boundary.test.ts` - passed, 1 test file / 7 tests.
@@ -150,7 +154,7 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 65 test files / 636 tests.
+- `corepack pnpm test` - passed, 66 test files / 643 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -160,4 +164,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-088` next. Keep the work focused on the read-only runtime command execution facade for only `look` and `inventory`. Do not introduce generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-089` next. Keep the work focused on the public read-only smoke scenario for only `look` and `inventory`. Do not introduce generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.

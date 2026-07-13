@@ -1,7 +1,7 @@
 # Task: TASK-088 - Read-only runtime command execution facade
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -30,7 +30,7 @@ Add a narrow read-only runtime command execution facade that delegates only to t
 - rejection of unsupported planned commands and blocking of non-planned supported commands
 - public engine-contracts exports for the read-only command execution facade surface
 - targeted public API tests for look and inventory delegation, blocked and rejected results, preserved delegated diagnostics, deterministic execution, and explicit non-mutation scope
-- metadata updates for TASK-087 DONE and TASK-088 REVIEW when complete
+- metadata updates for TASK-087 DONE and TASK-088 DONE when complete
 
 ## Out of Scope
 

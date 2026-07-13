@@ -279,6 +279,14 @@ export {
   type RuntimeReadonlyCommandExecutionView
 } from "./runtime-host/runtime-readonly-command-execution-facade.js";
 export {
+  createReadonlyRuntimeSmokeScenarioPackage,
+  runReadonlyRuntimeSmokeScenario,
+  READONLY_RUNTIME_SMOKE_SCENARIO_CONTRACT_VERSION,
+  type ReadonlyRuntimeSmokeScenarioPackage,
+  type ReadonlyRuntimeSmokeScenarioResult,
+  type ReadonlyRuntimeSmokeScenarioStep
+} from "./runtime-host/runtime-readonly-smoke-scenario.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,
