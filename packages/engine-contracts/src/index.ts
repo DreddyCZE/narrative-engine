@@ -264,6 +264,21 @@ export {
   type RuntimeInventoryCommandView
 } from "./runtime-host/runtime-inventory-command-executor.js";
 export {
+  assertRuntimeReadonlyCommandExecutionInput,
+  executeRuntimeReadonlyCommand,
+  formatRuntimeReadonlyCommandExecutionValidationMessage,
+  inspectRuntimeReadonlyCommandExecutionInput,
+  RUNTIME_READONLY_COMMAND_EXECUTION_STATUSES,
+  RUNTIME_READONLY_COMMAND_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeReadonlyCommandDiagnostic,
+  type RuntimeReadonlyCommandExecutionInput,
+  type RuntimeReadonlyCommandExecutionMetadata,
+  type RuntimeReadonlyCommandExecutionResult,
+  type RuntimeReadonlyCommandExecutionResultMetadata,
+  type RuntimeReadonlyCommandExecutionStatus,
+  type RuntimeReadonlyCommandExecutionView
+} from "./runtime-host/runtime-readonly-command-execution-facade.js";
+export {
   CONDITION_CONTRACT_VERSION,
   CONDITION_SCHEMA_ID,
   CONDITION_SCHEMA_VERSION,
