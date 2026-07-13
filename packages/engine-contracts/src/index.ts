@@ -287,6 +287,13 @@ export {
   type ReadonlyRuntimeSmokeScenarioStep
 } from "./runtime-host/runtime-readonly-smoke-scenario.js";
 export {
+  READONLY_RUNTIME_TRANSCRIPT_SCENARIO_CONTRACT_VERSION,
+  runReadonlyRuntimeTranscriptScenario,
+  type ReadonlyRuntimeTranscriptLine,
+  type ReadonlyRuntimeTranscriptScenarioResult,
+  type ReadonlyRuntimeTranscriptStep
+} from "./runtime-host/runtime-readonly-transcript-scenario.js";
+export {
   assertRuntimeReadonlyRequestExecutionInput,
   executeRuntimeReadonlyRequest,
   formatRuntimeReadonlyRequestExecutionValidationMessage,

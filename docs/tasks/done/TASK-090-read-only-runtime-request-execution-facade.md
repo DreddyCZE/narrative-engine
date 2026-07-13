@@ -1,7 +1,7 @@
 # Task: TASK-090 - Read-only runtime request execution facade
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -34,7 +34,7 @@ Add a narrow read-only runtime request execution facade that accepts a `RuntimeC
 - rejection of unsupported mutable commands and blocking of unavailable or invalid supported commands
 - public engine-contracts exports for the read-only request execution facade surface
 - targeted public API tests for end-to-end look and inventory execution, blocked and rejected results, preserved delegated diagnostics, determinism, and explicit non-mutation scope
-- metadata updates for TASK-089 DONE and TASK-090 REVIEW when complete
+- metadata updates for TASK-089 DONE and TASK-090 DONE when complete
 
 ## Out of Scope
 
