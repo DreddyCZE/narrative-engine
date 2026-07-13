@@ -2,7 +2,7 @@
 
 - Branch: `codex/task-090-read-only-runtime-request-execution-facade`
 - Base commit: `ff949beb88677d1542a0274fd4c03c2ae6f0c706`
-- Commit hash: `PENDING_COMMIT_HASH`
+- Commit hash: `851b6ce2ad4a8b0e0d648d48f0fca3962d829149`
 
 ## Changed Files
 
