@@ -1,17 +1,17 @@
 # Current State
 
-**Date:** 2026-07-13
+**Date:** 2026-07-14
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-091 are DONE or REVIEW. TASK-060 through TASK-090 are DONE. TASK-091 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-092 are DONE or REVIEW. TASK-060 through TASK-091 are DONE. TASK-092 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-090 is DONE. TASK-091 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-091 - Read-only runtime transcript scenario`.
+2. **Current state:** TASK-091 is DONE. TASK-092 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-092 - UI-neutral read-only runtime presentation model`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation, no UI/editor, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-091 remains review-ready with a deterministic transcript scenario that executes exactly `look`, `inventory`, `look` through the request facade, derives stable transcript lines from read-only views, preserves identical initial and final player state snapshots, and emits no next-state behavior.
+5. **How completion is recognized:** TASK-092 remains review-ready with a deterministic UI-neutral presentation model that transforms transcript data into stable location, inventory, transcript, command, and diagnostic display data without executing commands or emitting next-state behavior.
 
 ## Repository / PR State
 
@@ -45,6 +45,7 @@
 - PR #71 was merged into `origin/main` at merge commit `56968b0`.
 - PR #72 was merged into `origin/main` at merge commit `ff949be`.
 - PR #73 was merged into `origin/main` at merge commit `721994b`.
+- PR #74 was merged into `origin/main` at merge commit `44034a1`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -83,8 +84,9 @@
 - TASK-088 is done.
 - TASK-089 is done.
 - TASK-090 is done.
-- TASK-091 is in review.
-- TASK-092 has not been created.
+- TASK-091 is done.
+- TASK-092 is in review.
+- TASK-093 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -127,14 +129,15 @@
   - `TASK-088 - Read-only runtime command execution facade` DONE
   - `TASK-089 - Public read-only runtime smoke scenario` DONE
   - `TASK-090 - Read-only runtime request execution facade` DONE
+  - `TASK-091 - Read-only runtime transcript scenario` DONE
 - In review:
-  - `TASK-091 - Read-only runtime transcript scenario`
+  - `TASK-092 - UI-neutral read-only runtime presentation model`
 - Next task after acceptance:
-  - `TASK-092` not created
+  - `TASK-093` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, planned facade, public smoke scenario, request facade, and transcript scenario boundaries.
+- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, planned facade, public smoke scenario, request facade, transcript scenario, and presentation model boundaries.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -142,14 +145,15 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-091 adds only a read-only transcript scenario that executes exactly `look`, `inventory`, `look` through the accepted read-only request facade and derives stable transcript lines from read-only execution views.
-- TASK-091 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
+- TASK-092 adds only a UI-neutral presentation model that transforms accepted read-only transcript data into stable display panels and transcript lines.
+- TASK-092 does not execute `go`, `talk`, `take`, `use`, `save`, or `load`, and does not mutate gameplay state or generate next state.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-readonly-presentation-model.test.ts` - passed, 1 test file / 9 tests.
 - `corepack pnpm test -- tests/runtime-readonly-transcript-scenario.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-readonly-request-execution-facade.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-readonly-smoke-scenario.test.ts` - passed, 1 test file / 7 tests.
@@ -162,7 +166,7 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 68 test files / 658 tests.
+- `corepack pnpm test` - passed, 69 test files / 667 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -172,4 +176,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-091` next. Keep the work focused on the read-only runtime transcript scenario over the accepted request facade for only `look` and `inventory`. Do not introduce generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-092` next. Keep the work focused on the UI-neutral read-only runtime presentation model over accepted transcript data. Do not introduce browser UI, generic mutable command execution, gameplay mutation, next-state generation, gameplay content packages, UI/editor, replay runtime, DB adapters, or external storage in this step.

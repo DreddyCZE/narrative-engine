@@ -294,6 +294,17 @@ export {
   type ReadonlyRuntimeTranscriptStep
 } from "./runtime-host/runtime-readonly-transcript-scenario.js";
 export {
+  createRuntimeReadonlyPresentationModel,
+  RUNTIME_READONLY_PRESENTATION_MODEL_CONTRACT_VERSION,
+  type RuntimeReadonlyPresentationDiagnostic,
+  type RuntimeReadonlyPresentationInventoryPanel,
+  type RuntimeReadonlyPresentationLocationPanel,
+  type RuntimeReadonlyPresentationModel,
+  type RuntimeReadonlyPresentationModelInput,
+  type RuntimeReadonlyPresentationPanel,
+  type RuntimeReadonlyPresentationTranscriptLine
+} from "./runtime-host/runtime-readonly-presentation-model.js";
+export {
   assertRuntimeReadonlyRequestExecutionInput,
   executeRuntimeReadonlyRequest,
   formatRuntimeReadonlyRequestExecutionValidationMessage,
