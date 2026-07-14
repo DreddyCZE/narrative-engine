@@ -305,6 +305,12 @@ export {
   type RuntimeReadonlyPresentationTranscriptLine
 } from "./runtime-host/runtime-readonly-presentation-model.js";
 export {
+  READONLY_RUNTIME_PRESENTATION_SNAPSHOT_SCENARIO_CONTRACT_VERSION,
+  runReadonlyRuntimePresentationSnapshotScenario,
+  type ReadonlyRuntimePresentationSnapshotScenarioResult,
+  type ReadonlyRuntimePresentationSnapshotSummary
+} from "./runtime-host/runtime-readonly-presentation-snapshot-scenario.js";
+export {
   assertRuntimeReadonlyRequestExecutionInput,
   executeRuntimeReadonlyRequest,
   formatRuntimeReadonlyRequestExecutionValidationMessage,
