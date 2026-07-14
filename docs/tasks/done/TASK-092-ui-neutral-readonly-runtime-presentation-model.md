@@ -1,7 +1,7 @@
 # Task: TASK-092 - UI-neutral read-only runtime presentation model
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -35,7 +35,7 @@ Add a deterministic UI-neutral read-only runtime presentation model that transfo
 - deterministic diagnostic flattening into UI-neutral entries
 - public engine-contracts exports for the presentation model surface
 - targeted public API tests for transformation behavior, determinism, strict non-mutation scope, and explicit no-next-state behavior
-- metadata updates for TASK-091 DONE and TASK-092 REVIEW when complete
+- metadata updates for TASK-091 DONE and TASK-092 DONE when complete
 
 ## Out of Scope
 
