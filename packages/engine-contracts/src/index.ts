@@ -311,6 +311,17 @@ export {
   type ReadonlyRuntimePresentationSnapshotSummary
 } from "./runtime-host/runtime-readonly-presentation-snapshot-scenario.js";
 export {
+  assertRuntimeReadonlyInputRequest,
+  formatRuntimeReadonlyInputRequestValidationMessage,
+  inspectRuntimeReadonlyInputRequest,
+  RUNTIME_READONLY_INPUT_COMMAND_IDS,
+  RUNTIME_READONLY_INPUT_REQUEST_CONTRACT_VERSION,
+  toRuntimeCommandRequestFromReadonlyInput,
+  type RuntimeReadonlyInputCommandId,
+  type RuntimeReadonlyInputRequest,
+  type RuntimeReadonlyInputRequestDiagnostic
+} from "./runtime-host/runtime-readonly-input-request-contract.js";
+export {
   assertRuntimeReadonlyRequestExecutionInput,
   executeRuntimeReadonlyRequest,
   formatRuntimeReadonlyRequestExecutionValidationMessage,
