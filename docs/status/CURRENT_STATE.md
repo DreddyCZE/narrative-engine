@@ -3,15 +3,15 @@
 **Date:** 2026-07-14
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-094 are DONE or REVIEW. TASK-060 through TASK-093 are DONE. TASK-094 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-095 are DONE or REVIEW. TASK-060 through TASK-094 are DONE. TASK-095 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-093 is DONE. TASK-094 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-094 - UI-neutral read-only input request contract`.
+2. **Current state:** TASK-094 is DONE. TASK-095 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-095 - UI-neutral read-only interaction boundary`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation, no UI/editor, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-094 remains review-ready with a deterministic UI-neutral input contract that accepts only `look` and `inventory`, converts valid input into `RuntimeCommandRequest`, and rejects unsupported or malformed requests without executing commands or creating plans.
+5. **How completion is recognized:** TASK-095 remains review-ready with a deterministic UI-neutral interaction boundary that accepts valid TASK-094 read-only input, executes only through the accepted read-only request facade, preserves identical initial/final player state snapshots, and does not create plans directly or call lower-level executors.
 
 ## Repository / PR State
 
@@ -48,6 +48,7 @@
 - PR #74 was merged into `origin/main` at merge commit `44034a1`.
 - PR #75 was merged into `origin/main` at merge commit `6fdba66`.
 - PR #76 was merged into `origin/main` at merge commit `332beaf`.
+- PR #77 was merged into `origin/main` at merge commit `5eed7ae`.
 - TASK-053 is done.
 - TASK-054 is done.
 - TASK-055 is done.
@@ -89,8 +90,9 @@
 - TASK-091 is done.
 - TASK-092 is done.
 - TASK-093 is done.
-- TASK-094 is in review.
-- TASK-095 has not been created.
+- TASK-094 is done.
+- TASK-095 is in review.
+- TASK-096 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -136,9 +138,9 @@
   - `TASK-091 - Read-only runtime transcript scenario` DONE
   - `TASK-092 - UI-neutral read-only runtime presentation model` DONE
 - In review:
-  - `TASK-094 - UI-neutral read-only input request contract`
+  - `TASK-095 - UI-neutral read-only interaction boundary`
 - Next task after acceptance:
-  - `TASK-095` not created
+  - `TASK-096` not created
 
 ## Boundary Reminder
 
@@ -150,14 +152,15 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-094 adds only a UI-neutral read-only input request contract that validates safe future UX input and converts valid requests into `RuntimeCommandRequest`.
-- TASK-094 accepts only `look` and `inventory`, rejects mutable or unknown commands, and does not execute commands, create plans, build presentation output, mutate gameplay state, or generate next state.
+- TASK-095 adds only a UI-neutral read-only interaction boundary that validates TASK-094 input, converts it into `RuntimeCommandRequest`, and delegates execution only through the accepted read-only request facade.
+- TASK-095 accepts only `look` and `inventory`, rejects invalid interaction input before execution, does not create plans directly, does not call lower-level executors directly, and does not mutate gameplay state or generate next state.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-readonly-interaction-boundary.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-readonly-input-request-contract.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-readonly-presentation-snapshot-scenario.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/runtime-readonly-presentation-model.test.ts` - passed, 1 test file / 9 tests.
@@ -173,7 +176,7 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 71 test files / 680 tests.
+- `corepack pnpm test` - passed, 72 test files / 688 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
@@ -183,4 +186,4 @@
 
 ## Next Task Boundary
 
-Review `TASK-094` next. Keep the work focused on the UI-neutral read-only input request contract over the accepted read-only runtime request facade. Do not introduce browser UI, parsers, command execution, planning, presentation building, gameplay mutation, next-state generation, replay runtime, DB adapters, or external storage in this step.
+Review `TASK-095` next. Keep the work focused on the UI-neutral read-only interaction boundary over the accepted input contract and read-only request facade. Do not introduce browser UI, parsers, direct plan creation, lower-level executor calls, presentation building, gameplay mutation, next-state generation, replay runtime, DB adapters, or external storage in this step.

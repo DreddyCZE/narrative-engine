@@ -1,7 +1,7 @@
 # Task: TASK-094 - UI-neutral read-only input request contract
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -28,7 +28,7 @@ Add a deterministic UI-neutral read-only input request contract that validates t
 - deterministic rejection of mutable, unsupported, malformed, non-JSON-safe, or unknown-field input
 - public engine-contracts exports for the input contract surface
 - targeted public API tests for acceptance, rejection, determinism, non-mutation, JSON safety, and no-execution-output scope
-- metadata updates for TASK-093 DONE and TASK-094 REVIEW when complete
+- metadata updates for TASK-093 DONE and TASK-094 DONE when complete
 
 ## Out of Scope
 
