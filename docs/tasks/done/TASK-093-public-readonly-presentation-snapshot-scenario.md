@@ -1,7 +1,7 @@
 # Task: TASK-093 - Public read-only presentation snapshot scenario
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -35,7 +35,7 @@ Add a deterministic public read-only presentation snapshot scenario that compose
 - JSON-safe deterministic snapshot output with no mutation or next-state behavior
 - public engine-contracts exports for the snapshot scenario surface
 - targeted public API tests for composition behavior, summary derivation, determinism, strict non-mutation scope, and explicit no-next-state behavior
-- metadata updates for TASK-092 DONE and TASK-093 REVIEW when complete
+- metadata updates for TASK-092 DONE and TASK-093 DONE when complete
 
 ## Out of Scope
 
