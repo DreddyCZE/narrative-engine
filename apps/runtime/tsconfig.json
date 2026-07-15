@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": ["ES2023", "DOM"],
+    "outDir": "dist",
+    "paths": {
+      "@narrative-engine/core": ["../../packages/core/src/index.ts"],
+      "@narrative-engine/engine-contracts": ["../../packages/engine-contracts/src/index.ts"]
+    },
+    "rootDir": ".",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"],
+  "references": [
+    { "path": "../../packages/engine-contracts" }
+  ]
+}

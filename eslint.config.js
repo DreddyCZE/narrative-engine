@@ -5,6 +5,7 @@ export default tseslint.config(
   {
     ignores: [
       "dist/**",
+      "**/dist/**",
       "coverage/**",
       "node_modules/**",
       "pnpm-lock.yaml",
