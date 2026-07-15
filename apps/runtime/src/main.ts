@@ -5,8 +5,11 @@ import {
   type PrototypeCommandPaletteItem,
   type PrototypeMapConnection,
   type PrototypeMapTile,
+  type PrototypeScenarioId,
+  type PrototypeScenarioOption,
   type ReadonlyPrototypeState
 } from "./readonly-prototype.js";
+import { isPrototypeScenarioId } from "./prototype-scenarios.js";
 
 function assertRoot(value: Element | null): HTMLElement {
   if (!(value instanceof HTMLElement)) {
@@ -39,6 +42,36 @@ function renderListItems(items: readonly { readonly title: string; readonly desc
         </li>
       `).join("")}
     </ul>
+  `;
+}
+
+function renderScenarioSelectorItem(
+  option: PrototypeScenarioOption,
+  selectedScenarioId: PrototypeScenarioId
+): string {
+  const selected = option.scenarioId === selectedScenarioId;
+
+  return `
+    <button
+      type="button"
+      class="prototype-scenario-button${selected ? " is-selected" : ""}"
+      data-scenario="${escapeHtml(option.scenarioId)}"
+      aria-pressed="${selected ? "true" : "false"}"
+    >
+      <span class="prototype-command-header">
+        <span class="prototype-command-label">${escapeHtml(option.label)}</span>
+        <span class="prototype-command-state">${selected ? "Selected" : "Available"}</span>
+      </span>
+      <span class="prototype-palette-copy">${escapeHtml(option.description)}</span>
+    </button>
+  `;
+}
+
+function renderScenarioSelector(state: ReadonlyPrototypeState): string {
+  return `
+    <div class="prototype-selector-grid">
+      ${state.scenarios.map((option) => renderScenarioSelectorItem(option, state.selectedScenarioId)).join("")}
+    </div>
   `;
 }
 
@@ -278,6 +311,8 @@ function renderMapPanel(state: ReadonlyPrototypeState): string {
 }
 
 function renderApp(state: ReadonlyPrototypeState): string {
+  const selectedScenario = state.scenarios.find((scenario) => scenario.scenarioId === state.selectedScenarioId);
+
   return `
     <main class="prototype-shell">
       <section class="prototype-hero">
@@ -290,7 +325,11 @@ function renderApp(state: ReadonlyPrototypeState): string {
           <div class="prototype-hero-grid">
             <div class="prototype-meta-card">
               <span class="prototype-list-label">Scenario</span>
-              <strong>${escapeHtml(state.scenarioId)}</strong>
+              <strong>${escapeHtml(selectedScenario?.label ?? state.selectedScenarioId)}</strong>
+            </div>
+            <div class="prototype-meta-card">
+              <span class="prototype-list-label">Scenario id</span>
+              <strong>${escapeHtml(state.selectedScenarioId)}</strong>
             </div>
             <div class="prototype-meta-card">
               <span class="prototype-list-label">Package</span>
@@ -308,13 +347,18 @@ function renderApp(state: ReadonlyPrototypeState): string {
       </section>
       <section class="prototype-grid">
         <article class="prototype-panel prototype-panel-wide">
+          <h2>Scenario Selector</h2>
+          <p class="prototype-summary">Scenario packages remain app-layer prototype data. Selecting a scenario rebuilds content, map, inventory, and transcript state without changing engine contracts.</p>
+          ${renderScenarioSelector(state)}
+        </article>
+        <article class="prototype-panel prototype-panel-wide">
           <h2>Command Palette</h2>
           <p class="prototype-summary">The palette shows what is safe to execute now and what the future game UI will expose once mutable gameplay systems arrive.</p>
           ${renderCommandPalette(state)}
         </article>
         <article class="prototype-panel prototype-panel-wide">
           <h2>Map Layout</h2>
-          <p class="prototype-summary">This panel is a UI-only spatial preview for the smoke scenario. It highlights the current room and known connection without adding movement or map data to engine contracts.</p>
+          <p class="prototype-summary">This panel is a UI-only spatial preview for the selected prototype scenario. It highlights the current room and known connection without adding movement or map data to engine contracts.</p>
           ${renderMapPanel(state)}
         </article>
         <article class="prototype-panel">
@@ -339,7 +383,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
       </section>
       <div class="prototype-footer-note">
-        The prototype stays in-memory, executes only look and inventory through the TASK-095 boundary, keeps the map UI read-only, and surfaces future gameplay commands as disabled local UI affordances only.
+        The prototype stays in-memory, switches between app-layer scenario packages, executes only look and inventory through the TASK-095 boundary, and surfaces future gameplay commands as disabled local UI affordances only.
       </div>
     </main>
   `;
@@ -348,6 +392,12 @@ function renderApp(state: ReadonlyPrototypeState): string {
 function parseActionId(value: string | null): PrototypeCommandId | undefined {
   return value !== null && PROTOTYPE_COMMAND_IDS.includes(value as PrototypeCommandId)
     ? value as PrototypeCommandId
+    : undefined;
+}
+
+function parseScenarioId(value: string | null): PrototypeScenarioId | undefined {
+  return value !== null && isPrototypeScenarioId(value)
+    ? value
     : undefined;
 }
 
@@ -363,6 +413,16 @@ function render(): void {
       const actionId = parseActionId(actionButton.getAttribute("data-action"));
       if (actionId !== undefined) {
         controller.runAction(actionId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-scenario]").forEach((scenarioButton) => {
+    scenarioButton.addEventListener("click", () => {
+      const scenarioId = parseScenarioId(scenarioButton.getAttribute("data-scenario"));
+      if (scenarioId !== undefined) {
+        controller.selectScenario(scenarioId);
         render();
       }
     });

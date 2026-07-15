@@ -3,15 +3,15 @@
 **Date:** 2026-07-15
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-098 are DONE or REVIEW. TASK-060 through TASK-097 are DONE. TASK-098 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-099 are DONE or REVIEW. TASK-060 through TASK-098 are DONE. TASK-099 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-097 is DONE. TASK-098 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-098 - Prototype read-only map/layout panel`.
-4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation beyond the accepted read-only browser prototype with disabled future actions and a UI-only map layout panel, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-098 remains review-ready with a deterministic browser prototype in `apps/runtime` that renders a command palette, a UI-only read-only map panel, routes only `look` and `inventory` through `executeRuntimeReadonlyInteraction`, preserves identical initial/final player state snapshots, and does not create plans directly or call lower-level executors.
+2. **Current state:** TASK-098 is DONE. TASK-099 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-099 - Prototype data-driven scenario selector`.
+4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation beyond the accepted read-only browser prototype with a scenario selector, UI-only map layouts, and disabled future actions, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-099 remains review-ready with a deterministic browser prototype in `apps/runtime` that can switch between app-layer read-only scenario packages, updates map/location/inventory/transcript state per selection, routes only `look` and `inventory` through `executeRuntimeReadonlyInteraction`, preserves identical initial/final player state snapshots, and does not create plans directly or call lower-level executors.
 
 ## Repository / PR State
 
@@ -94,8 +94,9 @@
 - TASK-095 is done.
 - TASK-096 is done.
 - TASK-097 is done.
-- TASK-098 is in review.
-- TASK-099 has not been created.
+- TASK-098 is done.
+- TASK-099 is in review.
+- TASK-100 has not been created.
 - No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
 
 ## Planning State
@@ -145,10 +146,11 @@
   - `TASK-095 - UI-neutral read-only interaction boundary` DONE
   - `TASK-096 - Read-only browser vertical slice prototype` DONE
   - `TASK-097 - Prototype command palette and disabled gameplay actions` DONE
+  - `TASK-098 - Prototype read-only map/layout panel` DONE
 - In review:
-  - `TASK-098 - Prototype read-only map/layout panel`
+  - `TASK-099 - Prototype data-driven scenario selector`
 - Next task after acceptance:
-  - `TASK-099` not created
+  - `TASK-100` not created
 
 ## Boundary Reminder
 
@@ -162,14 +164,15 @@
 - P0 story content must not be hardcoded into engine contracts.
 - TASK-096 adds the accepted minimal browser prototype shell in `apps/runtime` over the read-only runtime path.
 - TASK-097 adds the accepted command palette with enabled `look` and `inventory` plus disabled `go`, `talk`, `take`, `use`, `save`, and `load`.
-- TASK-098 adds a UI-only map/layout panel in `apps/runtime` that highlights the current smoke location and known connection while keeping all layout coordinates and connections separate from engine contracts, content schema, and runtime player state.
+- TASK-098 adds the accepted UI-only map/layout panel in `apps/runtime`.
+- TASK-099 adds app-layer scenario and map registries in `apps/runtime` so the prototype can switch between multiple read-only content packages without changing engine contracts, content schema, or runtime player state contracts.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
 
 ## Last Checks
 
-- `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed, 1 test file / 6 tests.
+- `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed, 1 test file / 10 tests.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype build` - passed.
 - `corepack pnpm test -- tests/runtime-readonly-interaction-boundary.test.ts` - passed, 1 test file / 8 tests.
 - `corepack pnpm test -- tests/runtime-readonly-input-request-contract.test.ts` - passed, 1 test file / 7 tests.
@@ -187,14 +190,14 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 73 test files / 694 tests.
-- `corepack pnpm lint` - passed.
+- `corepack pnpm test` - passed, 73 test files / 698 tests.
+- `corepack pnpm lint` - pending rerun after final metadata update.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
-- `corepack pnpm validate` - passed.
-- `git diff --check` - passed with LF normalization warnings only.
+- `corepack pnpm validate` - pending rerun after final metadata update.
+- `git diff --check` - pending rerun after final metadata update.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-098` next. Keep the work focused on the read-only browser prototype command palette and UI-only map/layout panel over the accepted presentation snapshot and interaction boundary. Do not introduce mutable gameplay, movement execution, item pickup, dialogue progression, save/load behavior, next-state generation, replay runtime, DB adapters, external storage, or P0 story content in this step.
+Review `TASK-099` next. Keep the work focused on the read-only browser prototype scenario selector, app-layer scenario data, and UI-only map/layout panels over the accepted interaction boundary. Do not introduce mutable gameplay, movement execution, item pickup, dialogue progression, save/load behavior, next-state generation, replay runtime, DB adapters, external storage, or P0 story content in this step.

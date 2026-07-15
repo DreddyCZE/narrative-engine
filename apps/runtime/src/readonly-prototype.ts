@@ -1,10 +1,8 @@
 import {
   createContentReadModel,
   createInitialRuntimePlayerStateFromContent,
-  createReadonlyRuntimeSmokeScenarioPackage,
   executeRuntimeReadonlyInteraction,
   loadContentPackageFromObject,
-  runReadonlyRuntimePresentationSnapshotScenario,
   type RuntimePlayerState,
   type RuntimeReadonlyInteractionDiagnostic,
   type RuntimeReadonlyInteractionResult,
@@ -13,6 +11,19 @@ import {
   type RuntimeReadonlyPresentationLocationPanel,
   type RuntimeReadonlyPresentationTranscriptLine
 } from "@narrative-engine/engine-contracts";
+
+import {
+  createPrototypeMapPanel,
+  type PrototypeMapPanel
+} from "./prototype-map-layouts.js";
+import {
+  DEFAULT_PROTOTYPE_SCENARIO_ID,
+  createPrototypeScenarioOptions,
+  getPrototypeScenarioDescriptor,
+  type PrototypeScenarioDescriptor,
+  type PrototypeScenarioId,
+  type PrototypeScenarioOption
+} from "./prototype-scenarios.js";
 
 export const EXECUTABLE_PROTOTYPE_ACTIONS = ["look", "inventory"] as const;
 export const DISABLED_PROTOTYPE_ACTIONS = ["go", "talk", "take", "use", "save", "load"] as const;
@@ -25,32 +36,14 @@ export type ExecutablePrototypeActionId = (typeof EXECUTABLE_PROTOTYPE_ACTIONS)[
 export type DisabledPrototypeActionId = (typeof DISABLED_PROTOTYPE_ACTIONS)[number];
 export type PrototypeCommandId = (typeof PROTOTYPE_COMMAND_IDS)[number];
 
+export type { PrototypeMapConnection, PrototypeMapPanel, PrototypeMapTile } from "./prototype-map-layouts.js";
+export type { PrototypeScenarioId, PrototypeScenarioOption } from "./prototype-scenarios.js";
+
 export type PrototypeCommandPaletteItem = {
   readonly commandId: PrototypeCommandId;
   readonly label: string;
   readonly enabled: boolean;
   readonly disabledReason?: string;
-};
-
-export type PrototypeMapTile = {
-  readonly locationId: string;
-  readonly label: string;
-  readonly x: number;
-  readonly y: number;
-  readonly kind: "location" | "corridor" | "airlock" | "unknown";
-};
-
-export type PrototypeMapConnection = {
-  readonly fromLocationId: string;
-  readonly toLocationId: string;
-  readonly kind: "door" | "corridor";
-};
-
-export type PrototypeMapPanel = {
-  readonly currentLocationId?: string;
-  readonly tiles: readonly PrototypeMapTile[];
-  readonly connections: readonly PrototypeMapConnection[];
-  readonly legend: readonly string[];
 };
 
 type ReadonlyPrototypeOutputPanel = {
@@ -73,6 +66,8 @@ export type ReadonlyPrototypeState = {
   readonly screenTitle: string;
   readonly screenSubtitle: string;
   readonly scenarioId: string;
+  readonly selectedScenarioId: PrototypeScenarioId;
+  readonly scenarios: readonly PrototypeScenarioOption[];
   readonly packageId: string;
   readonly location?: RuntimeReadonlyPresentationLocationPanel;
   readonly inventory?: RuntimeReadonlyPresentationInventoryPanel;
@@ -100,14 +95,28 @@ export type ReadonlyPrototypeActionOutcome = {
 export type ReadonlyPrototypeController = {
   readonly getState: () => ReadonlyPrototypeState;
   readonly runAction: (actionId: PrototypeCommandId) => ReadonlyPrototypeActionOutcome;
+  readonly selectScenario: (scenarioId: PrototypeScenarioId) => ReadonlyPrototypeState;
 };
 
-type PrototypeRuntimeContext = ReturnType<typeof createPrototypeRuntimeContext>;
+type PrototypeRuntimeContext = {
+  readonly descriptor: PrototypeScenarioDescriptor;
+  readonly packageId: string;
+  readonly content: ReturnType<typeof createContentReadModel>;
+  readonly playerState: RuntimePlayerState;
+  readonly location?: RuntimeReadonlyPresentationLocationPanel;
+  readonly inventory?: RuntimeReadonlyPresentationInventoryPanel;
+  readonly transcript: readonly RuntimeReadonlyPresentationTranscriptLine[];
+  readonly diagnostics: readonly ReadonlyPrototypeDiagnosticView[];
+};
 
 type DisabledActionDescriptor = {
   readonly label: string;
   readonly reason: string;
 };
+
+const PROTOTYPE_SCREEN_TITLE = "Read-only Browser Vertical Slice";
+const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary.";
+const PROTOTYPE_SCENARIO_OPTIONS = createPrototypeScenarioOptions();
 
 const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionDescriptor> = {
   go: {
@@ -135,38 +144,6 @@ const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionD
     reason: "Load UI/storage integration is not implemented yet."
   }
 };
-
-const PROTOTYPE_MAP_TILES: readonly PrototypeMapTile[] = [
-  {
-    locationId: "location.smoke.start",
-    label: "Smoke Test Airlock",
-    x: 1,
-    y: 1,
-    kind: "airlock"
-  },
-  {
-    locationId: "location.smoke.corridor",
-    label: "Smoke Test Corridor",
-    x: 3,
-    y: 1,
-    kind: "corridor"
-  }
-] as const;
-
-const PROTOTYPE_MAP_CONNECTIONS: readonly PrototypeMapConnection[] = [
-  {
-    fromLocationId: "location.smoke.start",
-    toLocationId: "location.smoke.corridor",
-    kind: "door"
-  }
-] as const;
-
-const PROTOTYPE_MAP_LEGEND = [
-  "Current",
-  "Known location",
-  "Connection",
-  "Disabled movement"
-] as const;
 
 function cloneJsonValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -204,15 +181,6 @@ function createCommandPalette(): readonly PrototypeCommandPaletteItem[] {
   });
 }
 
-function createReadonlyMapPanel(currentLocationId?: string): PrototypeMapPanel {
-  return {
-    ...(currentLocationId === undefined ? {} : { currentLocationId }),
-    tiles: cloneJsonValue(PROTOTYPE_MAP_TILES),
-    connections: cloneJsonValue(PROTOTYPE_MAP_CONNECTIONS),
-    legend: cloneJsonValue(PROTOTYPE_MAP_LEGEND)
-  };
-}
-
 function createDisabledActionDiagnostic(actionId: DisabledPrototypeActionId): ReadonlyPrototypeDiagnosticView {
   const disabledAction = DISABLED_ACTION_DETAILS[actionId];
 
@@ -234,20 +202,107 @@ function createTranscriptPreviewOutput(lines: readonly RuntimeReadonlyPresentati
   };
 }
 
-function createPrototypeRuntimeContext() {
-  const rawPackage = createReadonlyRuntimeSmokeScenarioPackage();
+function createLocationPanelFromInteraction(
+  result: RuntimeReadonlyInteractionResult
+): RuntimeReadonlyPresentationLocationPanel | undefined {
+  if (result.execution?.status !== "executed" || result.execution.view?.kind !== "look") {
+    return undefined;
+  }
+
+  const { look } = result.execution.view;
+  return {
+    locationId: look.locationId,
+    title: look.title,
+    description: look.description,
+    exits: look.exits.map((exit) => ({
+      exitId: exit.exitId,
+      label: exit.label,
+      targetLocationId: exit.targetLocationId,
+      ...(exit.locked === undefined ? {} : { locked: exit.locked }),
+      ...(exit.conditionFlag === undefined ? {} : { conditionFlag: exit.conditionFlag })
+    })),
+    items: look.items.map((item) => ({
+      itemId: item.itemId,
+      title: item.title,
+      description: item.description,
+      ...(item.portable === undefined ? {} : { portable: item.portable })
+    })),
+    npcs: look.npcs.map((npc) => ({
+      npcId: npc.npcId,
+      name: npc.name,
+      ...(npc.dialogueId === undefined ? {} : { dialogueId: npc.dialogueId })
+    }))
+  };
+}
+
+function createInventoryPanelFromInteraction(
+  result: RuntimeReadonlyInteractionResult
+): RuntimeReadonlyPresentationInventoryPanel | undefined {
+  if (result.execution?.status !== "executed" || result.execution.view?.kind !== "inventory") {
+    return undefined;
+  }
+
+  const { inventory } = result.execution.view;
+  return {
+    itemCount: inventory.itemCount,
+    empty: inventory.itemCount === 0,
+    items: inventory.items.map((item) => ({
+      itemId: item.itemId,
+      title: item.title,
+      description: item.description,
+      ...(item.portable === undefined ? {} : { portable: item.portable })
+    }))
+  };
+}
+
+function createInitialTranscript(
+  descriptor: PrototypeScenarioDescriptor,
+  location?: RuntimeReadonlyPresentationLocationPanel,
+  inventory?: RuntimeReadonlyPresentationInventoryPanel
+): readonly RuntimeReadonlyPresentationTranscriptLine[] {
+  const inventorySummary = inventory === undefined || inventory.items.length === 0
+    ? "Inventory online: empty."
+    : `Inventory online: ${inventory.items.map((item) => item.title).join(", ")}.`;
+
+  return [
+    {
+      lineId: `${descriptor.scenarioId}.intro`,
+      stepId: `${descriptor.scenarioId}.intro`,
+      speaker: "system",
+      text: descriptor.description
+    },
+    {
+      lineId: `${descriptor.scenarioId}.location`,
+      stepId: `${descriptor.scenarioId}.look-preview`,
+      speaker: "system",
+      text: location === undefined
+        ? "Location preview unavailable."
+        : `Current location: ${location.title}.`
+    },
+    {
+      lineId: `${descriptor.scenarioId}.inventory`,
+      stepId: `${descriptor.scenarioId}.inventory-preview`,
+      speaker: "system",
+      text: inventorySummary
+    }
+  ];
+}
+
+function createScenarioRuntimeContext(scenarioId: PrototypeScenarioId): PrototypeRuntimeContext {
+  const descriptor = getPrototypeScenarioDescriptor(scenarioId);
+  const rawPackage = descriptor.packageFactory();
   const loadResult = loadContentPackageFromObject({
     rawPackage,
     source: {
-      sourceId: "prototype:readonly-runtime-smoke",
+      sourceId: `prototype:${descriptor.scenarioId}`,
       sourceKind: "provided-object",
       packageId: rawPackage.packageId,
-      description: "read-only browser prototype smoke scenario"
+      description: descriptor.description
     }
   });
 
   if (loadResult.status !== "valid" || loadResult.graph === undefined) {
-    throw new Error("Expected the read-only smoke scenario package to load successfully.");
+    throw new Error(`Expected prototype scenario ${descriptor.scenarioId} to load successfully.`);
   }
 
   const content = createContentReadModel({ graph: loadResult.graph });
@@ -258,11 +313,43 @@ function createPrototypeRuntimeContext() {
       updatedAtRevision: 0
     }
   });
+  const lookInteraction = executeRuntimeReadonlyInteraction({
+    input: { commandId: "look" },
+    content,
+    playerState,
+    metadata: {
+      deterministic: true,
+      requestId: `${descriptor.scenarioId}.bootstrap.look`,
+      correlationId: descriptor.scenarioId
+    }
+  });
+  const inventoryInteraction = executeRuntimeReadonlyInteraction({
+    input: { commandId: "inventory" },
+    content,
+    playerState,
+    metadata: {
+      deterministic: true,
+      requestId: `${descriptor.scenarioId}.bootstrap.inventory`,
+      correlationId: descriptor.scenarioId
+    }
+  });
+
+  const location = createLocationPanelFromInteraction(lookInteraction);
+  const inventory = createInventoryPanelFromInteraction(inventoryInteraction);
+  const diagnostics = [
+    ...lookInteraction.diagnostics,
+    ...inventoryInteraction.diagnostics
+  ];
 
   return {
+    descriptor,
     packageId: rawPackage.packageId,
     content,
-    playerState
+    playerState,
+    ...(location === undefined ? {} : { location }),
+    ...(inventory === undefined ? {} : { inventory }),
+    transcript: createInitialTranscript(descriptor, location, inventory),
+    diagnostics
   };
 }
 
@@ -315,25 +402,22 @@ function createOutputFromDisabledAction(actionId: DisabledPrototypeActionId): Re
   };
 }
 
-function createStateFromSnapshot(
-  runtime: PrototypeRuntimeContext,
-  snapshot = runReadonlyRuntimePresentationSnapshotScenario()
-): ReadonlyPrototypeState {
-  const currentLocationId = snapshot.presentation.location?.locationId;
-
+function createStateFromRuntimeContext(runtime: PrototypeRuntimeContext): ReadonlyPrototypeState {
   return {
-    screenTitle: "Read-only Browser Vertical Slice",
-    screenSubtitle: "Public smoke scenario rendered through the accepted read-only runtime boundary.",
-    scenarioId: snapshot.scenarioId,
+    screenTitle: PROTOTYPE_SCREEN_TITLE,
+    screenSubtitle: PROTOTYPE_SCREEN_SUBTITLE,
+    scenarioId: runtime.descriptor.scenarioId,
+    selectedScenarioId: runtime.descriptor.scenarioId,
+    scenarios: cloneJsonValue(PROTOTYPE_SCENARIO_OPTIONS),
     packageId: runtime.packageId,
-    ...(snapshot.presentation.location === undefined ? {} : { location: snapshot.presentation.location }),
-    ...(snapshot.presentation.inventory === undefined ? {} : { inventory: snapshot.presentation.inventory }),
-    transcript: snapshot.presentation.transcript,
-    output: createTranscriptPreviewOutput(snapshot.presentation.transcript),
-    diagnostics: snapshot.presentation.diagnostics,
+    ...(runtime.location === undefined ? {} : { location: runtime.location }),
+    ...(runtime.inventory === undefined ? {} : { inventory: runtime.inventory }),
+    transcript: cloneJsonValue(runtime.transcript),
+    output: createTranscriptPreviewOutput(runtime.transcript),
+    diagnostics: cloneJsonValue(runtime.diagnostics),
     availableActions: cloneJsonValue(EXECUTABLE_PROTOTYPE_ACTIONS),
     commandPalette: createCommandPalette(),
-    mapPanel: createReadonlyMapPanel(currentLocationId),
+    mapPanel: createPrototypeMapPanel(runtime.descriptor.initialMapLayout, runtime.playerState.currentLocationId),
     status: {
       kind: "idle",
       detail: "Ready. Read-only commands are executable; future gameplay commands are visible but disabled."
@@ -352,6 +436,7 @@ function createStateFromActionOutcome(
     ? outcome.interaction.execution.view.inventory
     : undefined;
   const currentLocationId = lookView?.locationId ?? previousState.mapPanel.currentLocationId;
+  const selectedScenario = getPrototypeScenarioDescriptor(previousState.selectedScenarioId);
 
   return {
     ...previousState,
@@ -391,13 +476,14 @@ function createStateFromActionOutcome(
             items: inventoryView.items.map((item) => ({
               itemId: item.itemId,
               title: item.title,
-              description: item.description
+              description: item.description,
+              ...(item.portable === undefined ? {} : { portable: item.portable })
             }))
           }
         }),
     output: outcome.output,
     diagnostics: outcome.diagnostics,
-    mapPanel: createReadonlyMapPanel(currentLocationId),
+    mapPanel: createPrototypeMapPanel(selectedScenario.initialMapLayout, currentLocationId),
     status: outcome.status === "disabled"
       ? {
           kind: "disabled",
@@ -443,8 +529,8 @@ function createExecutableActionOutcome(
     playerState: runtime.playerState,
     metadata: {
       deterministic: true,
-      requestId: `prototype.${actionId}`,
-      correlationId: "readonly-browser-vertical-slice"
+      requestId: `${runtime.descriptor.scenarioId}.${actionId}`,
+      correlationId: runtime.descriptor.scenarioId
     }
   });
   const playerStateBefore = cloneJsonValue(
@@ -466,13 +552,17 @@ function createExecutableActionOutcome(
   };
 }
 
-export function createReadonlyPrototypeState(): ReadonlyPrototypeState {
-  return cloneJsonValue(createStateFromSnapshot(createPrototypeRuntimeContext()));
+export function createReadonlyPrototypeState(
+  scenarioId: PrototypeScenarioId = DEFAULT_PROTOTYPE_SCENARIO_ID
+): ReadonlyPrototypeState {
+  return cloneJsonValue(createStateFromRuntimeContext(createScenarioRuntimeContext(scenarioId)));
 }
 
-export function createReadonlyPrototypeController(): ReadonlyPrototypeController {
-  const runtime = createPrototypeRuntimeContext();
-  let state = createStateFromSnapshot(runtime);
+export function createReadonlyPrototypeController(
+  initialScenarioId: PrototypeScenarioId = DEFAULT_PROTOTYPE_SCENARIO_ID
+): ReadonlyPrototypeController {
+  let runtime = createScenarioRuntimeContext(initialScenarioId);
+  let state = createStateFromRuntimeContext(runtime);
 
   return {
     getState(): ReadonlyPrototypeState {
@@ -485,6 +575,11 @@ export function createReadonlyPrototypeController(): ReadonlyPrototypeController
 
       state = createStateFromActionOutcome(state, outcome);
       return cloneJsonValue(outcome);
+    },
+    selectScenario(scenarioId: PrototypeScenarioId): ReadonlyPrototypeState {
+      runtime = createScenarioRuntimeContext(scenarioId);
+      state = createStateFromRuntimeContext(runtime);
+      return cloneJsonValue(state);
     }
   };
 }

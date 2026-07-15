@@ -117,7 +117,8 @@ body::after {
 
 .prototype-hero-grid,
 .prototype-grid,
-.prototype-command-grid {
+.prototype-command-grid,
+.prototype-selector-grid {
   display: grid;
   gap: 1rem;
 }
@@ -130,7 +131,8 @@ body::after {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-.prototype-command-grid {
+.prototype-command-grid,
+.prototype-selector-grid {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   margin-top: 1rem;
 }
@@ -176,7 +178,8 @@ body::after {
   background: var(--surface-muted);
 }
 
-.prototype-command-button {
+.prototype-command-button,
+.prototype-scenario-button {
   appearance: none;
   display: grid;
   gap: 0.75rem;
@@ -189,7 +192,14 @@ body::after {
   transition:
     transform 140ms ease,
     box-shadow 140ms ease,
-    border-color 140ms ease;
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.prototype-command-button:focus-visible,
+.prototype-scenario-button:focus-visible {
+  outline: 2px solid rgba(166, 75, 42, 0.35);
+  outline-offset: 2px;
 }
 
 .prototype-command-button.is-enabled {
@@ -200,12 +210,15 @@ body::after {
 }
 
 .prototype-command-button.is-enabled:hover,
-.prototype-command-button.is-enabled:focus-visible {
+.prototype-command-button.is-enabled:focus-visible,
+.prototype-scenario-button:hover,
+.prototype-scenario-button:focus-visible {
   transform: translateY(-1px);
-  box-shadow: 0 18px 32px rgba(36, 52, 71, 0.22);
+  box-shadow: 0 18px 32px rgba(36, 52, 71, 0.16);
 }
 
-.prototype-command-button.is-disabled {
+.prototype-command-button.is-disabled,
+.prototype-scenario-button {
   border: 1px dashed rgba(36, 52, 71, 0.2);
   color: var(--text);
   background: rgba(255, 255, 255, 0.52);
@@ -215,12 +228,12 @@ body::after {
 .prototype-command-button.is-disabled:hover,
 .prototype-command-button.is-disabled:focus-visible {
   border-color: rgba(166, 75, 42, 0.45);
-  transform: translateY(-1px);
 }
 
-.prototype-command-button:focus-visible {
-  outline: 2px solid rgba(166, 75, 42, 0.35);
-  outline-offset: 2px;
+.prototype-scenario-button.is-selected {
+  border: 1px solid rgba(166, 75, 42, 0.36);
+  background: linear-gradient(180deg, rgba(166, 75, 42, 0.12), rgba(255, 255, 255, 0.86));
+  box-shadow: 0 14px 28px rgba(166, 75, 42, 0.12);
 }
 
 .prototype-command-header {

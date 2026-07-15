@@ -1,7 +1,7 @@
 # Task: TASK-098 - Prototype read-only map/layout panel
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -41,4 +41,3 @@ Add the first visible read-only map/layout panel to the browser runtime prototyp
 - plugin runtime
 - P0 story content
 - backend services or external APIs
-
