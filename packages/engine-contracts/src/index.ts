@@ -322,6 +322,18 @@ export {
   type RuntimeReadonlyInputRequestDiagnostic
 } from "./runtime-host/runtime-readonly-input-request-contract.js";
 export {
+  assertRuntimeReadonlyInteractionInput,
+  executeRuntimeReadonlyInteraction,
+  formatRuntimeReadonlyInteractionValidationMessage,
+  inspectRuntimeReadonlyInteractionInput,
+  RUNTIME_READONLY_INTERACTION_BOUNDARY_CONTRACT_VERSION,
+  RUNTIME_READONLY_INTERACTION_STATUSES,
+  type RuntimeReadonlyInteractionDiagnostic,
+  type RuntimeReadonlyInteractionInput,
+  type RuntimeReadonlyInteractionResult,
+  type RuntimeReadonlyInteractionStatus
+} from "./runtime-host/runtime-readonly-interaction-boundary.js";
+export {
   assertRuntimeReadonlyRequestExecutionInput,
   executeRuntimeReadonlyRequest,
   formatRuntimeReadonlyRequestExecutionValidationMessage,
