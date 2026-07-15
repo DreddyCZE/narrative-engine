@@ -32,6 +32,27 @@ export type PrototypeCommandPaletteItem = {
   readonly disabledReason?: string;
 };
 
+export type PrototypeMapTile = {
+  readonly locationId: string;
+  readonly label: string;
+  readonly x: number;
+  readonly y: number;
+  readonly kind: "location" | "corridor" | "airlock" | "unknown";
+};
+
+export type PrototypeMapConnection = {
+  readonly fromLocationId: string;
+  readonly toLocationId: string;
+  readonly kind: "door" | "corridor";
+};
+
+export type PrototypeMapPanel = {
+  readonly currentLocationId?: string;
+  readonly tiles: readonly PrototypeMapTile[];
+  readonly connections: readonly PrototypeMapConnection[];
+  readonly legend: readonly string[];
+};
+
 type ReadonlyPrototypeOutputPanel = {
   readonly kind: "transcript-preview" | PrototypeCommandId;
   readonly title: string;
@@ -60,6 +81,7 @@ export type ReadonlyPrototypeState = {
   readonly diagnostics: readonly ReadonlyPrototypeDiagnosticView[];
   readonly availableActions: readonly ExecutablePrototypeActionId[];
   readonly commandPalette: readonly PrototypeCommandPaletteItem[];
+  readonly mapPanel: PrototypeMapPanel;
   readonly status: ReadonlyPrototypeStatus;
 };
 
@@ -114,6 +136,38 @@ const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionD
   }
 };
 
+const PROTOTYPE_MAP_TILES: readonly PrototypeMapTile[] = [
+  {
+    locationId: "location.smoke.start",
+    label: "Smoke Test Airlock",
+    x: 1,
+    y: 1,
+    kind: "airlock"
+  },
+  {
+    locationId: "location.smoke.corridor",
+    label: "Smoke Test Corridor",
+    x: 3,
+    y: 1,
+    kind: "corridor"
+  }
+] as const;
+
+const PROTOTYPE_MAP_CONNECTIONS: readonly PrototypeMapConnection[] = [
+  {
+    fromLocationId: "location.smoke.start",
+    toLocationId: "location.smoke.corridor",
+    kind: "door"
+  }
+] as const;
+
+const PROTOTYPE_MAP_LEGEND = [
+  "Current",
+  "Known location",
+  "Connection",
+  "Disabled movement"
+] as const;
+
 function cloneJsonValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -148,6 +202,15 @@ function createCommandPalette(): readonly PrototypeCommandPaletteItem[] {
       disabledReason: disabledAction.reason
     };
   });
+}
+
+function createReadonlyMapPanel(currentLocationId?: string): PrototypeMapPanel {
+  return {
+    ...(currentLocationId === undefined ? {} : { currentLocationId }),
+    tiles: cloneJsonValue(PROTOTYPE_MAP_TILES),
+    connections: cloneJsonValue(PROTOTYPE_MAP_CONNECTIONS),
+    legend: cloneJsonValue(PROTOTYPE_MAP_LEGEND)
+  };
 }
 
 function createDisabledActionDiagnostic(actionId: DisabledPrototypeActionId): ReadonlyPrototypeDiagnosticView {
@@ -256,6 +319,8 @@ function createStateFromSnapshot(
   runtime: PrototypeRuntimeContext,
   snapshot = runReadonlyRuntimePresentationSnapshotScenario()
 ): ReadonlyPrototypeState {
+  const currentLocationId = snapshot.presentation.location?.locationId;
+
   return {
     screenTitle: "Read-only Browser Vertical Slice",
     screenSubtitle: "Public smoke scenario rendered through the accepted read-only runtime boundary.",
@@ -268,6 +333,7 @@ function createStateFromSnapshot(
     diagnostics: snapshot.presentation.diagnostics,
     availableActions: cloneJsonValue(EXECUTABLE_PROTOTYPE_ACTIONS),
     commandPalette: createCommandPalette(),
+    mapPanel: createReadonlyMapPanel(currentLocationId),
     status: {
       kind: "idle",
       detail: "Ready. Read-only commands are executable; future gameplay commands are visible but disabled."
@@ -285,6 +351,7 @@ function createStateFromActionOutcome(
   const inventoryView = outcome.interaction?.execution?.view?.kind === "inventory"
     ? outcome.interaction.execution.view.inventory
     : undefined;
+  const currentLocationId = lookView?.locationId ?? previousState.mapPanel.currentLocationId;
 
   return {
     ...previousState,
@@ -320,26 +387,28 @@ function createStateFromActionOutcome(
       : {
           inventory: {
             itemCount: inventoryView.itemCount,
+            empty: inventoryView.itemCount === 0,
             items: inventoryView.items.map((item) => ({
               itemId: item.itemId,
               title: item.title,
-              description: item.description,
-              ...(item.portable === undefined ? {} : { portable: item.portable })
-            })),
-            empty: inventoryView.itemCount === 0
+              description: item.description
+            }))
           }
         }),
     output: outcome.output,
     diagnostics: outcome.diagnostics,
-    commandPalette: createCommandPalette(),
-    status: {
-      kind: outcome.status,
-      detail: outcome.status === "disabled"
-        ? `${outcome.actionId.toUpperCase()}: ${outcome.disabledReason ?? "This command is unavailable."}`
-        : outcome.playerStateUnchanged
-          ? `${outcome.status.toUpperCase()}: ${outcome.actionId} preserved player state.`
-          : `${outcome.status.toUpperCase()}: unexpected player-state drift detected.`
-    }
+    mapPanel: createReadonlyMapPanel(currentLocationId),
+    status: outcome.status === "disabled"
+      ? {
+          kind: "disabled",
+          detail: `${outcome.actionId.toUpperCase()}: ${outcome.disabledReason ?? "Unavailable."}`
+        }
+      : {
+          kind: outcome.status,
+          detail: outcome.playerStateUnchanged
+            ? `${outcome.actionId.toUpperCase()} executed through the read-only boundary with no gameplay mutation.`
+            : `${outcome.actionId.toUpperCase()} changed runtime state unexpectedly.`
+        }
   };
 }
 
@@ -419,4 +488,3 @@ export function createReadonlyPrototypeController(): ReadonlyPrototypeController
     }
   };
 }
-

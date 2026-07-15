@@ -1,7 +1,7 @@
 # Task: TASK-097 - Prototype command palette and disabled gameplay actions
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -44,4 +44,3 @@ Extend the browser runtime prototype with a visible command palette that shows c
 - plugin runtime
 - P0 story content
 - backend services or external APIs
-

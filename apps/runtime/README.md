@@ -5,6 +5,7 @@ This browser prototype renders the current read-only smoke scenario through the 
 ## What It Shows
 
 - scenario title and package metadata
+- a UI-only read-only map/layout panel for the smoke scenario
 - current location details
 - exits, visible items, and NPCs
 - current inventory
@@ -16,6 +17,7 @@ This browser prototype renders the current read-only smoke scenario through the 
 
 - uses public `@narrative-engine/engine-contracts` exports only
 - builds initial presentation from `runReadonlyRuntimePresentationSnapshotScenario()`
+- keeps map layout coordinates and connections local to `apps/runtime`
 - routes `Look` and `Inventory` through `executeRuntimeReadonlyInteraction(...)`
 - shows `Go`, `Talk`, `Take`, `Use`, `Save`, and `Load` as disabled local UI affordances with reasons
 - never creates runtime requests for disabled commands
@@ -27,6 +29,14 @@ This browser prototype renders the current read-only smoke scenario through the 
 - executable now: `Look`, `Inventory`
 - visible but disabled: `Go`, `Talk`, `Take`, `Use`, `Save`, `Load`
 - selecting a disabled command updates local prototype output/status only and explains why the command is unavailable
+
+## Map Layout Panel
+
+- highlights `Smoke Test Airlock` as the current tile
+- shows `Smoke Test Corridor` as a known connected tile
+- renders the connection as a UI-only corridor/door indicator
+- remains unchanged during `Look`
+- remains unchanged when disabled `Go` is selected because movement is still not implemented
 
 ## Local Run
 
