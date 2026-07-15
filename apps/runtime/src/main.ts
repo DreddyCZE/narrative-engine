@@ -1,6 +1,8 @@
 import {
-  READONLY_PROTOTYPE_ACTIONS,
+  PROTOTYPE_COMMAND_IDS,
   createReadonlyPrototypeController,
+  type PrototypeCommandId,
+  type PrototypeCommandPaletteItem,
   type ReadonlyPrototypeState
 } from "./readonly-prototype.js";
 
@@ -19,10 +21,6 @@ function escapeHtml(value: string): string {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
-}
-
-function getActionLabel(actionId: "look" | "inventory"): string {
-  return actionId === "look" ? "Look" : "Inventory";
 }
 
 function renderListItems(items: readonly { readonly title: string; readonly description: string }[], empty: string): string {
@@ -163,6 +161,35 @@ function renderDiagnostics(state: ReadonlyPrototypeState): string {
   `;
 }
 
+function renderCommandPaletteItem(item: PrototypeCommandPaletteItem): string {
+  const reasonMarkup = item.enabled
+    ? '<div class="prototype-palette-copy">Routes through the read-only interaction boundary.</div>'
+    : `<div class="prototype-palette-copy">${escapeHtml(item.disabledReason ?? "Unavailable.")}</div>`;
+
+  return `
+    <button
+      type="button"
+      class="prototype-command-button${item.enabled ? " is-enabled" : " is-disabled"}"
+      data-action="${escapeHtml(item.commandId)}"
+      aria-disabled="${item.enabled ? "false" : "true"}"
+    >
+      <span class="prototype-command-header">
+        <span class="prototype-command-label">${escapeHtml(item.label)}</span>
+        <span class="prototype-command-state">${item.enabled ? "Ready" : "Disabled"}</span>
+      </span>
+      ${reasonMarkup}
+    </button>
+  `;
+}
+
+function renderCommandPalette(state: ReadonlyPrototypeState): string {
+  return `
+    <div class="prototype-command-grid">
+      ${state.commandPalette.map((item) => renderCommandPaletteItem(item)).join("")}
+    </div>
+  `;
+}
+
 function renderApp(state: ReadonlyPrototypeState): string {
   return `
     <main class="prototype-shell">
@@ -183,14 +210,9 @@ function renderApp(state: ReadonlyPrototypeState): string {
               <strong>${escapeHtml(state.packageId)}</strong>
             </div>
             <div class="prototype-meta-card">
-              <span class="prototype-list-label">Actions</span>
+              <span class="prototype-list-label">Enabled now</span>
               <strong>${state.availableActions.map((actionId) => escapeHtml(actionId)).join(" · ")}</strong>
             </div>
-          </div>
-          <div class="prototype-actions">
-            ${READONLY_PROTOTYPE_ACTIONS.map((actionId) => `
-              <button type="button" data-action="${escapeHtml(actionId)}">${getActionLabel(actionId)}</button>
-            `).join("")}
           </div>
           <div class="prototype-status${state.status.kind === "executed" || state.status.kind === "idle" ? "" : " is-warning"}">
             ${escapeHtml(state.status.detail)}
@@ -198,6 +220,11 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </div>
       </section>
       <section class="prototype-grid">
+        <article class="prototype-panel prototype-panel-wide">
+          <h2>Command Palette</h2>
+          <p class="prototype-summary">The palette shows what is safe to execute now and what the future game UI will expose once mutable gameplay systems arrive.</p>
+          ${renderCommandPalette(state)}
+        </article>
         <article class="prototype-panel">
           <h2>Location</h2>
           ${renderLocation(state)}
@@ -220,10 +247,16 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
       </section>
       <div class="prototype-footer-note">
-        The prototype stays in-memory, exposes only look and inventory, and routes both actions through the TASK-095 read-only interaction boundary.
+        The prototype stays in-memory, executes only look and inventory through the TASK-095 boundary, and surfaces future gameplay commands as disabled local UI affordances only.
       </div>
     </main>
   `;
+}
+
+function parseActionId(value: string | null): PrototypeCommandId | undefined {
+  return value !== null && PROTOTYPE_COMMAND_IDS.includes(value as PrototypeCommandId)
+    ? value as PrototypeCommandId
+    : undefined;
 }
 
 const root = assertRoot(document.querySelector("#app"));
@@ -235,8 +268,8 @@ function render(): void {
 
   root.querySelectorAll<HTMLButtonElement>("[data-action]").forEach((actionButton) => {
     actionButton.addEventListener("click", () => {
-      const actionId = actionButton.getAttribute("data-action");
-      if (actionId === "look" || actionId === "inventory") {
+      const actionId = parseActionId(actionButton.getAttribute("data-action"));
+      if (actionId !== undefined) {
         controller.runAction(actionId);
         render();
       }

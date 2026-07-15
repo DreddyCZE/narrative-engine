@@ -1,7 +1,7 @@
 # Task: TASK-096 - Read-only browser vertical slice prototype
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
