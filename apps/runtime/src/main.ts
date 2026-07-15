@@ -3,6 +3,8 @@ import {
   createReadonlyPrototypeController,
   type PrototypeCommandId,
   type PrototypeCommandPaletteItem,
+  type PrototypeMapConnection,
+  type PrototypeMapTile,
   type ReadonlyPrototypeState
 } from "./readonly-prototype.js";
 
@@ -190,6 +192,91 @@ function renderCommandPalette(state: ReadonlyPrototypeState): string {
   `;
 }
 
+function renderMapTile(tile: PrototypeMapTile, currentLocationId?: string): string {
+  const isCurrent = tile.locationId === currentLocationId;
+
+  return `
+    <div
+      class="prototype-map-tile prototype-map-tile-${escapeHtml(tile.kind)}${isCurrent ? " is-current" : ""}"
+      style="grid-column:${String(tile.x)};grid-row:${String(tile.y)}"
+    >
+      <span class="prototype-map-tile-kind">${escapeHtml(tile.kind)}</span>
+      <strong>${escapeHtml(tile.label)}</strong>
+      <span class="prototype-code">${escapeHtml(tile.locationId)}</span>
+    </div>
+  `;
+}
+
+function renderMapConnection(
+  connection: PrototypeMapConnection,
+  tiles: readonly PrototypeMapTile[]
+): string {
+  const fromTile = tiles.find((tile) => tile.locationId === connection.fromLocationId);
+  const toTile = tiles.find((tile) => tile.locationId === connection.toLocationId);
+
+  if (fromTile === undefined || toTile === undefined) {
+    return "";
+  }
+
+  if (fromTile.y === toTile.y) {
+    const startColumn = Math.min(fromTile.x, toTile.x) + 1;
+    const span = Math.max(Math.abs(fromTile.x - toTile.x) - 1, 1);
+
+    return `
+      <div
+        class="prototype-map-connection prototype-map-connection-horizontal"
+        style="grid-column:${String(startColumn)} / span ${String(span)};grid-row:${String(fromTile.y)}"
+        aria-hidden="true"
+      >
+        <span>${escapeHtml(connection.kind)}</span>
+      </div>
+    `;
+  }
+
+  const startRow = Math.min(fromTile.y, toTile.y) + 1;
+  const span = Math.max(Math.abs(fromTile.y - toTile.y) - 1, 1);
+
+  return `
+    <div
+      class="prototype-map-connection prototype-map-connection-vertical"
+      style="grid-column:${String(fromTile.x)};grid-row:${String(startRow)} / span ${String(span)}"
+      aria-hidden="true"
+    >
+      <span>${escapeHtml(connection.kind)}</span>
+    </div>
+  `;
+}
+
+function renderMapPanel(state: ReadonlyPrototypeState): string {
+  const { mapPanel } = state;
+  const columns = Math.max(...mapPanel.tiles.map((tile) => tile.x));
+  const rows = Math.max(...mapPanel.tiles.map((tile) => tile.y));
+  const currentTile = mapPanel.tiles.find((tile) => tile.locationId === mapPanel.currentLocationId);
+
+  return `
+    <div class="prototype-map-frame">
+      <div class="prototype-map-grid" style="grid-template-columns:repeat(${String(columns)}, minmax(0, 1fr));grid-template-rows:repeat(${String(rows)}, minmax(7rem, auto));">
+        ${mapPanel.connections.map((connection) => renderMapConnection(connection, mapPanel.tiles)).join("")}
+        ${mapPanel.tiles.map((tile) => renderMapTile(tile, mapPanel.currentLocationId)).join("")}
+      </div>
+      <div class="prototype-subpanel">
+        <h3>Legend</h3>
+        <div class="prototype-map-legend">
+          ${mapPanel.legend.map((entry) => `<span class="prototype-map-legend-item">${escapeHtml(entry)}</span>`).join("")}
+        </div>
+      </div>
+      <div class="prototype-subpanel">
+        <h3>Map Status</h3>
+        <div class="prototype-empty">
+          ${currentTile === undefined
+            ? "No current location is highlighted."
+            : `${escapeHtml(currentTile.label)} remains highlighted until movement exists.`}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderApp(state: ReadonlyPrototypeState): string {
   return `
     <main class="prototype-shell">
@@ -225,6 +312,11 @@ function renderApp(state: ReadonlyPrototypeState): string {
           <p class="prototype-summary">The palette shows what is safe to execute now and what the future game UI will expose once mutable gameplay systems arrive.</p>
           ${renderCommandPalette(state)}
         </article>
+        <article class="prototype-panel prototype-panel-wide">
+          <h2>Map Layout</h2>
+          <p class="prototype-summary">This panel is a UI-only spatial preview for the smoke scenario. It highlights the current room and known connection without adding movement or map data to engine contracts.</p>
+          ${renderMapPanel(state)}
+        </article>
         <article class="prototype-panel">
           <h2>Location</h2>
           ${renderLocation(state)}
@@ -247,7 +339,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
       </section>
       <div class="prototype-footer-note">
-        The prototype stays in-memory, executes only look and inventory through the TASK-095 boundary, and surfaces future gameplay commands as disabled local UI affordances only.
+        The prototype stays in-memory, executes only look and inventory through the TASK-095 boundary, keeps the map UI read-only, and surfaces future gameplay commands as disabled local UI affordances only.
       </div>
     </main>
   `;

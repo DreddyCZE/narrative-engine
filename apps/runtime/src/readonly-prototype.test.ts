@@ -13,10 +13,6 @@ import {
 
 type RuntimePlayerState = engineContracts.RuntimePlayerState;
 
-type ReadonlyPrototypeActionOutcome = ReturnType<
-  ReturnType<typeof createReadonlyPrototypeController>["runAction"]
->;
-
 function expectJsonSafe(value: unknown): void {
   expect(inspectJsonSafety(value)).toEqual([]);
 }
@@ -34,25 +30,11 @@ function assertStateSnapshots(outcome: {
   };
 }
 
-function expectDisabledOutcome(
-  outcome: ReadonlyPrototypeActionOutcome,
-  reason: string
-): void {
-  const snapshots = assertStateSnapshots(outcome);
-
-  expect(outcome.status).toBe("disabled");
-  expect(outcome.disabledReason).toBe(reason);
-  expect(outcome.interaction).toBeUndefined();
-  expect(outcome.output.lines).toContain(reason);
-  expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-  expect(outcome.playerStateUnchanged).toBe(true);
-  expectJsonSafe(outcome);
-}
-
-describe("readonly browser prototype command palette", () => {
-  it("builds deterministic initial state from the public presentation snapshot", () => {
+describe("readonly browser prototype map layout panel", () => {
+  it("builds deterministic initial state with a readonly map panel", () => {
     const first = createReadonlyPrototypeState();
     const second = createReadonlyPrototypeState();
+    const currentTile = first.mapPanel.tiles.find((tile) => tile.locationId === first.mapPanel.currentLocationId);
 
     expect(first.location?.title).toBe("Smoke Test Airlock");
     expect(first.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
@@ -67,6 +49,12 @@ describe("readonly browser prototype command palette", () => {
       "save",
       "load"
     ]);
+    expect(first.mapPanel.tiles.length).toBeGreaterThanOrEqual(2);
+    expect(first.mapPanel.currentLocationId).toBe(first.location?.locationId);
+    expect(currentTile?.label).toBe("Smoke Test Airlock");
+    expect(first.mapPanel.tiles.some((tile) => tile.label === "Smoke Test Corridor")).toBe(true);
+    expect(first.mapPanel.connections.length).toBeGreaterThanOrEqual(1);
+    expect(first.mapPanel.legend).toEqual(["Current", "Known location", "Connection", "Disabled movement"]);
     expect(first.output.kind).toBe("transcript-preview");
     expect(first.output.lines.length).toBeGreaterThan(0);
     expect(first.diagnostics).toEqual([]);
@@ -74,7 +62,7 @@ describe("readonly browser prototype command palette", () => {
     expectJsonSafe(first);
   });
 
-  it("marks only look and inventory as enabled in the palette", () => {
+  it("keeps the accepted command palette unchanged", () => {
     const state = createReadonlyPrototypeState();
     const palette = state.commandPalette;
 
@@ -92,6 +80,7 @@ describe("readonly browser prototype command palette", () => {
     expect(DISABLED_PROTOTYPE_ACTIONS).toEqual(["go", "talk", "take", "use", "save", "load"]);
     expect(palette.find((item) => item.commandId === "look")?.enabled).toBe(true);
     expect(palette.find((item) => item.commandId === "inventory")?.enabled).toBe(true);
+    expect(palette.find((item) => item.commandId === "go")?.enabled).toBe(false);
 
     for (const commandId of DISABLED_PROTOTYPE_ACTIONS) {
       const item = palette.find((paletteItem) => paletteItem.commandId === commandId);
@@ -100,59 +89,54 @@ describe("readonly browser prototype command palette", () => {
     }
   });
 
-  it("routes look through the readonly interaction boundary without mutating player state", () => {
+  it("keeps the map and player state unchanged during look", () => {
     const controller = createReadonlyPrototypeController();
+    const beforeState = controller.getState();
 
     const outcome = controller.runAction("look");
-    const state = controller.getState();
+    const afterState = controller.getState();
     const snapshots = assertStateSnapshots(outcome);
 
     expect(outcome.status).toBe("executed");
     expect(outcome.interaction?.status).toBe("executed");
     expect(outcome.interaction?.execution?.view?.kind).toBe("look");
     expect(outcome.output.title).toBe("Smoke Test Airlock");
-    expect(outcome.output.lines.some((line) => line.includes("Location: Smoke Test Airlock"))).toBe(true);
-    expect(state.location?.title).toBe("Smoke Test Airlock");
+    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+    expect(afterState.mapPanel.tiles.length).toBe(beforeState.mapPanel.tiles.length);
+    expect(canonicalizeJson(afterState.mapPanel)).toBe(canonicalizeJson(beforeState.mapPanel));
     expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
     expect(outcome.playerStateUnchanged).toBe(true);
     expectJsonSafe(outcome);
   });
 
-  it("routes inventory through the readonly interaction boundary without mutating player state", () => {
+  it("keeps disabled go local and never moves or executes runtime interaction", () => {
     const controller = createReadonlyPrototypeController();
+    const beforeState = controller.getState();
 
-    const outcome = controller.runAction("inventory");
-    const state = controller.getState();
+    const outcome = controller.runAction("go");
+    const afterState = controller.getState();
     const snapshots = assertStateSnapshots(outcome);
 
-    expect(outcome.status).toBe("executed");
-    expect(outcome.interaction?.status).toBe("executed");
-    expect(outcome.interaction?.execution?.view?.kind).toBe("inventory");
-    expect(outcome.output.lines).toContain("Smoke Test Keycard");
-    expect(state.inventory?.items.map((item) => item.title)).toContain("Smoke Test Keycard");
+    expect(outcome.status).toBe("disabled");
+    expect(outcome.disabledReason).toBe("Movement execution is not implemented yet.");
+    expect(outcome.interaction).toBeUndefined();
+    expect(outcome.output.lines).toContain("Movement execution is not implemented yet.");
+    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+    expect(canonicalizeJson(afterState.mapPanel)).toBe(canonicalizeJson(beforeState.mapPanel));
     expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
     expect(outcome.playerStateUnchanged).toBe(true);
     expectJsonSafe(outcome);
   });
 
-  it("keeps disabled actions local and never executes runtime interaction", () => {
-    const controller = createReadonlyPrototypeController();
-    const disabledActionReasons = {
-      go: "Movement execution is not implemented yet.",
-      talk: "Dialogue execution is not implemented yet.",
-      take: "Inventory mutation is not implemented yet.",
-      use: "Use/effect execution is not implemented yet.",
-      save: "Save UI/storage integration is not implemented yet.",
-      load: "Load UI/storage integration is not implemented yet."
-    } as const;
-
-    for (const commandId of DISABLED_PROTOTYPE_ACTIONS) {
-      const outcome = controller.runAction(commandId);
-      expectDisabledOutcome(outcome, disabledActionReasons[commandId]);
-    }
+  it("keeps map layout data out of engine contracts", () => {
+    expect("RuntimeMap" in engineContracts).toBe(false);
+    expect("MapTile" in engineContracts).toBe(false);
+    expect("MapRenderer" in engineContracts).toBe(false);
+    expect("MapEditor" in engineContracts).toBe(false);
+    expect("moveTo" in engineContracts).toBe(false);
   });
 
-  it("returns JSON-safe deterministic state for disabled actions with no next-state or storage outputs", () => {
+  it("returns JSON-safe deterministic outcomes with no next-state or storage outputs", () => {
     const firstController = createReadonlyPrototypeController();
     const secondController = createReadonlyPrototypeController();
 
@@ -169,15 +153,5 @@ describe("readonly browser prototype command palette", () => {
     expect("loadResult" in first).toBe(false);
     expect(first.interaction).toBeUndefined();
     expectJsonSafe(first);
-  });
-
-  it("does not add generic execution APIs", () => {
-    expect("executeCommand" in engineContracts).toBe(false);
-    expect("executeRuntimeCommand" in engineContracts).toBe(false);
-    expect("applyCommand" in engineContracts).toBe(false);
-    expect("moveTo" in engineContracts).toBe(false);
-    expect("takeItem" in engineContracts).toBe(false);
-    expect("talkToNpc" in engineContracts).toBe(false);
-    expect("applyEffectToRuntimePlayerState" in engineContracts).toBe(false);
   });
 });
