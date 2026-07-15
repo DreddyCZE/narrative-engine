@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Read-only Runtime Prototype</title>
+    <link rel="stylesheet" href="./src/readonly-prototype.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@narrative-engine/core": "../../packages/core/dist/src/index.js",
+          "@narrative-engine/engine-contracts": "../../dist/src/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./dist/src/main.js"></script>
+  </body>
+</html>

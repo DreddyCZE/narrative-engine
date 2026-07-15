@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
+    { "path": "apps/runtime" },
     { "path": "packages/core" },
     { "path": "packages/engine-contracts" },
     { "path": "packages/engine-kernel" },
