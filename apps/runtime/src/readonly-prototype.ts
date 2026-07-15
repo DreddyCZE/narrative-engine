@@ -14,18 +14,32 @@ import {
   type RuntimeReadonlyPresentationTranscriptLine
 } from "@narrative-engine/engine-contracts";
 
-export const READONLY_PROTOTYPE_ACTIONS = ["look", "inventory"] as const;
+export const EXECUTABLE_PROTOTYPE_ACTIONS = ["look", "inventory"] as const;
+export const DISABLED_PROTOTYPE_ACTIONS = ["go", "talk", "take", "use", "save", "load"] as const;
+export const PROTOTYPE_COMMAND_IDS = [
+  ...EXECUTABLE_PROTOTYPE_ACTIONS,
+  ...DISABLED_PROTOTYPE_ACTIONS
+] as const;
 
-type ReadonlyPrototypeActionId = (typeof READONLY_PROTOTYPE_ACTIONS)[number];
+export type ExecutablePrototypeActionId = (typeof EXECUTABLE_PROTOTYPE_ACTIONS)[number];
+export type DisabledPrototypeActionId = (typeof DISABLED_PROTOTYPE_ACTIONS)[number];
+export type PrototypeCommandId = (typeof PROTOTYPE_COMMAND_IDS)[number];
+
+export type PrototypeCommandPaletteItem = {
+  readonly commandId: PrototypeCommandId;
+  readonly label: string;
+  readonly enabled: boolean;
+  readonly disabledReason?: string;
+};
 
 type ReadonlyPrototypeOutputPanel = {
-  readonly kind: "transcript-preview" | ReadonlyPrototypeActionId;
+  readonly kind: "transcript-preview" | PrototypeCommandId;
   readonly title: string;
   readonly lines: readonly string[];
 };
 
 type ReadonlyPrototypeStatus = {
-  readonly kind: "idle" | "executed" | "rejected" | "blocked";
+  readonly kind: "idle" | "executed" | "rejected" | "blocked" | "disabled";
   readonly detail: string;
 };
 
@@ -44,25 +58,61 @@ export type ReadonlyPrototypeState = {
   readonly transcript: readonly RuntimeReadonlyPresentationTranscriptLine[];
   readonly output: ReadonlyPrototypeOutputPanel;
   readonly diagnostics: readonly ReadonlyPrototypeDiagnosticView[];
-  readonly availableActions: readonly ReadonlyPrototypeActionId[];
+  readonly availableActions: readonly ExecutablePrototypeActionId[];
+  readonly commandPalette: readonly PrototypeCommandPaletteItem[];
   readonly status: ReadonlyPrototypeStatus;
 };
 
-export type ReadonlyPrototypeInteractionOutcome = {
-  readonly actionId: ReadonlyPrototypeActionId;
-  readonly interaction: RuntimeReadonlyInteractionResult;
+export type ReadonlyPrototypeActionOutcome = {
+  readonly actionId: PrototypeCommandId;
+  readonly status: "executed" | "rejected" | "blocked" | "disabled";
+  readonly disabledReason?: string;
+  readonly interaction?: RuntimeReadonlyInteractionResult;
   readonly output: ReadonlyPrototypeOutputPanel;
-  readonly playerStateBefore?: RuntimePlayerState;
-  readonly playerStateAfter?: RuntimePlayerState;
+  readonly diagnostics: readonly ReadonlyPrototypeDiagnosticView[];
+  readonly playerStateBefore: RuntimePlayerState;
+  readonly playerStateAfter: RuntimePlayerState;
   readonly playerStateUnchanged: boolean;
 };
 
 export type ReadonlyPrototypeController = {
   readonly getState: () => ReadonlyPrototypeState;
-  readonly runAction: (actionId: ReadonlyPrototypeActionId) => ReadonlyPrototypeInteractionOutcome;
+  readonly runAction: (actionId: PrototypeCommandId) => ReadonlyPrototypeActionOutcome;
 };
 
 type PrototypeRuntimeContext = ReturnType<typeof createPrototypeRuntimeContext>;
+
+type DisabledActionDescriptor = {
+  readonly label: string;
+  readonly reason: string;
+};
+
+const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionDescriptor> = {
+  go: {
+    label: "Go",
+    reason: "Movement execution is not implemented yet."
+  },
+  talk: {
+    label: "Talk",
+    reason: "Dialogue execution is not implemented yet."
+  },
+  take: {
+    label: "Take",
+    reason: "Inventory mutation is not implemented yet."
+  },
+  use: {
+    label: "Use",
+    reason: "Use/effect execution is not implemented yet."
+  },
+  save: {
+    label: "Save",
+    reason: "Save UI/storage integration is not implemented yet."
+  },
+  load: {
+    label: "Load",
+    reason: "Load UI/storage integration is not implemented yet."
+  }
+};
 
 function cloneJsonValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -72,8 +122,45 @@ function formatListLine(prefix: string, values: readonly string[], emptyLabel: s
   return values.length > 0 ? `${prefix}: ${values.join(", ")}` : `${prefix}: ${emptyLabel}`;
 }
 
-function toSupportedActionIds(commandIds: readonly string[]): readonly ReadonlyPrototypeActionId[] {
-  return READONLY_PROTOTYPE_ACTIONS.filter((commandId) => commandIds.includes(commandId));
+function createCommandPalette(): readonly PrototypeCommandPaletteItem[] {
+  return PROTOTYPE_COMMAND_IDS.map((commandId) => {
+    if (commandId === "look") {
+      return {
+        commandId,
+        label: "Look",
+        enabled: true
+      };
+    }
+
+    if (commandId === "inventory") {
+      return {
+        commandId,
+        label: "Inventory",
+        enabled: true
+      };
+    }
+
+    const disabledAction = DISABLED_ACTION_DETAILS[commandId];
+    return {
+      commandId,
+      label: disabledAction.label,
+      enabled: false,
+      disabledReason: disabledAction.reason
+    };
+  });
+}
+
+function createDisabledActionDiagnostic(actionId: DisabledPrototypeActionId): ReadonlyPrototypeDiagnosticView {
+  const disabledAction = DISABLED_ACTION_DETAILS[actionId];
+
+  return {
+    code: "PROTOTYPE_ACTION_DISABLED",
+    message: disabledAction.reason,
+    path: ["commandPalette", actionId],
+    phase: "execution",
+    category: "command",
+    severity: "warning"
+  };
 }
 
 function createTranscriptPreviewOutput(lines: readonly RuntimeReadonlyPresentationTranscriptLine[]): ReadonlyPrototypeOutputPanel {
@@ -154,6 +241,17 @@ function createOutputFromInteraction(result: RuntimeReadonlyInteractionResult): 
       : ["Inventory is empty."]
   };
 }
+
+function createOutputFromDisabledAction(actionId: DisabledPrototypeActionId): ReadonlyPrototypeOutputPanel {
+  const disabledAction = DISABLED_ACTION_DETAILS[actionId];
+
+  return {
+    kind: actionId,
+    title: `${disabledAction.label} Unavailable`,
+    lines: [disabledAction.reason]
+  };
+}
+
 function createStateFromSnapshot(
   runtime: PrototypeRuntimeContext,
   snapshot = runReadonlyRuntimePresentationSnapshotScenario()
@@ -168,22 +266,23 @@ function createStateFromSnapshot(
     transcript: snapshot.presentation.transcript,
     output: createTranscriptPreviewOutput(snapshot.presentation.transcript),
     diagnostics: snapshot.presentation.diagnostics,
-    availableActions: toSupportedActionIds(snapshot.summary.availableCommands),
+    availableActions: cloneJsonValue(EXECUTABLE_PROTOTYPE_ACTIONS),
+    commandPalette: createCommandPalette(),
     status: {
       kind: "idle",
-      detail: "Ready. Only look and inventory are exposed."
+      detail: "Ready. Read-only commands are executable; future gameplay commands are visible but disabled."
     }
   };
 }
 
-function createStateFromInteraction(
+function createStateFromActionOutcome(
   previousState: ReadonlyPrototypeState,
-  outcome: ReadonlyPrototypeInteractionOutcome
+  outcome: ReadonlyPrototypeActionOutcome
 ): ReadonlyPrototypeState {
-  const lookView = outcome.interaction.execution?.view?.kind === "look"
+  const lookView = outcome.interaction?.execution?.view?.kind === "look"
     ? outcome.interaction.execution.view.look
     : undefined;
-  const inventoryView = outcome.interaction.execution?.view?.kind === "inventory"
+  const inventoryView = outcome.interaction?.execution?.view?.kind === "inventory"
     ? outcome.interaction.execution.view.inventory
     : undefined;
 
@@ -214,8 +313,7 @@ function createStateFromInteraction(
               name: npc.name,
               ...(npc.dialogueId === undefined ? {} : { dialogueId: npc.dialogueId })
             }))
-          },
-          availableActions: toSupportedActionIds(lookView.availableActions)
+          }
         }),
     ...(inventoryView === undefined
       ? {}
@@ -232,13 +330,70 @@ function createStateFromInteraction(
           }
         }),
     output: outcome.output,
-    diagnostics: outcome.interaction.diagnostics,
+    diagnostics: outcome.diagnostics,
+    commandPalette: createCommandPalette(),
     status: {
-      kind: outcome.interaction.status,
-      detail: outcome.playerStateUnchanged
-        ? `${outcome.interaction.status.toUpperCase()}: ${outcome.actionId} preserved player state.`
-        : `${outcome.interaction.status.toUpperCase()}: unexpected player-state drift detected.`
+      kind: outcome.status,
+      detail: outcome.status === "disabled"
+        ? `${outcome.actionId.toUpperCase()}: ${outcome.disabledReason ?? "This command is unavailable."}`
+        : outcome.playerStateUnchanged
+          ? `${outcome.status.toUpperCase()}: ${outcome.actionId} preserved player state.`
+          : `${outcome.status.toUpperCase()}: unexpected player-state drift detected.`
     }
+  };
+}
+
+function createDisabledActionOutcome(
+  runtime: PrototypeRuntimeContext,
+  actionId: DisabledPrototypeActionId
+): ReadonlyPrototypeActionOutcome {
+  const playerStateBefore = cloneJsonValue(runtime.playerState);
+  const playerStateAfter = cloneJsonValue(runtime.playerState);
+  const diagnostic = createDisabledActionDiagnostic(actionId);
+  const disabledReason = DISABLED_ACTION_DETAILS[actionId].reason;
+
+  return {
+    actionId,
+    status: "disabled",
+    disabledReason,
+    output: createOutputFromDisabledAction(actionId),
+    diagnostics: [diagnostic],
+    playerStateBefore,
+    playerStateAfter,
+    playerStateUnchanged: true
+  };
+}
+
+function createExecutableActionOutcome(
+  runtime: PrototypeRuntimeContext,
+  actionId: ExecutablePrototypeActionId
+): ReadonlyPrototypeActionOutcome {
+  const interaction = executeRuntimeReadonlyInteraction({
+    input: { commandId: actionId },
+    content: runtime.content,
+    playerState: runtime.playerState,
+    metadata: {
+      deterministic: true,
+      requestId: `prototype.${actionId}`,
+      correlationId: "readonly-browser-vertical-slice"
+    }
+  });
+  const playerStateBefore = cloneJsonValue(
+    interaction.initialPlayerState === undefined ? runtime.playerState : interaction.initialPlayerState
+  );
+  const playerStateAfter = cloneJsonValue(
+    interaction.finalPlayerState === undefined ? runtime.playerState : interaction.finalPlayerState
+  );
+
+  return {
+    actionId,
+    status: interaction.status,
+    interaction,
+    output: createOutputFromInteraction(interaction),
+    diagnostics: interaction.diagnostics,
+    playerStateBefore,
+    playerStateAfter,
+    playerStateUnchanged: JSON.stringify(playerStateBefore) === JSON.stringify(playerStateAfter)
   };
 }
 
@@ -254,31 +409,12 @@ export function createReadonlyPrototypeController(): ReadonlyPrototypeController
     getState(): ReadonlyPrototypeState {
       return cloneJsonValue(state);
     },
-    runAction(actionId: ReadonlyPrototypeActionId): ReadonlyPrototypeInteractionOutcome {
-      const interaction = executeRuntimeReadonlyInteraction({
-        input: { commandId: actionId },
-        content: runtime.content,
-        playerState: runtime.playerState,
-        metadata: {
-          deterministic: true,
-          requestId: `prototype.${actionId}`,
-          correlationId: "readonly-browser-vertical-slice"
-        }
-      });
-      const output = createOutputFromInteraction(interaction);
-      const playerStateBefore = interaction.initialPlayerState;
-      const playerStateAfter = interaction.finalPlayerState;
-      const playerStateUnchanged = JSON.stringify(playerStateBefore) === JSON.stringify(playerStateAfter);
-      const outcome: ReadonlyPrototypeInteractionOutcome = {
-        actionId,
-        interaction,
-        output,
-        ...(playerStateBefore === undefined ? {} : { playerStateBefore }),
-        ...(playerStateAfter === undefined ? {} : { playerStateAfter }),
-        playerStateUnchanged
-      };
+    runAction(actionId: PrototypeCommandId): ReadonlyPrototypeActionOutcome {
+      const outcome = EXECUTABLE_PROTOTYPE_ACTIONS.includes(actionId as ExecutablePrototypeActionId)
+        ? createExecutableActionOutcome(runtime, actionId as ExecutablePrototypeActionId)
+        : createDisabledActionOutcome(runtime, actionId as DisabledPrototypeActionId);
 
-      state = createStateFromInteraction(state, outcome);
+      state = createStateFromActionOutcome(state, outcome);
       return cloneJsonValue(outcome);
     }
   };
