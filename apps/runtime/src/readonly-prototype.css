@@ -515,3 +515,19 @@ body::after {
   outline: 2px solid rgba(166, 75, 42, 0.35);
   outline-offset: 2px;
 }
+.prototype-exit-button-available .prototype-command-state {
+  color: var(--success);
+}
+
+.prototype-exit-button-locked,
+.prototype-exit-button-condition-gated,
+.prototype-exit-button.is-blocked {
+  border-style: dashed;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(36, 52, 71, 0.08));
+}
+
+.prototype-exit-button-locked .prototype-command-state,
+.prototype-exit-button-condition-gated .prototype-command-state,
+.prototype-exit-button.is-blocked .prototype-palette-copy {
+  color: var(--accent);
+}

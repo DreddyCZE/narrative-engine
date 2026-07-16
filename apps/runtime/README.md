@@ -1,6 +1,6 @@
 # Runtime Prototype
 
-This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice.
+This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice with locked-exit and condition-gated diagnostics.
 
 ## What It Shows
 
@@ -9,6 +9,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - a UI-only map/layout panel per scenario
 - current location details
 - explicit exit buttons derived from the current location read model
+- exit availability states for available, locked, and condition-gated movement
 - current inventory
 - transcript preview and latest action output
 - diagnostics
@@ -23,6 +24,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - routes `Look` and `Inventory` through `executeRuntimeReadonlyInteraction(...)`
 - routes `Go` through `createRuntimeCommandPlan(...)` plus `executeRuntimeMovementCommand(...)`
 - binds movement to explicit exit buttons only
+- reuses existing exit `locked` and `conditionFlag` metadata without widening the content schema
 - never accepts free-form text or arbitrary command input
 - stays fully in-memory
 - does not persist, save, load, replay, or call generic mutable execution APIs
@@ -31,6 +33,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 
 - `Smoke Scenario`: public smoke package adapted at the app layer for prototype movement, with `Smoke Test Airlock`, `Smoke Test Corridor`, and `Smoke Test Keycard`
 - `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, `Prototype Sensor Gallery`, and `Prototype Survey Tablet`
+- the observation deck demo also includes a locked service locker exit and a condition-gated maintenance hatch for movement-readiness diagnostics
 
 These scenarios are prototype data only. They are not final game content and do not add P0 story content to engine contracts.
 
@@ -40,7 +43,9 @@ These scenarios are prototype data only. They are not final game content and do 
 - conditionally executable: `Go`
 - still disabled: `Talk`, `Take`, `Use`, `Save`, `Load`
 - `Go` becomes enabled only when the current location exposes a concrete exit
+- exit buttons show whether each exit is available, locked, or waiting on a progress flag
 - movement runs only by clicking a visible exit button that maps to a specific target location
+- clicking a locked or condition-gated exit keeps player state and map highlight unchanged and reports the movement diagnostic
 - clicking `Go` without choosing an exit does not execute movement and instead explains how to continue safely
 
 ## Scenario Switching

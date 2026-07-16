@@ -43,6 +43,18 @@ function createValidPackage(
             exitId: "exit.to-corridor",
             label: "Open corridor hatch",
             targetLocationId: "location.corridor"
+          },
+          {
+            exitId: "exit.to-locked-annex",
+            label: "Open locked annex door",
+            targetLocationId: "location.locked",
+            locked: true
+          },
+          {
+            exitId: "exit.to-flagged-annex",
+            label: "Cycle flagged annex hatch",
+            targetLocationId: "location.flagged",
+            conditionFlag: "access.flagged-annex"
           }
         ],
         tags: ["start", "indoors"]
@@ -51,6 +63,18 @@ function createValidPackage(
         locationId: "location.corridor",
         title: "Service Corridor",
         description: "A plain corridor that connects the sample spaces.",
+        exits: []
+      },
+      {
+        locationId: "location.locked",
+        title: "Locked Annex",
+        description: "A valid location that remains blocked behind a locked exit.",
+        exits: []
+      },
+      {
+        locationId: "location.flagged",
+        title: "Flagged Annex",
+        description: "A valid location that opens only when the matching progress flag is present.",
         exits: []
       },
       {
@@ -108,14 +132,28 @@ function createReadModel(actionAffordances?: readonly ContentActionAffordance[])
   return createContentReadModel({ graph: createValidGraph(actionAffordances) });
 }
 
-function createPlayerState(actionAffordances?: readonly ContentActionAffordance[]): RuntimePlayerState {
-  return createInitialRuntimePlayerStateFromContent({
+function createPlayerState(
+  actionAffordances?: readonly ContentActionAffordance[],
+  overrides: Partial<RuntimePlayerState> = {}
+): RuntimePlayerState {
+  const baseState = createInitialRuntimePlayerStateFromContent({
     content: { graph: createValidGraph(actionAffordances) },
     metadata: {
       createdAtRevision: 0,
       updatedAtRevision: 0
     }
   });
+
+  return {
+    ...baseState,
+    ...overrides,
+    inventoryItemIds: overrides.inventoryItemIds === undefined ? baseState.inventoryItemIds : [...overrides.inventoryItemIds],
+    progressFlags: overrides.progressFlags === undefined ? baseState.progressFlags : [...overrides.progressFlags],
+    metadata: {
+      ...baseState.metadata,
+      ...overrides.metadata
+    }
+  };
 }
 
 function createPlan(request: engineContracts.RuntimeCommandRequest, actionAffordances?: readonly ContentActionAffordance[]): RuntimeCommandPlan {
@@ -124,21 +162,25 @@ function createPlan(request: engineContracts.RuntimeCommandRequest, actionAfford
     content: createReadModel(actionAffordances),
     playerState: createPlayerState(actionAffordances),
     metadata: {
-      requestId: "req.task-101.sample",
-      correlationId: "corr.task-101.sample",
+      requestId: "req.task-102.sample",
+      correlationId: "corr.task-102.sample",
       deterministic: true
     }
   });
 }
 
-function createInput(plan: RuntimeCommandPlan, actionAffordances?: readonly ContentActionAffordance[]): RuntimeMovementCommandExecutorInput {
+function createInput(
+  plan: RuntimeCommandPlan,
+  actionAffordances?: readonly ContentActionAffordance[],
+  playerStateOverrides: Partial<RuntimePlayerState> = {}
+): RuntimeMovementCommandExecutorInput {
   return {
     plan,
     content: createReadModel(actionAffordances),
-    playerState: createPlayerState(actionAffordances),
+    playerState: createPlayerState(actionAffordances, playerStateOverrides),
     metadata: {
-      requestId: "req.task-101.sample",
-      correlationId: "corr.task-101.sample",
+      requestId: "req.task-102.sample",
+      correlationId: "corr.task-102.sample",
       deterministic: true
     }
   };
@@ -205,6 +247,85 @@ describe("runtime movement command executor boundary", () => {
     expect(result.status).toBe("blocked");
     expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXECUTION_PLAN_NOT_PLANNED");
     expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_COMMAND_PLAN_TARGET_REQUIRED");
+  });
+
+  it("blocks locked exits with explicit diagnostics", () => {
+    const result = executeRuntimeMovementCommand(createInput(createPlan({ commandId: "go", targetId: "location.locked" })));
+
+    expect(result.status).toBe("blocked");
+    expect(result.exitId).toBe("exit.to-locked-annex");
+    expect(result.diagnostics).toEqual([
+      {
+        contractVersion: "validation-diagnostic@0.1.0",
+        schemaId: "validation-diagnostic",
+        schemaVersion: 1,
+        ownerContract: "runtime-movement-command-executor@0.1.0",
+        code: "RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED",
+        severity: "error",
+        category: "command",
+        phase: "command-execution",
+        path: ["plan", "request", "targetId"],
+        message: "the selected exit is locked and cannot be used yet.",
+        source: {
+          kind: "runtime-movement-command-executor",
+          id: "movement-execution-input",
+          path: ["plan", "request", "targetId"]
+        },
+        details: {
+          currentLocationId: "location.start",
+          targetLocationId: "location.locked",
+          exitId: "exit.to-locked-annex",
+          locked: true
+        }
+      }
+    ]);
+    expect(canonicalizeJson(result.initialPlayerState)).toBe(canonicalizeJson(result.finalPlayerState));
+  });
+
+  it("blocks exits with missing condition flags", () => {
+    const result = executeRuntimeMovementCommand(createInput(createPlan({ commandId: "go", targetId: "location.flagged" })));
+
+    expect(result.status).toBe("blocked");
+    expect(result.exitId).toBe("exit.to-flagged-annex");
+    expect(result.diagnostics).toEqual([
+      {
+        contractVersion: "validation-diagnostic@0.1.0",
+        schemaId: "validation-diagnostic",
+        schemaVersion: 1,
+        ownerContract: "runtime-movement-command-executor@0.1.0",
+        code: "RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET",
+        severity: "error",
+        category: "command",
+        phase: "command-execution",
+        path: ["plan", "request", "targetId"],
+        message: "the selected exit requires a progress flag that is not present on the player state.",
+        source: {
+          kind: "runtime-movement-command-executor",
+          id: "movement-execution-input",
+          path: ["plan", "request", "targetId"]
+        },
+        details: {
+          currentLocationId: "location.start",
+          targetLocationId: "location.flagged",
+          exitId: "exit.to-flagged-annex",
+          conditionFlag: "access.flagged-annex"
+        }
+      }
+    ]);
+    expect(canonicalizeJson(result.initialPlayerState)).toBe(canonicalizeJson(result.finalPlayerState));
+  });
+
+  it("allows condition-gated exits when the progress flag is present", () => {
+    const plan = createPlan({ commandId: "go", targetId: "location.flagged" });
+    const result = executeRuntimeMovementCommand(createInput(plan, undefined, {
+      progressFlags: ["intro.ready", "access.flagged-annex"]
+    }));
+
+    expect(result.status).toBe("executed");
+    expect(result.toLocationId).toBe("location.flagged");
+    expect(result.exitId).toBe("exit.to-flagged-annex");
+    expect(result.finalPlayerState?.currentLocationId).toBe("location.flagged");
+    expect(result.finalPlayerState?.progressFlags).toEqual(["intro.ready", "access.flagged-annex"]);
   });
 
   it("blocks unreachable target", () => {

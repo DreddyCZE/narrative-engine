@@ -93,17 +93,25 @@ function renderLocation(state: ReadonlyPrototypeState): string {
 }
 
 function renderExitAction(exitAction: PrototypeExitAction): string {
+  const stateLabel = exitAction.availability === "available"
+    ? "Move"
+    : exitAction.availability === "locked"
+      ? "Locked"
+      : "Condition";
+  const availabilityCopy = exitAction.disabledReason ?? "Movement is available through the controlled go boundary.";
+
   return `
     <button
       type="button"
-      class="prototype-exit-button"
+      class="prototype-exit-button prototype-exit-button-${escapeHtml(exitAction.availability)}${exitAction.enabled ? "" : " is-blocked"}"
       data-exit="${escapeHtml(exitAction.exitId)}"
     >
       <span class="prototype-command-header">
         <span class="prototype-command-label">${escapeHtml(exitAction.label)}</span>
-        <span class="prototype-command-state">Move</span>
+        <span class="prototype-command-state">${escapeHtml(stateLabel)}</span>
       </span>
-      <span class="prototype-palette-copy">Target: ${escapeHtml(exitAction.targetLocationId)}</span>
+      <span class="prototype-palette-copy">Target: ${escapeHtml(exitAction.targetLocationTitle)} (${escapeHtml(exitAction.targetLocationId)})</span>
+      <span class="prototype-palette-copy">${escapeHtml(availabilityCopy)}</span>
     </button>
   `;
 }
@@ -210,7 +218,7 @@ function renderDiagnostics(state: ReadonlyPrototypeState): string {
 
 function renderCommandPaletteItem(item: PrototypeCommandPaletteItem): string {
   const paletteCopy = item.commandId === "go" && item.enabled
-    ? "Select a visible exit below to run controlled movement."
+    ? "Select a visible exit below. Available exits move now; locked or condition-gated exits report diagnostics without changing state."
     : item.enabled
       ? "Routes through an accepted runtime boundary."
       : item.disabledReason ?? "Unavailable.";
@@ -367,7 +375,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
         <article class="prototype-panel prototype-panel-wide">
           <h2>Command Palette</h2>
-          <p class="prototype-summary">The palette shows what is safe to execute now. Go is enabled only when the current location exposes a concrete exit, and the actual movement action stays bound to explicit exit buttons below.</p>
+          <p class="prototype-summary">The palette shows what is safe to execute now. Go is enabled only when the current location exposes concrete exits, and each exit reports whether movement is available, locked, or waiting on a progress flag.</p>
           ${renderCommandPalette(state)}
         </article>
         <article class="prototype-panel prototype-panel-wide">
