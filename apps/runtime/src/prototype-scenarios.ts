@@ -32,6 +32,18 @@ export type PrototypeScenarioDescriptor = {
 
 export const DEFAULT_PROTOTYPE_SCENARIO_ID = SMOKE_PROTOTYPE_SCENARIO_ID;
 
+function cloneJsonValue<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+function createSmokeMovementPrototypePackage(): ContentPackage {
+  const basePackage = createReadonlyRuntimeSmokeScenarioPackage();
+  return cloneJsonValue({
+    ...basePackage,
+    actionAffordances: ["look", "inventory", "go"]
+  });
+}
+
 function createObservationDeckDemoPackage(): ContentPackage {
   return {
     packageId: "content.prototype.demo.observation-deck",
@@ -41,7 +53,7 @@ function createObservationDeckDemoPackage(): ContentPackage {
     },
     title: "Prototype Observation Deck Demo Package",
     theme: "neutral-sci-fi",
-    description: "Prototype-only demo package for the runtime scenario selector vertical slice.",
+    description: "Prototype-only demo package for the runtime scenario selector and controlled movement vertical slice.",
     locations: [
       {
         locationId: "location.demo.observation-deck",
@@ -59,7 +71,7 @@ function createObservationDeckDemoPackage(): ContentPackage {
       {
         locationId: "location.demo.sensor-gallery",
         title: "Prototype Sensor Gallery",
-        description: "A narrow gallery lined with diagnostic screens used only for read-only prototype switching checks.",
+        description: "A narrow gallery lined with diagnostic screens used only for controlled movement and read-only switching checks.",
         exits: []
       }
     ],
@@ -83,7 +95,7 @@ function createObservationDeckDemoPackage(): ContentPackage {
       {
         dialogueId: "dialogue.demo.analyst",
         title: "Prototype Advisory",
-        lines: ["This observation deck package exists only for UI switching validation."]
+        lines: ["This observation deck package exists only for UI switching and controlled movement validation."]
       }
     ],
     initialPlayerState: {
@@ -91,7 +103,7 @@ function createObservationDeckDemoPackage(): ContentPackage {
       inventoryItemIds: ["item.demo.survey-tablet"],
       progressFlags: ["demo.ready"]
     },
-    actionAffordances: ["look", "inventory"]
+    actionAffordances: ["look", "inventory", "go"]
   };
 }
 
@@ -100,7 +112,7 @@ export const PROTOTYPE_SCENARIOS: readonly PrototypeScenarioDescriptor[] = [
     scenarioId: SMOKE_PROTOTYPE_SCENARIO_ID,
     label: "Smoke Scenario",
     description: "Public readonly smoke scenario from engine contracts with the airlock, corridor, and keycard baseline.",
-    packageFactory: createReadonlyRuntimeSmokeScenarioPackage,
+    packageFactory: createSmokeMovementPrototypePackage,
     initialMapLayout: SMOKE_SCENARIO_MAP_LAYOUT
   },
   {

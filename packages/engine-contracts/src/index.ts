@@ -230,6 +230,18 @@ export {
   type RuntimeCommandPlanningMetadata
 } from "./runtime-host/runtime-command-planning.js";
 export {
+  assertRuntimeMovementCommandExecutionInput,
+  executeRuntimeMovementCommand,
+  formatRuntimeMovementCommandExecutionValidationMessage,
+  inspectRuntimeMovementCommandExecutionInput,
+  RUNTIME_MOVEMENT_COMMAND_EXECUTION_STATUSES,
+  RUNTIME_MOVEMENT_COMMAND_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeMovementCommandDiagnostic,
+  type RuntimeMovementCommandExecutionStatus,
+  type RuntimeMovementCommandExecutorInput,
+  type RuntimeMovementCommandExecutorResult
+} from "./runtime-host/runtime-movement-command-executor.js";
+export {
   assertRuntimeLookCommandExecutionInput,
   executeRuntimeLookCommand,
   formatRuntimeLookCommandExecutionValidationMessage,

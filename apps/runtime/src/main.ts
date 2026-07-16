@@ -3,6 +3,7 @@ import {
   createReadonlyPrototypeController,
   type PrototypeCommandId,
   type PrototypeCommandPaletteItem,
+  type PrototypeExitAction,
   type PrototypeMapConnection,
   type PrototypeMapTile,
   type PrototypeScenarioId,
@@ -91,6 +92,22 @@ function renderLocation(state: ReadonlyPrototypeState): string {
   `;
 }
 
+function renderExitAction(exitAction: PrototypeExitAction): string {
+  return `
+    <button
+      type="button"
+      class="prototype-exit-button"
+      data-exit="${escapeHtml(exitAction.exitId)}"
+    >
+      <span class="prototype-command-header">
+        <span class="prototype-command-label">${escapeHtml(exitAction.label)}</span>
+        <span class="prototype-command-state">Move</span>
+      </span>
+      <span class="prototype-palette-copy">Target: ${escapeHtml(exitAction.targetLocationId)}</span>
+    </button>
+  `;
+}
+
 function renderWorldDetails(state: ReadonlyPrototypeState): string {
   const location = state.location;
   if (location === undefined) {
@@ -98,16 +115,11 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
   }
 
   const exitsMarkup = location.exits.length === 0
-    ? `<div class="prototype-empty">No exits are exposed in this read-only snapshot.</div>`
+    ? `<div class="prototype-empty">No exits are available from this location.</div>`
     : `
-      <ul class="prototype-list">
-        ${location.exits.map((exit) => `
-          <li>
-            <span class="prototype-list-title">${escapeHtml(exit.label)}</span>
-            <span class="prototype-code">${escapeHtml(exit.targetLocationId)}</span>
-          </li>
-        `).join("")}
-      </ul>
+      <div class="prototype-exit-grid">
+        ${state.exitActions.map((exitAction) => renderExitAction(exitAction)).join("")}
+      </div>
     `;
 
   const npcsMarkup = location.npcs.length === 0
@@ -151,7 +163,7 @@ function renderInventory(state: ReadonlyPrototypeState): string {
         <strong>${String(state.inventory.itemCount)}</strong>
       </div>
       <div class="prototype-chip">
-        <span class="prototype-list-label">Read-only</span>
+        <span class="prototype-list-label">Runtime state</span>
         <strong>${state.inventory.empty ? "Empty" : "Stable"}</strong>
       </div>
     </div>
@@ -197,9 +209,11 @@ function renderDiagnostics(state: ReadonlyPrototypeState): string {
 }
 
 function renderCommandPaletteItem(item: PrototypeCommandPaletteItem): string {
-  const reasonMarkup = item.enabled
-    ? '<div class="prototype-palette-copy">Routes through the read-only interaction boundary.</div>'
-    : `<div class="prototype-palette-copy">${escapeHtml(item.disabledReason ?? "Unavailable.")}</div>`;
+  const paletteCopy = item.commandId === "go" && item.enabled
+    ? "Select a visible exit below to run controlled movement."
+    : item.enabled
+      ? "Routes through an accepted runtime boundary."
+      : item.disabledReason ?? "Unavailable.";
 
   return `
     <button
@@ -212,7 +226,7 @@ function renderCommandPaletteItem(item: PrototypeCommandPaletteItem): string {
         <span class="prototype-command-label">${escapeHtml(item.label)}</span>
         <span class="prototype-command-state">${item.enabled ? "Ready" : "Disabled"}</span>
       </span>
-      ${reasonMarkup}
+      <span class="prototype-palette-copy">${escapeHtml(paletteCopy)}</span>
     </button>
   `;
 }
@@ -303,7 +317,7 @@ function renderMapPanel(state: ReadonlyPrototypeState): string {
         <div class="prototype-empty">
           ${currentTile === undefined
             ? "No current location is highlighted."
-            : `${escapeHtml(currentTile.label)} remains highlighted until movement exists.`}
+            : `${escapeHtml(currentTile.label)} is the current highlighted room.`}
         </div>
       </div>
     </div>
@@ -318,7 +332,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
       <section class="prototype-hero">
         <div class="prototype-hero-inner">
           <div>
-            <div class="prototype-kicker">Read-only runtime prototype</div>
+            <div class="prototype-kicker">Controlled runtime prototype</div>
             <h1 class="prototype-title">${escapeHtml(state.screenTitle)}</h1>
             <p class="prototype-summary">${escapeHtml(state.screenSubtitle)}</p>
           </div>
@@ -353,12 +367,12 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
         <article class="prototype-panel prototype-panel-wide">
           <h2>Command Palette</h2>
-          <p class="prototype-summary">The palette shows what is safe to execute now and what the future game UI will expose once mutable gameplay systems arrive.</p>
+          <p class="prototype-summary">The palette shows what is safe to execute now. Go is enabled only when the current location exposes a concrete exit, and the actual movement action stays bound to explicit exit buttons below.</p>
           ${renderCommandPalette(state)}
         </article>
         <article class="prototype-panel prototype-panel-wide">
           <h2>Map Layout</h2>
-          <p class="prototype-summary">This panel is a UI-only spatial preview for the selected prototype scenario. It highlights the current room and known connection without adding movement or map data to engine contracts.</p>
+          <p class="prototype-summary">This panel remains UI-only. Controlled movement updates only the current highlighted room and does not add map schema to engine contracts.</p>
           ${renderMapPanel(state)}
         </article>
         <article class="prototype-panel">
@@ -383,7 +397,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
       </section>
       <div class="prototype-footer-note">
-        The prototype stays in-memory, switches between app-layer scenario packages, executes only look and inventory through the TASK-095 boundary, and surfaces future gameplay commands as disabled local UI affordances only.
+        The prototype stays in-memory, keeps scenario and map data in the app layer, routes Look and Inventory through the TASK-095 read-only boundary, and executes Go only through explicit exit-targeted planning plus the dedicated movement boundary.
       </div>
     </main>
   `;
@@ -413,6 +427,16 @@ function render(): void {
       const actionId = parseActionId(actionButton.getAttribute("data-action"));
       if (actionId !== undefined) {
         controller.runAction(actionId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-exit]").forEach((exitButton) => {
+    exitButton.addEventListener("click", () => {
+      const exitId = exitButton.getAttribute("data-exit");
+      if (typeof exitId === "string" && exitId.length > 0) {
+        controller.moveToExit(exitId);
         render();
       }
     });
