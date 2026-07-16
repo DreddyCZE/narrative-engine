@@ -111,11 +111,11 @@
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test` - passed, 74 test files / 708 tests.
-- `corepack pnpm lint` - pending final rerun after metadata update.
+- `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
-- `corepack pnpm validate` - pending final rerun after metadata update.
-- `git diff --check` - passed before final metadata update.
+- `corepack pnpm validate` - passed.
+- `git diff --check` - passed.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
