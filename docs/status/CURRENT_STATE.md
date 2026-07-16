@@ -1,103 +1,28 @@
 # Current State
 
-**Date:** 2026-07-15
+**Date:** 2026-07-16
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-099 are DONE or REVIEW. TASK-060 through TASK-098 are DONE. TASK-099 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-100 are DONE or REVIEW. TASK-060 through TASK-099 are DONE. TASK-100 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-098 is DONE. TASK-099 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-099 - Prototype data-driven scenario selector`.
+2. **Current state:** TASK-099 is DONE. TASK-100 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-100 - Prototype milestone checkpoint and next gameplay-scope decision`.
 4. **What the current scope must not change:** no generic command execution, no gameplay mutation, no next-state generation beyond the accepted read-only browser prototype with a scenario selector, UI-only map layouts, and disabled future actions, no replay runtime, no DB adapter, and no external storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-099 remains review-ready with a deterministic browser prototype in `apps/runtime` that can switch between app-layer read-only scenario packages, updates map/location/inventory/transcript state per selection, routes only `look` and `inventory` through `executeRuntimeReadonlyInteraction`, preserves identical initial/final player state snapshots, and does not create plans directly or call lower-level executors.
+5. **How completion is recognized:** TASK-100 remains review-ready with a checkpoint document that confirms the accepted read-only runtime and prototype boundaries, locks forbidden scope, and recommends the next gameplay-facing slice without implementing movement or mutable gameplay.
 
 ## Repository / PR State
 
 - Correct GitHub remote is configured:
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
-- PR #47 was merged into `origin/main` at merge commit `28827e6`.
-- PR #48 was merged into `origin/main` at merge commit `4adca9f`.
-- PR #49 was merged into `origin/main` at merge commit `a2854b4`.
-- PR #50 was merged into `origin/main` at merge commit `d2fb102`.
-- PR #51 was merged into `origin/main` at merge commit `8f8539b`.
-- PR #52 was merged into `origin/main` at merge commit `1df1b6a`.
-- PR #53 was merged into `origin/main` at merge commit `f4ba2fb`.
-- PR #54 was merged into `origin/main` at merge commit `8db7197`.
-- PR #55 was merged into `origin/main` at merge commit `8e2ad13`.
-- PR #56 was merged into `origin/main` at merge commit `6d0c976`.
-- PR #57 was merged into `origin/main` at merge commit `e679fb7`.
-- PR #58 was merged into `origin/main` at merge commit `68f2a38`.
-- PR #59 was merged into `origin/main` at merge commit `2c33133`.
-- PR #60 was merged into `origin/main` at merge commit `652dbf9`.
-- PR #61 was merged into `origin/main` at merge commit `3f86137`.
-- PR #62 was merged into `origin/main` at merge commit `cf135ff`.
-- PR #63 was merged into `origin/main` at merge commit `73aec38`.
-- PR #64 was merged into `origin/main` at merge commit `1c6f034`.
-- PR #65 was merged into `origin/main` at merge commit `afd8d68`.
-- PR #66 was merged into `origin/main` at merge commit `2cc7c74`.
-- PR #67 was merged into `origin/main` at merge commit `e1ada8b`.
-- PR #68 was merged into `origin/main` at merge commit `4c7978a`.
-- PR #69 was merged into `origin/main` at merge commit `9846803`.
-- PR #70 was merged into `origin/main` at merge commit `6d9c566`.
-- PR #71 was merged into `origin/main` at merge commit `56968b0`.
-- PR #72 was merged into `origin/main` at merge commit `ff949be`.
-- PR #73 was merged into `origin/main` at merge commit `721994b`.
-- PR #74 was merged into `origin/main` at merge commit `44034a1`.
-- PR #75 was merged into `origin/main` at merge commit `6fdba66`.
-- PR #76 was merged into `origin/main` at merge commit `332beaf`.
-- PR #77 was merged into `origin/main` at merge commit `5eed7ae`.
-- TASK-053 is done.
-- TASK-054 is done.
-- TASK-055 is done.
-- TASK-056 is done.
-- TASK-057 is done.
-- TASK-058 is done.
-- TASK-059 is done.
-- TASK-060 is done.
-- TASK-061 is done.
-- TASK-062 is done.
-- TASK-063 is done.
-- TASK-064 is done.
-- TASK-065 is done.
-- TASK-066 is done.
-- TASK-067 is done.
-- TASK-068 is done.
-- TASK-069 is done.
-- TASK-070 is done.
-- TASK-071 is done.
-- TASK-072 is done.
-- TASK-073 is done.
-- TASK-074 is done.
-- TASK-075 is done.
-- TASK-076 is done.
-- TASK-077 is done.
-- TASK-078 is done.
-- TASK-079 is done.
-- TASK-080 is done.
-- TASK-081 is done.
-- TASK-082 is done.
-- TASK-083 is done.
-- TASK-084 is done.
-- TASK-085 is done.
-- TASK-086 is done.
-- TASK-087 is done.
-- TASK-088 is done.
-- TASK-089 is done.
-- TASK-090 is done.
-- TASK-091 is done.
-- TASK-092 is done.
-- TASK-093 is done.
-- TASK-094 is done.
-- TASK-095 is done.
-- TASK-096 is done.
-- TASK-097 is done.
-- TASK-098 is done.
-- TASK-099 is in review.
-- TASK-100 has not been created.
-- No DB adapter, external storage adapter, replay runtime, UI, gameplay, or plugin implementation task is active.
+- PR #82 was merged into `origin/main` at merge commit `37deb19`.
+- TASK-099 is done.
+- TASK-100 is in review.
+- TASK-101 has not been created.
+- No DB adapter, external storage adapter, replay runtime, gameplay mutation, or plugin runtime task is active.
 
 ## Planning State
 
@@ -107,6 +32,7 @@
 - Replay checkpoint: `docs/planning/M7_REPLAY_BOUNDARY_CHECKPOINT_AND_NEXT_CONTRACT.md`.
 - Replay contract closure checkpoint: `docs/planning/M7_REPLAY_CONTRACT_CHECKPOINT_AND_CLOSURE.md`.
 - Content/runtime direction checkpoint: `docs/planning/CONTENT_RUNTIME_BOUNDARY_AND_PROTOTYPE_PATH.md`.
+- Prototype checkpoint: `docs/planning/PROTOTYPE_MILESTONE_CHECKPOINT_AND_NEXT_GAMEPLAY_SCOPE.md`.
 - Accepted:
   - `TASK-060 - Plan M7 Production Storage Adapter / Replay Boundary` DONE
   - `TASK-061 - Storage adapter interface contracts` DONE
@@ -147,14 +73,15 @@
   - `TASK-096 - Read-only browser vertical slice prototype` DONE
   - `TASK-097 - Prototype command palette and disabled gameplay actions` DONE
   - `TASK-098 - Prototype read-only map/layout panel` DONE
+  - `TASK-099 - Prototype data-driven scenario selector` DONE
 - In review:
-  - `TASK-099 - Prototype data-driven scenario selector`
+  - `TASK-100 - Prototype milestone checkpoint and next gameplay-scope decision`
 - Next task after acceptance:
-  - `TASK-100` not created
+  - `TASK-101` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, planned facade, public smoke scenario, request facade, transcript scenario, presentation model, and presentation snapshot scenario boundaries.
+- Runtime host remains pure and in-memory except for the intentionally read-only `look`, `inventory`, command planning facade, public smoke scenario, request facade, transcript scenario, presentation model, presentation snapshot scenario, and interaction boundary.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -162,10 +89,9 @@
 - Content data must remain separate from engine logic.
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
-- TASK-096 adds the accepted minimal browser prototype shell in `apps/runtime` over the read-only runtime path.
-- TASK-097 adds the accepted command palette with enabled `look` and `inventory` plus disabled `go`, `talk`, `take`, `use`, `save`, and `load`.
-- TASK-098 adds the accepted UI-only map/layout panel in `apps/runtime`.
-- TASK-099 adds app-layer scenario and map registries in `apps/runtime` so the prototype can switch between multiple read-only content packages without changing engine contracts, content schema, or runtime player state contracts.
+- `apps/runtime` is the accepted browser prototype consumer over the read-only runtime path.
+- Disabled gameplay actions may be visible in the palette but remain non-executable.
+- Scenario registry and map registry remain app-layer only.
 - No DB adapter.
 - No external storage adapter.
 - No plugin runtime.
@@ -174,30 +100,14 @@
 
 - `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed, 1 test file / 10 tests.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype build` - passed.
-- `corepack pnpm test -- tests/runtime-readonly-interaction-boundary.test.ts` - passed, 1 test file / 8 tests.
-- `corepack pnpm test -- tests/runtime-readonly-input-request-contract.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/runtime-readonly-presentation-snapshot-scenario.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test -- tests/runtime-readonly-presentation-model.test.ts` - passed, 1 test file / 9 tests.
-- `corepack pnpm test -- tests/runtime-readonly-transcript-scenario.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/runtime-readonly-request-execution-facade.test.ts` - passed, 1 test file / 8 tests.
-- `corepack pnpm test -- tests/runtime-readonly-smoke-scenario.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/runtime-readonly-command-execution-facade.test.ts` - passed, 1 test file / 8 tests.
-- `corepack pnpm test -- tests/runtime-inventory-command-executor-boundary.test.ts` - passed, 1 test file / 8 tests.
-- `corepack pnpm test -- tests/runtime-look-command-executor-boundary.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/runtime-command-planning-boundary.test.ts` - passed, 1 test file / 7 tests.
-- `corepack pnpm test -- tests/runtime-command-request-boundary.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test -- tests/runtime-player-state-contract.test.ts` - passed, 1 test file / 5 tests.
-- `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
-- `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test` - passed, 73 test files / 698 tests.
-- `corepack pnpm lint` - pending rerun after final metadata update.
+- `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
-- `corepack pnpm validate` - pending rerun after final metadata update.
-- `git diff --check` - pending rerun after final metadata update.
+- `corepack pnpm validate` - passed.
+- `git diff --check` - passed.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-099` next. Keep the work focused on the read-only browser prototype scenario selector, app-layer scenario data, and UI-only map/layout panels over the accepted interaction boundary. Do not introduce mutable gameplay, movement execution, item pickup, dialogue progression, save/load behavior, next-state generation, replay runtime, DB adapters, external storage, or P0 story content in this step.
+Review `TASK-100` next. Keep the work focused on the docs-only checkpoint that protects the accepted read-only prototype architecture and recommends the next gameplay-facing scope without implementing movement, mutable gameplay, storage, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content.
