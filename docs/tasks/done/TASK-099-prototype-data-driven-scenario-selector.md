@@ -1,7 +1,7 @@
 # Task: TASK-099 - Prototype data-driven scenario selector
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -26,7 +26,7 @@ Add a data-driven scenario selector to the browser runtime prototype so the UI c
 - app-layer map layout registry that switches with selected scenario
 - scenario selector UI and controller support in `apps/runtime`
 - deterministic prototype tests for scenario switching, per-scenario read-only actions, disabled action locality, JSON safety, and no engine export leakage
-- metadata updates for TASK-098 DONE and TASK-099 REVIEW when complete
+- metadata updates for TASK-098 DONE and TASK-099 DONE when complete
 
 ## Out of Scope
 
@@ -43,4 +43,3 @@ Add a data-driven scenario selector to the browser runtime prototype so the UI c
 - plugin runtime
 - P0 story content
 - backend services or external APIs
-
