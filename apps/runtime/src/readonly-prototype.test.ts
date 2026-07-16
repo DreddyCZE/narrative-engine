@@ -236,6 +236,7 @@ describe("read-only inspection panel", () => {
     expect(state.inspectionPanel.readonly).toBe(true);
     expect(state.inspectionPanel.selection).toBeUndefined();
     expect(state.inspectionPanel.title).toBe("Inspection");
+    expect(state.inspectionPanel.futureActionReadiness).toEqual([]);
   });
 
   it("inspects the current location without moving or mutating state", () => {
@@ -250,6 +251,53 @@ describe("read-only inspection panel", () => {
     expect(state.inspectionPanel.title).toBe("Prototype Observation Deck");
     expect(state.inspectionPanel.lines).toContain("A bright observation deck with prototype navigation glass and a calm starfield beyond the hull.");
     expect(state.inspectionPanel.lines).toContain("Visible exits: 3");
+    expect(state.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "look",
+        label: "Look",
+        status: "already-enabled",
+        reason: "Look already runs through the accepted read-only boundary.",
+        entityKind: "location",
+        entityId: "location.demo.observation-deck",
+        readonly: true
+      },
+      {
+        commandId: "go",
+        label: "Go",
+        status: "ready-later",
+        reason: "Visible exits exist. Use explicit exit Move buttons for controlled movement.",
+        entityKind: "location",
+        entityId: "location.demo.observation-deck",
+        readonly: true
+      },
+      {
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "No portable visible items are available at this location.",
+        entityKind: "location",
+        entityId: "location.demo.observation-deck",
+        readonly: true
+      },
+      {
+        commandId: "talk",
+        label: "Talk",
+        status: "ready-later",
+        reason: "Visible NPCs exist, but dialogue execution is not implemented yet.",
+        entityKind: "location",
+        entityId: "location.demo.observation-deck",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "ready-later",
+        reason: "A visible locked or condition-gated exit may become usable later, but use/effect execution is not implemented.",
+        entityKind: "location",
+        entityId: "location.demo.observation-deck",
+        readonly: true
+      }
+    ]);
     expect(state.mapPanel.currentLocationId).toBe(before.mapPanel.currentLocationId);
     expect(state.location?.title).toBe(before.location?.title);
   });
@@ -266,10 +314,70 @@ describe("read-only inspection panel", () => {
       targetLocationId: "location.demo.sensor-gallery"
     });
     expect(available.inspectionPanel.lines).toContain("Availability: available");
+    expect(available.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "go",
+        label: "Go",
+        status: "already-enabled",
+        reason: "Go is already enabled here. Use the Move button for explicit exit-targeted movement.",
+        entityKind: "exit",
+        entityId: "exit.demo.to-sensor-gallery",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "not-applicable",
+        reason: "This exit already moves through the explicit Go boundary, so Use does not apply.",
+        entityKind: "exit",
+        entityId: "exit.demo.to-sensor-gallery",
+        readonly: true
+      }
+    ]);
     expect(locked.inspectionPanel.lines).toContain("Availability: locked");
     expect(locked.inspectionPanel.lines).toContain("Movement is blocked because this exit is locked.");
+    expect(locked.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "go",
+        label: "Go",
+        status: "blocked",
+        reason: "Movement is blocked because this exit is locked.",
+        entityKind: "exit",
+        entityId: "exit.demo.locked-service-door",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "ready-later",
+        reason: "A future use/effect interaction may unlock this exit, but use/effect execution is not implemented.",
+        entityKind: "exit",
+        entityId: "exit.demo.locked-service-door",
+        readonly: true
+      }
+    ]);
     expect(gated.inspectionPanel.lines).toContain("Availability: condition-gated");
     expect(gated.inspectionPanel.lines).toContain("Required condition flag: demo.maintenance-access");
+    expect(gated.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "go",
+        label: "Go",
+        status: "blocked",
+        reason: "Movement is blocked until progress flag \"demo.maintenance-access\" is present.",
+        entityKind: "exit",
+        entityId: "exit.demo.maintenance-hatch",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "ready-later",
+        reason: "A future use/effect interaction may satisfy the required condition flag \"demo.maintenance-access\", but use/effect execution is not implemented.",
+        entityKind: "exit",
+        entityId: "exit.demo.maintenance-hatch",
+        readonly: true
+      }
+    ]);
   });
 
   it("inspects items and npcs with disabled future-action hints", () => {
@@ -280,9 +388,85 @@ describe("read-only inspection panel", () => {
     expect(itemState.inspectionPanel.title).toBe("Prototype Survey Tablet");
     expect(itemState.inspectionPanel.lines).toContain("A portable survey tablet carried only to prove that scenario inventory can switch cleanly.");
     expect(itemState.inspectionPanel.lines).toContain("Future action hint: Take remains disabled in this prototype.");
+    expect(itemState.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "take",
+        label: "Take",
+        status: "ready-later",
+        reason: "This item is portable, but item pickup is not implemented yet.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "ready-later",
+        reason: "This item may become usable later, but use/effect execution is not implemented.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      },
+      {
+        commandId: "talk",
+        label: "Talk",
+        status: "not-applicable",
+        reason: "Talk does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      },
+      {
+        commandId: "go",
+        label: "Go",
+        status: "not-applicable",
+        reason: "Go does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      }
+    ]);
     expect(npcState.inspectionPanel.title).toBe("Prototype Analyst");
     expect(npcState.inspectionPanel.lines).toContain("Prototype Advisory");
     expect(npcState.inspectionPanel.lines).toContain("Future action hint: Talk remains disabled in this prototype.");
+    expect(npcState.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "talk",
+        label: "Talk",
+        status: "ready-later",
+        reason: "Dialogue may apply later, but Talk remains disabled in this prototype.",
+        entityKind: "npc",
+        entityId: "npc.demo.analyst",
+        readonly: true
+      },
+      {
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "Take does not apply to inspected NPCs.",
+        entityKind: "npc",
+        entityId: "npc.demo.analyst",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "not-applicable",
+        reason: "Use does not apply to inspected NPCs.",
+        entityKind: "npc",
+        entityId: "npc.demo.analyst",
+        readonly: true
+      },
+      {
+        commandId: "go",
+        label: "Go",
+        status: "not-applicable",
+        reason: "Go does not apply to inspected NPCs.",
+        entityKind: "npc",
+        entityId: "npc.demo.analyst",
+        readonly: true
+      }
+    ]);
   });
 
   it("clears inspection and keeps runtime state unchanged", () => {
@@ -308,5 +492,7 @@ describe("read-only inspection panel", () => {
     expect(inspected.location).toEqual(before.location);
     expect(inspected.inventory).toEqual(before.inventory);
     expect(inspected.mapPanel).toEqual(before.mapPanel);
+    expect((inspected.inspectionPanel as { futureActionReadiness: readonly unknown[] }).futureActionReadiness.length).toBeGreaterThan(0);
+    expectJsonSafe(inspected);
   });
 });
