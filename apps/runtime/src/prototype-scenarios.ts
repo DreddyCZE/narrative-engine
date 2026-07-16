@@ -64,6 +64,18 @@ function createObservationDeckDemoPackage(): ContentPackage {
             exitId: "exit.demo.to-sensor-gallery",
             label: "Slide sensor gallery door",
             targetLocationId: "location.demo.sensor-gallery"
+          },
+          {
+            exitId: "exit.demo.locked-service-door",
+            label: "Open service locker",
+            targetLocationId: "location.demo.service-locker",
+            locked: true
+          },
+          {
+            exitId: "exit.demo.maintenance-hatch",
+            label: "Cycle maintenance hatch",
+            targetLocationId: "location.demo.maintenance-hatch",
+            conditionFlag: "demo.maintenance-access"
           }
         ],
         tags: ["prototype", "deck", "indoors"]
@@ -72,6 +84,18 @@ function createObservationDeckDemoPackage(): ContentPackage {
         locationId: "location.demo.sensor-gallery",
         title: "Prototype Sensor Gallery",
         description: "A narrow gallery lined with diagnostic screens used only for controlled movement and read-only switching checks.",
+        exits: []
+      },
+      {
+        locationId: "location.demo.service-locker",
+        title: "Prototype Service Locker",
+        description: "A compact locker room visible in the prototype only to prove locked movement diagnostics.",
+        exits: []
+      },
+      {
+        locationId: "location.demo.maintenance-hatch",
+        title: "Prototype Maintenance Hatch",
+        description: "A maintenance crawlspace that becomes reachable only when a future progress flag is present.",
         exits: []
       }
     ],

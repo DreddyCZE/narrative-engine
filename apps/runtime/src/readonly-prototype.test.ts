@@ -36,8 +36,43 @@ function assertStateSnapshots(outcome: {
   };
 }
 
-describe("controlled movement prototype vertical slice", () => {
-  it("enables go when the current location has exits", () => {
+describe("movement diagnostics prototype vertical slice", () => {
+  it("exposes exit availability metadata", () => {
+    const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+
+    expect(state.exitActions).toEqual([
+      {
+        exitId: "exit.demo.to-sensor-gallery",
+        label: "Slide sensor gallery door",
+        targetLocationId: "location.demo.sensor-gallery",
+        targetLocationTitle: "Prototype Sensor Gallery",
+        availability: "available",
+        enabled: true
+      },
+      {
+        exitId: "exit.demo.locked-service-door",
+        label: "Open service locker",
+        targetLocationId: "location.demo.service-locker",
+        targetLocationTitle: "Prototype Service Locker",
+        availability: "locked",
+        enabled: false,
+        disabledReason: "Movement is blocked because this exit is locked.",
+        locked: true
+      },
+      {
+        exitId: "exit.demo.maintenance-hatch",
+        label: "Cycle maintenance hatch",
+        targetLocationId: "location.demo.maintenance-hatch",
+        targetLocationTitle: "Prototype Maintenance Hatch",
+        availability: "condition-gated",
+        enabled: false,
+        disabledReason: "Movement is blocked until progress flag \"demo.maintenance-access\" is present.",
+        conditionFlag: "demo.maintenance-access"
+      }
+    ]);
+  });
+
+  it("keeps go enabled when the current location has visible exits", () => {
     const state = createReadonlyPrototypeState();
 
     expect(DEFAULT_PROTOTYPE_SCENARIO_ID).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
@@ -47,20 +82,7 @@ describe("controlled movement prototype vertical slice", () => {
     expect(state.availableActions).toEqual(["look", "inventory", "go"]);
   });
 
-  it("derives exit actions from the current location exits", () => {
-    const state = createReadonlyPrototypeState();
-
-    expect(state.exitActions).toEqual([
-      {
-        exitId: "exit.smoke.to-corridor",
-        label: "Open corridor door",
-        targetLocationId: "location.smoke.corridor",
-        enabled: true
-      }
-    ]);
-  });
-
-  it("moves through the smoke scenario exit and updates the current location to Smoke Test Corridor", () => {
+  it("available exits still move and update the current location", () => {
     const controller = createReadonlyPrototypeController();
     const outcome = controller.moveToExit("exit.smoke.to-corridor");
     const nextState = controller.getState();
@@ -108,7 +130,7 @@ describe("controlled movement prototype vertical slice", () => {
     expect(outcome.output.lines.some((line) => line.includes("Service") || line.includes("corridor") || line.includes("Corridor"))).toBe(true);
   });
 
-  it("moves in the observation deck scenario to the sensor gallery", () => {
+  it("available movement still works in the observation deck scenario", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
     const outcome = controller.moveToExit("exit.demo.to-sensor-gallery");
     const nextState = controller.getState();
@@ -116,6 +138,40 @@ describe("controlled movement prototype vertical slice", () => {
     expect(outcome.status).toBe("executed");
     expect(outcome.movement?.toLocationId).toBe("location.demo.sensor-gallery");
     expect(nextState.location?.title).toBe("Prototype Sensor Gallery");
+  });
+
+  it("locked exits display blocked diagnostics without changing location or map highlight", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.moveToExit("exit.demo.locked-service-door");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.movement?.status).toBe("blocked");
+    expect(outcome.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED");
+    expect(outcome.output.lines.some((line) => line.includes("RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED"))).toBe(true);
+    expect(afterState.location?.title).toBe(beforeState.location?.title);
+    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(outcome.playerStateUnchanged).toBe(true);
+  });
+
+  it("condition-gated exits display blocked diagnostics without changing location or map highlight", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.moveToExit("exit.demo.maintenance-hatch");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.movement?.status).toBe("blocked");
+    expect(outcome.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET");
+    expect(outcome.output.lines.some((line) => line.includes("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET"))).toBe(true);
+    expect(afterState.location?.title).toBe(beforeState.location?.title);
+    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(outcome.playerStateUnchanged).toBe(true);
   });
 
   it("disables go after moving to a no-exit location", () => {

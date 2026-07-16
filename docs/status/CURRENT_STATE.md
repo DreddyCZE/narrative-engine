@@ -3,15 +3,15 @@
 **Date:** 2026-07-16
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-101 are DONE or REVIEW. TASK-060 through TASK-100 are DONE. TASK-101 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-102 are DONE or REVIEW. TASK-060 through TASK-101 are DONE. TASK-102 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-100 is DONE. TASK-101 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-101 - Controlled movement planning vertical slice`.
+2. **Current state:** TASK-101 is DONE. TASK-102 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-102 - Movement diagnostics and locked-exit readiness`.
 4. **What the current scope must not change:** no generic command execution, no free-form parser, no arbitrary target input, no gameplay mutation beyond the accepted deterministic current-location movement slice, no inventory mutation, no dialogue progression, no use/effect execution, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-101 remains review-ready with a dedicated movement executor boundary, explicit exit-targeted `go` planning, deterministic current-location updates, prototype map highlight changes, preserved inventory/progress state, and no expansion into parser, storage, replay, or other gameplay systems.
+5. **How completion is recognized:** TASK-102 remains review-ready with explicit movement diagnostics for locked and condition-gated exits, preserved player state and map highlight on blocked movement, continued deterministic movement for available exits, and no expansion into parser, storage, replay, or other gameplay systems.
 
 ## Repository / PR State
 
@@ -19,9 +19,10 @@
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
 - PR #83 was merged into `origin/main` at merge commit `56165af`.
-- TASK-100 is done.
-- TASK-101 is in review.
-- TASK-102 has not been created.
+- PR #84 was merged into `origin/main` at merge commit `53e66a6`.
+- TASK-101 is done.
+- TASK-102 is in review.
+- TASK-103 has not been created.
 - No DB adapter, external storage adapter, replay runtime, browser storage, map editor, or plugin runtime task is active.
 
 ## Planning State
@@ -75,14 +76,15 @@
   - `TASK-098 - Prototype read-only map/layout panel` DONE
   - `TASK-099 - Prototype data-driven scenario selector` DONE
   - `TASK-100 - Prototype milestone checkpoint and next gameplay-scope decision` DONE
+  - `TASK-101 - Controlled movement planning vertical slice` DONE
 - In review:
-  - `TASK-101 - Controlled movement planning vertical slice`
+  - `TASK-102 - Movement diagnostics and locked-exit readiness`
 - Next task after acceptance:
-  - `TASK-102` not created
+  - `TASK-103` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the accepted read-only `look` and `inventory` boundaries plus the new dedicated movement executor boundary for planned `go` commands.
+- Runtime host remains pure and in-memory except for the accepted read-only `look` and `inventory` boundaries plus the dedicated movement executor boundary for planned `go` commands.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -91,7 +93,9 @@
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
 - `apps/runtime` remains the accepted browser prototype consumer over public engine-contracts exports only.
-- `Go` is now bound only to explicit exits already present in the current read model and does not accept arbitrary text.
+- `Go` stays bound only to explicit exits already present in the current read model and does not accept arbitrary text.
+- Locked exits now block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED`.
+- Condition-gated exits now block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET` until the required progress flag is present.
 - Scenario registry and map registry remain app-layer only.
 - `Talk`, `Take`, `Use`, `Save`, and `Load` remain disabled local UI-only affordances.
 - No DB adapter.
@@ -101,8 +105,8 @@
 
 ## Last Checks
 
-- `corepack pnpm test -- tests/runtime-movement-command-executor-boundary.test.ts` - passed, 1 test file / 10 tests.
-- `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed, 1 test file / 10 tests.
+- `corepack pnpm test -- tests/runtime-movement-command-executor-boundary.test.ts` - passed, 1 test file / 13 tests.
+- `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed, 1 test file / 12 tests.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype build` - passed.
 - `corepack pnpm test -- tests/runtime-command-planning-boundary.test.ts` - passed, 1 test file / 7 tests.
 - `corepack pnpm test -- tests/runtime-command-request-boundary.test.ts` - passed, 1 test file / 6 tests.
@@ -110,14 +114,14 @@
 - `corepack pnpm test -- tests/content-read-model-boundary.test.ts` - passed, 1 test file / 5 tests.
 - `corepack pnpm test -- tests/content-package-loader-boundary.test.ts` - passed, 1 test file / 6 tests.
 - `corepack pnpm test -- tests/content-package-contracts.test.ts` - passed, 1 test file / 6 tests.
-- `corepack pnpm test` - passed, 74 test files / 708 tests.
+- `corepack pnpm test` - passed, 74 test files / 713 tests.
 - `corepack pnpm lint` - passed.
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed.
+- `git diff --check` - passed with LF normalization warnings only.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects Node 22.
 
 ## Next Task Boundary
 
-Review `TASK-101` next. Keep the work focused on the accepted controlled movement slice only. Do not introduce parser input, arbitrary targeting, item pickup, inventory mutation, dialogue progression, use/effect execution, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.
+Review `TASK-102` next. Keep the work focused on the accepted controlled movement slice only. Do not introduce parser input, arbitrary targeting, item pickup, inventory mutation, dialogue progression, use/effect execution, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.

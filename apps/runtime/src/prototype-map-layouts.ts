@@ -68,6 +68,20 @@ export const OBSERVATION_DECK_SCENARIO_MAP_LAYOUT: PrototypeMapPanel = {
       x: 3,
       y: 1,
       kind: "corridor"
+    },
+    {
+      locationId: "location.demo.service-locker",
+      label: "Prototype Service Locker",
+      x: 1,
+      y: 3,
+      kind: "location"
+    },
+    {
+      locationId: "location.demo.maintenance-hatch",
+      label: "Prototype Maintenance Hatch",
+      x: 3,
+      y: 3,
+      kind: "unknown"
     }
   ],
   connections: [
@@ -75,6 +89,16 @@ export const OBSERVATION_DECK_SCENARIO_MAP_LAYOUT: PrototypeMapPanel = {
       fromLocationId: "location.demo.observation-deck",
       toLocationId: "location.demo.sensor-gallery",
       kind: "corridor"
+    },
+    {
+      fromLocationId: "location.demo.observation-deck",
+      toLocationId: "location.demo.service-locker",
+      kind: "door"
+    },
+    {
+      fromLocationId: "location.demo.observation-deck",
+      toLocationId: "location.demo.maintenance-hatch",
+      kind: "door"
     }
   ],
   legend: DEFAULT_PROTOTYPE_MAP_LEGEND

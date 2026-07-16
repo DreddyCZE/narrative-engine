@@ -14,7 +14,6 @@ import {
   type RuntimeReadonlyPresentationTranscriptLine
 } from "@narrative-engine/engine-contracts";
 
-
 import {
   createPrototypeMapPanel,
   type PrototypeMapPanel
@@ -53,7 +52,12 @@ export type PrototypeExitAction = {
   readonly exitId: string;
   readonly label: string;
   readonly targetLocationId: string;
-  readonly enabled: true;
+  readonly targetLocationTitle: string;
+  readonly availability: "available" | "locked" | "condition-gated";
+  readonly enabled: boolean;
+  readonly disabledReason?: string;
+  readonly conditionFlag?: string;
+  readonly locked?: boolean;
 };
 
 type ReadonlyPrototypeOutputPanel = {
@@ -130,8 +134,8 @@ type DisabledActionDescriptor = {
   readonly reason: string;
 };
 
-const PROTOTYPE_SCREEN_TITLE = "Controlled Movement Vertical Slice";
-const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement executed only through a planned go boundary.";
+const PROTOTYPE_SCREEN_TITLE = "Movement Diagnostics Vertical Slice";
+const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement diagnostics for available, locked, and condition-gated exits.";
 const PROTOTYPE_SCENARIO_OPTIONS = createPrototypeScenarioOptions();
 const GO_SELECT_EXIT_DETAIL = "Select a visible exit below to run controlled movement through the planned go boundary.";
 
@@ -330,6 +334,50 @@ function createGoDisabledReason(location: RuntimeReadonlyPresentationLocationPan
   return undefined;
 }
 
+function createExitAction(
+  runtime: PrototypeRuntimeContext,
+  exit: RuntimeReadonlyPresentationLocationPanel["exits"][number]
+): PrototypeExitAction {
+  const targetLocationTitle = runtime.content.getLocation(exit.targetLocationId)?.title ?? exit.targetLocationId;
+
+  if (exit.locked === true) {
+    return {
+      exitId: exit.exitId,
+      label: exit.label,
+      targetLocationId: exit.targetLocationId,
+      targetLocationTitle,
+      availability: "locked",
+      enabled: false,
+      disabledReason: "Movement is blocked because this exit is locked.",
+      locked: true
+    };
+  }
+
+  if (exit.conditionFlag !== undefined && !runtime.playerState.progressFlags.includes(exit.conditionFlag)) {
+    return {
+      exitId: exit.exitId,
+      label: exit.label,
+      targetLocationId: exit.targetLocationId,
+      targetLocationTitle,
+      availability: "condition-gated",
+      enabled: false,
+      disabledReason: `Movement is blocked until progress flag "${exit.conditionFlag}" is present.`,
+      conditionFlag: exit.conditionFlag
+    };
+  }
+
+  return {
+    exitId: exit.exitId,
+    label: exit.label,
+    targetLocationId: exit.targetLocationId,
+    targetLocationTitle,
+    availability: "available",
+    enabled: true,
+    ...(exit.conditionFlag === undefined ? {} : { conditionFlag: exit.conditionFlag }),
+    ...(exit.locked === undefined ? {} : { locked: exit.locked })
+  };
+}
+
 function createCommandPalette(location: RuntimeReadonlyPresentationLocationPanel | undefined): readonly PrototypeCommandPaletteItem[] {
   const goDisabledReason = createGoDisabledReason(location);
 
@@ -369,17 +417,15 @@ function createCommandPalette(location: RuntimeReadonlyPresentationLocationPanel
   });
 }
 
-function createExitActions(location: RuntimeReadonlyPresentationLocationPanel | undefined): readonly PrototypeExitAction[] {
+function createExitActions(
+  runtime: PrototypeRuntimeContext,
+  location: RuntimeReadonlyPresentationLocationPanel | undefined
+): readonly PrototypeExitAction[] {
   if (location === undefined) {
     return [];
   }
 
-  return location.exits.map((exit) => ({
-    exitId: exit.exitId,
-    label: exit.label,
-    targetLocationId: exit.targetLocationId,
-    enabled: true
-  }));
+  return location.exits.map((exit) => createExitAction(runtime, exit));
 }
 
 function createTranscriptPreviewOutput(lines: readonly RuntimeReadonlyPresentationTranscriptLine[]): ReadonlyPrototypeOutputPanel {
@@ -489,7 +535,7 @@ function createStateFromRuntime(
     diagnostics,
     availableActions,
     commandPalette,
-    exitActions: createExitActions(snapshot.location),
+    exitActions: createExitActions(runtime, snapshot.location),
     mapPanel: createPrototypeMapPanel(runtime.descriptor.initialMapLayout, runtime.playerState.currentLocationId),
     status
   };
@@ -657,7 +703,7 @@ function buildStateForIdle(runtime: PrototypeRuntimeContext): ReadonlyPrototypeS
     snapshot.diagnostics,
     {
       kind: "idle",
-      detail: "Ready. Look and Inventory remain read-only. Go is available only through explicit exits when the current location exposes them."
+      detail: "Ready. Look and Inventory remain read-only. Go is available only through explicit exits when the current location exposes them. Locked and condition-gated exits report movement diagnostics without changing state."
     }
   );
 }

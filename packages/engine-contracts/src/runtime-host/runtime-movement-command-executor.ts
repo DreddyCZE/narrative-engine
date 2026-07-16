@@ -576,6 +576,63 @@ export function executeRuntimeMovementCommand(
     );
   }
 
+  if (matchingExit.locked === true) {
+    return createTerminalResult(
+      input,
+      "blocked",
+      [
+        createDiagnostic(
+          "RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED",
+          ["plan", "request", "targetId"],
+          "the selected exit is locked and cannot be used yet.",
+          "command",
+          "command-execution",
+          {
+            currentLocationId: currentLocation.locationId,
+            targetLocationId: targetLocation.locationId,
+            exitId: matchingExit.exitId,
+            locked: true
+          }
+        )
+      ],
+      initialPlayerState,
+      cloneJsonValue(initialPlayerState as JsonValue) as RuntimePlayerState,
+      currentLocation.locationId,
+      targetLocation.locationId,
+      matchingExit.exitId
+    );
+  }
+
+  if (
+    matchingExit.conditionFlag !== undefined
+    && !input.playerState.progressFlags.includes(matchingExit.conditionFlag)
+  ) {
+    return createTerminalResult(
+      input,
+      "blocked",
+      [
+        createDiagnostic(
+          "RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET",
+          ["plan", "request", "targetId"],
+          "the selected exit requires a progress flag that is not present on the player state.",
+          "command",
+          "command-execution",
+          {
+            currentLocationId: currentLocation.locationId,
+            targetLocationId: targetLocation.locationId,
+            exitId: matchingExit.exitId,
+            conditionFlag: matchingExit.conditionFlag
+          }
+        )
+      ],
+      initialPlayerState,
+      cloneJsonValue(initialPlayerState as JsonValue) as RuntimePlayerState,
+      currentLocation.locationId,
+      targetLocation.locationId,
+      matchingExit.exitId
+    );
+  }
+
   const nextRevision = input.playerState.revision + 1;
   const finalPlayerState = {
     ...input.playerState,
