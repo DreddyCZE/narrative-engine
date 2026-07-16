@@ -1,11 +1,12 @@
 # Read-only Runtime Prototype
 
-This browser prototype renders the current read-only smoke scenario through the public engine contracts.
+This browser prototype renders multiple read-only prototype scenarios through the public engine contracts.
 
 ## What It Shows
 
-- scenario title and package metadata
-- a UI-only read-only map/layout panel for the smoke scenario
+- a data-driven scenario selector
+- scenario metadata and package identity
+- a UI-only read-only map/layout panel per scenario
 - current location details
 - exits, visible items, and NPCs
 - current inventory
@@ -16,13 +17,20 @@ This browser prototype renders the current read-only smoke scenario through the 
 ## Read-only Boundary
 
 - uses public `@narrative-engine/engine-contracts` exports only
-- builds initial presentation from `runReadonlyRuntimePresentationSnapshotScenario()`
-- keeps map layout coordinates and connections local to `apps/runtime`
+- keeps prototype scenario data and map layouts in `apps/runtime`
+- loads each scenario through the public content package loader, read model, and initial player state path
 - routes `Look` and `Inventory` through `executeRuntimeReadonlyInteraction(...)`
 - shows `Go`, `Talk`, `Take`, `Use`, `Save`, and `Load` as disabled local UI affordances with reasons
 - never creates runtime requests for disabled commands
 - stays fully in-memory
 - does not persist, mutate gameplay, save, load, replay, or call lower-level executors directly
+
+## Prototype Scenarios
+
+- `Smoke Scenario`: public readonly smoke package with `Smoke Test Airlock`, `Smoke Test Corridor`, and `Smoke Test Keycard`
+- `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, `Prototype Sensor Gallery`, and `Prototype Survey Tablet`
+
+These scenarios are prototype data only. They are not final game content and do not add P0 story content to engine contracts.
 
 ## Command Palette
 
@@ -30,13 +38,12 @@ This browser prototype renders the current read-only smoke scenario through the 
 - visible but disabled: `Go`, `Talk`, `Take`, `Use`, `Save`, `Load`
 - selecting a disabled command updates local prototype output/status only and explains why the command is unavailable
 
-## Map Layout Panel
+## Scenario Switching
 
-- highlights `Smoke Test Airlock` as the current tile
-- shows `Smoke Test Corridor` as a known connected tile
-- renders the connection as a UI-only corridor/door indicator
-- remains unchanged during `Look`
-- remains unchanged when disabled `Go` is selected because movement is still not implemented
+- selecting a scenario rebuilds content, map, location, inventory, transcript preview, and diagnostics from the selected package
+- the latest action output resets back to transcript preview for the newly selected scenario
+- `Look` and `Inventory` remain read-only in every scenario
+- disabled future commands remain local UI-only in every scenario
 
 ## Local Run
 
