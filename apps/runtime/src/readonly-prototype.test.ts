@@ -228,3 +228,85 @@ describe("movement diagnostics prototype vertical slice", () => {
     expectJsonSafe(smokeMove);
   });
 });
+
+describe("read-only inspection panel", () => {
+  it("includes an inspection panel in read-only mode by default", () => {
+    const state = createReadonlyPrototypeState();
+
+    expect(state.inspectionPanel.readonly).toBe(true);
+    expect(state.inspectionPanel.selection).toBeUndefined();
+    expect(state.inspectionPanel.title).toBe("Inspection");
+  });
+
+  it("inspects the current location without moving or mutating state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const before = controller.getState();
+    const state = controller.inspectLocation();
+
+    expect(state.inspectionPanel.selection).toEqual({
+      kind: "location",
+      locationId: "location.demo.observation-deck"
+    });
+    expect(state.inspectionPanel.title).toBe("Prototype Observation Deck");
+    expect(state.inspectionPanel.lines).toContain("A bright observation deck with prototype navigation glass and a calm starfield beyond the hull.");
+    expect(state.inspectionPanel.lines).toContain("Visible exits: 3");
+    expect(state.mapPanel.currentLocationId).toBe(before.mapPanel.currentLocationId);
+    expect(state.location?.title).toBe(before.location?.title);
+  });
+
+  it("inspects available and blocked exits without executing movement", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const available = controller.inspectExit("exit.demo.to-sensor-gallery");
+    const locked = controller.inspectExit("exit.demo.locked-service-door");
+    const gated = controller.inspectExit("exit.demo.maintenance-hatch");
+
+    expect(available.inspectionPanel.selection).toEqual({
+      kind: "exit",
+      exitId: "exit.demo.to-sensor-gallery",
+      targetLocationId: "location.demo.sensor-gallery"
+    });
+    expect(available.inspectionPanel.lines).toContain("Availability: available");
+    expect(locked.inspectionPanel.lines).toContain("Availability: locked");
+    expect(locked.inspectionPanel.lines).toContain("Movement is blocked because this exit is locked.");
+    expect(gated.inspectionPanel.lines).toContain("Availability: condition-gated");
+    expect(gated.inspectionPanel.lines).toContain("Required condition flag: demo.maintenance-access");
+  });
+
+  it("inspects items and npcs with disabled future-action hints", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const itemState = controller.inspectItem("item.demo.survey-tablet");
+    const npcState = controller.inspectNpc("npc.demo.analyst");
+
+    expect(itemState.inspectionPanel.title).toBe("Prototype Survey Tablet");
+    expect(itemState.inspectionPanel.lines).toContain("A portable survey tablet carried only to prove that scenario inventory can switch cleanly.");
+    expect(itemState.inspectionPanel.lines).toContain("Future action hint: Take remains disabled in this prototype.");
+    expect(npcState.inspectionPanel.title).toBe("Prototype Analyst");
+    expect(npcState.inspectionPanel.lines).toContain("Prototype Advisory");
+    expect(npcState.inspectionPanel.lines).toContain("Future action hint: Talk remains disabled in this prototype.");
+  });
+
+  it("clears inspection and keeps runtime state unchanged", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    controller.inspectExit("exit.demo.locked-service-door");
+    const before = controller.getState();
+    const cleared = controller.clearInspection();
+
+    expect(cleared.inspectionPanel.selection).toBeUndefined();
+    expect(cleared.inspectionPanel.title).toBe("Inspection");
+    expect(cleared.mapPanel.currentLocationId).toBe(before.mapPanel.currentLocationId);
+    expect(cleared.location?.title).toBe(before.location?.title);
+    expect(cleared.inventory?.items).toEqual(before.inventory?.items);
+  });
+
+  it("inspection does not expose execution results or mutate player-facing state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const before = controller.getState();
+    const inspected = controller.inspectNpc("npc.demo.analyst") as Record<string, unknown>;
+
+    expect("interaction" in inspected).toBe(false);
+    expect("movement" in inspected).toBe(false);
+    expect(inspected.location).toEqual(before.location);
+    expect(inspected.inventory).toEqual(before.inventory);
+    expect(inspected.mapPanel).toEqual(before.mapPanel);
+  });
+});

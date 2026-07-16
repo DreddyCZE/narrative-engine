@@ -88,6 +88,7 @@ function renderLocation(state: ReadonlyPrototypeState): string {
         <strong>${escapeHtml(state.location.title)}</strong>
       </div>
       <p>${escapeHtml(state.location.description)}</p>
+      <button type="button" class="prototype-inspect-button" data-inspect-location="true">Inspect Current Location</button>
     </div>
   `;
 }
@@ -101,18 +102,18 @@ function renderExitAction(exitAction: PrototypeExitAction): string {
   const availabilityCopy = exitAction.disabledReason ?? "Movement is available through the controlled go boundary.";
 
   return `
-    <button
-      type="button"
-      class="prototype-exit-button prototype-exit-button-${escapeHtml(exitAction.availability)}${exitAction.enabled ? "" : " is-blocked"}"
-      data-exit="${escapeHtml(exitAction.exitId)}"
-    >
-      <span class="prototype-command-header">
+    <div class="prototype-exit-card prototype-exit-button-${escapeHtml(exitAction.availability)}${exitAction.enabled ? "" : " is-blocked"}">
+      <div class="prototype-command-header">
         <span class="prototype-command-label">${escapeHtml(exitAction.label)}</span>
         <span class="prototype-command-state">${escapeHtml(stateLabel)}</span>
-      </span>
+      </div>
       <span class="prototype-palette-copy">Target: ${escapeHtml(exitAction.targetLocationTitle)} (${escapeHtml(exitAction.targetLocationId)})</span>
       <span class="prototype-palette-copy">${escapeHtml(availabilityCopy)}</span>
-    </button>
+      <div class="prototype-inline-actions">
+        <button type="button" class="prototype-exit-button" data-exit="${escapeHtml(exitAction.exitId)}">Move</button>
+        <button type="button" class="prototype-inspect-button" data-inspect-exit="${escapeHtml(exitAction.exitId)}">Inspect</button>
+      </div>
+    </div>
   `;
 }
 
@@ -130,6 +131,22 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
       </div>
     `;
 
+  const itemsMarkup = location.items.length === 0
+    ? `<div class="prototype-empty">No visible items.</div>`
+    : `
+      <ul class="prototype-list">
+        ${location.items.map((item) => `
+          <li>
+            <span class="prototype-list-title">${escapeHtml(item.title)}</span>
+            <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
+            <div class="prototype-inline-actions">
+              <button type="button" class="prototype-inspect-button" data-inspect-item="${escapeHtml(item.itemId)}">Inspect</button>
+            </div>
+          </li>
+        `).join("")}
+      </ul>
+    `;
+
   const npcsMarkup = location.npcs.length === 0
     ? `<div class="prototype-empty">No NPCs are visible.</div>`
     : `
@@ -138,6 +155,9 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
           <li>
             <span class="prototype-list-title">${escapeHtml(npc.name)}</span>
             <span class="prototype-code">${escapeHtml(npc.npcId)}</span>
+            <div class="prototype-inline-actions">
+              <button type="button" class="prototype-inspect-button" data-inspect-npc="${escapeHtml(npc.npcId)}">Inspect</button>
+            </div>
           </li>
         `).join("")}
       </ul>
@@ -150,7 +170,7 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
     </div>
     <div class="prototype-subpanel">
       <h3>Items</h3>
-      ${renderListItems(location.items, "No visible items.")}
+      ${itemsMarkup}
     </div>
     <div class="prototype-subpanel">
       <h3>NPCs</h3>
@@ -302,6 +322,29 @@ function renderMapConnection(
   `;
 }
 
+function renderInspectionPanel(state: ReadonlyPrototypeState): string {
+  return `
+    <div class="prototype-subpanel">
+      <h3>${escapeHtml(state.inspectionPanel.title)}</h3>
+      <ul class="prototype-output-list">
+        ${state.inspectionPanel.lines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}
+      </ul>
+      <div class="prototype-chip-row">
+        <div class="prototype-chip">
+          <span class="prototype-list-label">Readonly</span>
+          <strong>true</strong>
+        </div>
+        <div class="prototype-chip">
+          <span class="prototype-list-label">Future actions</span>
+          <strong>${state.inspectionPanel.availableFutureActions.length === 0 ? "none" : state.inspectionPanel.availableFutureActions.map((actionId) => escapeHtml(actionId)).join(" · ")}</strong>
+        </div>
+      </div>
+      <div class="prototype-inline-actions">
+        <button type="button" class="prototype-inspect-button" data-clear-inspection="true">Clear Inspection</button>
+      </div>
+    </div>
+  `;
+}
 function renderMapPanel(state: ReadonlyPrototypeState): string {
   const { mapPanel } = state;
   const columns = Math.max(...mapPanel.tiles.map((tile) => tile.x));
@@ -392,6 +435,10 @@ function renderApp(state: ReadonlyPrototypeState): string {
           ${renderWorldDetails(state)}
         </article>
         <article class="prototype-panel">
+          <h2>Inspection</h2>
+          ${renderInspectionPanel(state)}
+        </article>
+        <article class="prototype-panel">
           <h2>Inventory</h2>
           ${renderInventory(state)}
         </article>
@@ -447,6 +494,50 @@ function render(): void {
         controller.moveToExit(exitId);
         render();
       }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-inspect-location]").forEach((button) => {
+    button.addEventListener("click", () => {
+      controller.inspectLocation();
+      render();
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-inspect-exit]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const exitId = button.getAttribute("data-inspect-exit");
+      if (typeof exitId === "string" && exitId.length > 0) {
+        controller.inspectExit(exitId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-inspect-item]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const itemId = button.getAttribute("data-inspect-item");
+      if (typeof itemId === "string" && itemId.length > 0) {
+        controller.inspectItem(itemId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-inspect-npc]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const npcId = button.getAttribute("data-inspect-npc");
+      if (typeof npcId === "string" && npcId.length > 0) {
+        controller.inspectNpc(npcId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-clear-inspection]").forEach((button) => {
+    button.addEventListener("click", () => {
+      controller.clearInspection();
+      render();
     });
   });
 
