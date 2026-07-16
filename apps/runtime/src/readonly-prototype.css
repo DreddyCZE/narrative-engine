@@ -479,3 +479,39 @@ body::after {
     min-height: 6rem;
   }
 }
+
+.prototype-exit-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.prototype-exit-button {
+  appearance: none;
+  display: grid;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(36, 52, 71, 0.18);
+  border-radius: 18px;
+  padding: 0.95rem;
+  font: inherit;
+  cursor: pointer;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(242, 211, 191, 0.34));
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+}
+
+.prototype-exit-button:hover,
+.prototype-exit-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(166, 75, 42, 0.42);
+  box-shadow: 0 16px 28px rgba(36, 52, 71, 0.14);
+}
+
+.prototype-exit-button:focus-visible {
+  outline: 2px solid rgba(166, 75, 42, 0.35);
+  outline-offset: 2px;
+}

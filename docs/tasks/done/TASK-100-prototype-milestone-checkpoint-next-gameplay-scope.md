@@ -1,7 +1,7 @@
 # Task: TASK-100 - Prototype milestone checkpoint and next gameplay-scope decision
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal
@@ -23,7 +23,7 @@ Create a post-TASK-099 prototype milestone checkpoint that consolidates the acce
 - confirmed architecture principles and forbidden scope
 - recommended future TASK-101 scope description without creating TASK-101
 - risk register and review checklist
-- metadata updates for TASK-099 DONE and TASK-100 REVIEW when complete
+- metadata updates for TASK-099 DONE and TASK-100 DONE when complete
 
 ## Out of Scope
 

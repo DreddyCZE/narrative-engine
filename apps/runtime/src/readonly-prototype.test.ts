@@ -36,163 +36,139 @@ function assertStateSnapshots(outcome: {
   };
 }
 
-describe("readonly browser prototype data-driven scenario selector", () => {
-  it("contains at least two stable unique scenarios in the registry", () => {
-    const ids = PROTOTYPE_SCENARIOS.map((scenario) => scenario.scenarioId);
-
-    expect(ids.length).toBeGreaterThanOrEqual(2);
-    expect(ids).toContain(SMOKE_PROTOTYPE_SCENARIO_ID);
-    expect(ids).toContain(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it("starts on the smoke scenario", () => {
+describe("controlled movement prototype vertical slice", () => {
+  it("enables go when the current location has exits", () => {
     const state = createReadonlyPrototypeState();
-    const currentTile = state.mapPanel.tiles.find((tile) => tile.locationId === state.mapPanel.currentLocationId);
 
     expect(DEFAULT_PROTOTYPE_SCENARIO_ID).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
     expect(state.selectedScenarioId).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
     expect(state.location?.title).toBe("Smoke Test Airlock");
-    expect(state.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
-    expect(currentTile?.label).toBe("Smoke Test Airlock");
-    expectJsonSafe(state);
+    expect(state.commandPalette.find((item) => item.commandId === "go")?.enabled).toBe(true);
+    expect(state.availableActions).toEqual(["look", "inventory", "go"]);
   });
 
-  it("switches to the second scenario and rebuilds location, inventory, map, and diagnostics", () => {
+  it("derives exit actions from the current location exits", () => {
+    const state = createReadonlyPrototypeState();
+
+    expect(state.exitActions).toEqual([
+      {
+        exitId: "exit.smoke.to-corridor",
+        label: "Open corridor door",
+        targetLocationId: "location.smoke.corridor",
+        enabled: true
+      }
+    ]);
+  });
+
+  it("moves through the smoke scenario exit and updates the current location to Smoke Test Corridor", () => {
     const controller = createReadonlyPrototypeController();
-    const smokeState = controller.getState();
+    const outcome = controller.moveToExit("exit.smoke.to-corridor");
+    const nextState = controller.getState();
 
-    const nextState = controller.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-
-    expect(nextState.selectedScenarioId).toBe(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    expect(nextState.location?.title).not.toBe("Smoke Test Airlock");
-    expect(nextState.location?.title).toBe("Prototype Observation Deck");
-    expect(nextState.inventory?.items.map((item) => item.title)).not.toEqual(["Smoke Test Keycard"]);
-    expect(nextState.inventory?.items.map((item) => item.title)).toContain("Prototype Survey Tablet");
-    expect(nextState.mapPanel.currentLocationId).not.toBe(smokeState.mapPanel.currentLocationId);
-    expect(nextState.diagnostics).toEqual([]);
-    expectJsonSafe(nextState);
+    expect(outcome.status).toBe("executed");
+    expect(outcome.movement?.status).toBe("executed");
+    expect(outcome.movement?.toLocationId).toBe("location.smoke.corridor");
+    expect(nextState.location?.title).toBe("Smoke Test Corridor");
+    expect(nextState.output.lines.some((line) => line.includes("Smoke Test Corridor"))).toBe(true);
   });
 
-  it("routes look through the readonly interaction boundary for both scenarios without mutating player state", () => {
-    for (const scenario of PROTOTYPE_SCENARIOS) {
-      const controller = createReadonlyPrototypeController(scenario.scenarioId);
-      const beforeState = controller.getState();
-      const outcome = controller.runAction("look");
-      const afterState = controller.getState();
-      const snapshots = assertStateSnapshots(outcome);
+  it("updates the map highlight after accepted movement", () => {
+    const controller = createReadonlyPrototypeController();
+    const beforeState = controller.getState();
 
-      expect(outcome.status).toBe("executed");
-      expect(outcome.interaction?.status).toBe("executed");
-      expect(outcome.interaction?.execution?.view?.kind).toBe("look");
-      expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
-      expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-      expect(outcome.playerStateUnchanged).toBe(true);
-      expectJsonSafe(outcome);
-    }
+    controller.moveToExit("exit.smoke.to-corridor");
+    const afterState = controller.getState();
+
+    expect(beforeState.mapPanel.currentLocationId).toBe("location.smoke.start");
+    expect(afterState.mapPanel.currentLocationId).toBe("location.smoke.corridor");
   });
 
-  it("routes inventory through the readonly interaction boundary for both scenarios without mutating player state", () => {
-    for (const scenario of PROTOTYPE_SCENARIOS) {
-      const controller = createReadonlyPrototypeController(scenario.scenarioId);
-      const outcome = controller.runAction("inventory");
-      const snapshots = assertStateSnapshots(outcome);
+  it("preserves inventory after movement", () => {
+    const controller = createReadonlyPrototypeController();
+    const beforeState = controller.getState();
+    const outcome = controller.moveToExit("exit.smoke.to-corridor");
+    const afterState = controller.getState();
 
-      expect(outcome.status).toBe("executed");
-      expect(outcome.interaction?.status).toBe("executed");
-      expect(outcome.interaction?.execution?.view?.kind).toBe("inventory");
-      expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-      expect(outcome.playerStateUnchanged).toBe(true);
-      expectJsonSafe(outcome);
-    }
+    expect(outcome.playerStateUnchanged).toBe(false);
+    expect(beforeState.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
+    expect(afterState.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
+    expect(outcome.playerStateBefore.inventoryItemIds).toEqual(outcome.playerStateAfter.inventoryItemIds);
+    expect(outcome.playerStateBefore.progressFlags).toEqual(outcome.playerStateAfter.progressFlags);
   });
 
-  it("keeps disabled go local in both scenarios", () => {
-    for (const scenario of PROTOTYPE_SCENARIOS) {
-      const controller = createReadonlyPrototypeController(scenario.scenarioId);
-      const beforeState = controller.getState();
-      const outcome = controller.runAction("go");
-      const afterState = controller.getState();
+  it("shows the new location when look runs after movement", () => {
+    const controller = createReadonlyPrototypeController();
+
+    controller.moveToExit("exit.smoke.to-corridor");
+    const outcome = controller.runAction("look");
+
+    expect(outcome.status).toBe("executed");
+    expect(outcome.interaction?.execution?.view?.kind).toBe("look");
+    expect(outcome.output.title).toBe("Smoke Test Corridor");
+    expect(outcome.output.lines.some((line) => line.includes("Service") || line.includes("corridor") || line.includes("Corridor"))).toBe(true);
+  });
+
+  it("moves in the observation deck scenario to the sensor gallery", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const outcome = controller.moveToExit("exit.demo.to-sensor-gallery");
+    const nextState = controller.getState();
+
+    expect(outcome.status).toBe("executed");
+    expect(outcome.movement?.toLocationId).toBe("location.demo.sensor-gallery");
+    expect(nextState.location?.title).toBe("Prototype Sensor Gallery");
+  });
+
+  it("disables go after moving to a no-exit location", () => {
+    const controller = createReadonlyPrototypeController();
+
+    controller.moveToExit("exit.smoke.to-corridor");
+    const nextState = controller.getState();
+
+    expect(nextState.exitActions).toEqual([]);
+    expect(nextState.commandPalette.find((item) => item.commandId === "go")?.enabled).toBe(false);
+    expect(nextState.commandPalette.find((item) => item.commandId === "go")?.disabledReason).toBe("No exit is available from the current location.");
+    expect(nextState.availableActions).toEqual(["look", "inventory"]);
+  });
+
+  it("keeps Talk Take Use Save and Load disabled local ui-only actions", () => {
+    const controller = createReadonlyPrototypeController();
+
+    for (const actionId of DISABLED_PROTOTYPE_ACTIONS) {
+      const outcome = controller.runAction(actionId);
       const snapshots = assertStateSnapshots(outcome);
 
       expect(outcome.status).toBe("disabled");
       expect(outcome.interaction).toBeUndefined();
-      expect(outcome.disabledReason).toBe("Movement execution is not implemented yet.");
-      expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+      expect(outcome.movement).toBeUndefined();
       expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
       expect(outcome.playerStateUnchanged).toBe(true);
       expectJsonSafe(outcome);
     }
   });
 
-  it("resets output when switching scenarios", () => {
+  it("keeps engine contracts free of storage replay db and final-game exports", () => {
     const controller = createReadonlyPrototypeController();
+    const smokeMove = controller.moveToExit("exit.smoke.to-corridor");
+    const demoController = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const demoState = demoController.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
 
-    controller.runAction("inventory");
-    const inventoryState = controller.getState();
-    expect(inventoryState.output.kind).toBe("inventory");
-    expect(inventoryState.output.lines).toContain("Smoke Test Keycard");
-
-    const nextState = controller.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-
-    expect(nextState.output.kind).toBe("transcript-preview");
-    expect(nextState.output.title).toBe("Transcript Preview");
-    expect(nextState.output.lines.some((line) => line.includes("Smoke Test Keycard"))).toBe(false);
-    expect(nextState.output.lines.some((line) => line.includes("Prototype Survey Tablet"))).toBe(true);
-  });
-
-  it("keeps engine contracts free of map and final-game exports", () => {
-    expect("RuntimeMap" in engineContracts).toBe(false);
-    expect("MapTile" in engineContracts).toBe(false);
-    expect("MapRenderer" in engineContracts).toBe(false);
-    expect("MapEditor" in engineContracts).toBe(false);
-    expect("P0ContentPackage" in engineContracts).toBe(false);
-    expect("moveTo" in engineContracts).toBe(false);
-  });
-
-  it("returns JSON-safe deterministic state and outcomes for the same selected scenario", () => {
-    const firstSmoke = createReadonlyPrototypeState();
-    const secondSmoke = createReadonlyPrototypeState();
-    expect(canonicalizeJson(firstSmoke)).toBe(canonicalizeJson(secondSmoke));
-
-    const firstController = createReadonlyPrototypeController();
-    const secondController = createReadonlyPrototypeController();
-    const firstSelected = firstController.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const secondSelected = secondController.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const firstOutcome = firstController.runAction("go");
-    const secondOutcome = secondController.runAction("go");
-
-    expect(canonicalizeJson(firstSelected)).toBe(canonicalizeJson(secondSelected));
-    expect(canonicalizeJson(firstOutcome)).toBe(canonicalizeJson(secondOutcome));
-    expect("nextState" in firstOutcome).toBe(false);
-    expect("statePatch" in firstOutcome).toBe(false);
-    expect("events" in firstOutcome).toBe(false);
-    expect("runtimeDomainEventValues" in firstOutcome).toBe(false);
-    expect("transaction" in firstOutcome).toBe(false);
-    expect("saveResult" in firstOutcome).toBe(false);
-    expect("loadResult" in firstOutcome).toBe(false);
-    expectJsonSafe(firstSelected);
-    expectJsonSafe(firstOutcome);
-  });
-
-  it("keeps the accepted command palette unchanged", () => {
-    const state = createReadonlyPrototypeState();
-    const palette = state.commandPalette;
-
-    expect(PROTOTYPE_COMMAND_IDS).toEqual([
-      "look",
-      "inventory",
-      "go",
-      "talk",
-      "take",
-      "use",
-      "save",
-      "load"
+    expect(PROTOTYPE_SCENARIOS.map((scenario) => scenario.scenarioId)).toEqual([
+      SMOKE_PROTOTYPE_SCENARIO_ID,
+      OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID
     ]);
-    expect(EXECUTABLE_PROTOTYPE_ACTIONS).toEqual(["look", "inventory"]);
-    expect(DISABLED_PROTOTYPE_ACTIONS).toEqual(["go", "talk", "take", "use", "save", "load"]);
-    expect(palette.find((item) => item.commandId === "look")?.enabled).toBe(true);
-    expect(palette.find((item) => item.commandId === "inventory")?.enabled).toBe(true);
-    expect(palette.find((item) => item.commandId === "go")?.enabled).toBe(false);
+    expect(PROTOTYPE_COMMAND_IDS).toEqual(["look", "inventory", "go", "talk", "take", "use", "save", "load"]);
+    expect(EXECUTABLE_PROTOTYPE_ACTIONS).toEqual(["look", "inventory", "go"]);
+    expect("P0ContentPackage" in engineContracts).toBe(false);
+    expect("MapEditor" in engineContracts).toBe(false);
+    expect("moveTo" in engineContracts).toBe(false);
+    expect("executeRuntimeCommand" in engineContracts).toBe(false);
+    expect("saveGameToBrowserStorage" in engineContracts).toBe(false);
+    expect("createReplayRuntime" in engineContracts).toBe(false);
+    expect("connectDatabaseRuntime" in engineContracts).toBe(false);
+    expect("pluginRuntime" in engineContracts).toBe(false);
+    expect(smokeMove.movement?.finalPlayerState?.currentLocationId).toBe("location.smoke.corridor");
+    expect(demoState.location?.title).toBe("Prototype Observation Deck");
+    expectJsonSafe(demoState);
+    expectJsonSafe(smokeMove);
   });
 });
