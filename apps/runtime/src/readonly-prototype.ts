@@ -5,6 +5,9 @@ import {
   executeRuntimeMovementCommand,
   executeRuntimeReadonlyInteraction,
   loadContentPackageFromObject,
+  type ContentDialogueDescriptor,
+  type ContentItemDescriptor,
+  type ContentNpcDescriptor,
   type RuntimeMovementCommandExecutorResult,
   type RuntimePlayerState,
   type RuntimeReadonlyInteractionDiagnostic,
@@ -60,6 +63,33 @@ export type PrototypeExitAction = {
   readonly locked?: boolean;
 };
 
+export type PrototypeInspectionSelection =
+  | {
+      readonly kind: "location";
+      readonly locationId: string;
+    }
+  | {
+      readonly kind: "exit";
+      readonly exitId: string;
+      readonly targetLocationId: string;
+    }
+  | {
+      readonly kind: "item";
+      readonly itemId: string;
+    }
+  | {
+      readonly kind: "npc";
+      readonly npcId: string;
+    };
+
+export type PrototypeInspectionPanel = {
+  readonly selection?: PrototypeInspectionSelection;
+  readonly title: string;
+  readonly lines: readonly string[];
+  readonly availableFutureActions: readonly PrototypeCommandId[];
+  readonly readonly: true;
+};
+
 type ReadonlyPrototypeOutputPanel = {
   readonly kind: "transcript-preview" | PrototypeCommandId;
   readonly title: string;
@@ -92,6 +122,7 @@ export type ReadonlyPrototypeState = {
   readonly commandPalette: readonly PrototypeCommandPaletteItem[];
   readonly exitActions: readonly PrototypeExitAction[];
   readonly mapPanel: PrototypeMapPanel;
+  readonly inspectionPanel: PrototypeInspectionPanel;
   readonly status: ReadonlyPrototypeStatus;
 };
 
@@ -113,6 +144,11 @@ export type ReadonlyPrototypeController = {
   readonly runAction: (actionId: PrototypeCommandId) => ReadonlyPrototypeActionOutcome;
   readonly moveToExit: (exitId: string) => ReadonlyPrototypeActionOutcome;
   readonly selectScenario: (scenarioId: PrototypeScenarioId) => ReadonlyPrototypeState;
+  readonly inspectLocation: () => ReadonlyPrototypeState;
+  readonly inspectExit: (exitId: string) => ReadonlyPrototypeState;
+  readonly inspectItem: (itemId: string) => ReadonlyPrototypeState;
+  readonly inspectNpc: (npcId: string) => ReadonlyPrototypeState;
+  readonly clearInspection: () => ReadonlyPrototypeState;
 };
 
 type PrototypeRuntimeContext = {
@@ -138,6 +174,8 @@ const PROTOTYPE_SCREEN_TITLE = "Movement Diagnostics Vertical Slice";
 const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement diagnostics for available, locked, and condition-gated exits.";
 const PROTOTYPE_SCENARIO_OPTIONS = createPrototypeScenarioOptions();
 const GO_SELECT_EXIT_DETAIL = "Select a visible exit below to run controlled movement through the planned go boundary.";
+const DEFAULT_INSPECTION_TITLE = "Inspection";
+const DEFAULT_INSPECTION_LINES = ["Select the current location, a visible exit, a visible item, or a visible NPC to inspect details in read-only mode."] as const;
 
 const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionDescriptor> = {
   talk: {
@@ -509,17 +547,142 @@ function createDiagnosticView(code: string, message: string, path: readonly (str
   };
 }
 
+function createDefaultInspectionPanel(): PrototypeInspectionPanel {
+  return {
+    title: DEFAULT_INSPECTION_TITLE,
+    lines: [...DEFAULT_INSPECTION_LINES],
+    availableFutureActions: [],
+    readonly: true
+  };
+}
+
+function createLocationInspectionPanel(location: RuntimeReadonlyPresentationLocationPanel): PrototypeInspectionPanel {
+  return {
+    selection: {
+      kind: "location",
+      locationId: location.locationId
+    },
+    title: location.title,
+    lines: [
+      location.description,
+      `Visible exits: ${String(location.exits.length)}`,
+      `Visible items: ${String(location.items.length)}`,
+      `Visible NPCs: ${String(location.npcs.length)}`
+    ],
+    availableFutureActions: ["go", "take", "talk", "use"],
+    readonly: true
+  };
+}
+
+function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeInspectionPanel {
+  return {
+    selection: {
+      kind: "exit",
+      exitId: exitAction.exitId,
+      targetLocationId: exitAction.targetLocationId
+    },
+    title: exitAction.label,
+    lines: [
+      `Target: ${exitAction.targetLocationTitle}`,
+      `Target id: ${exitAction.targetLocationId}`,
+      `Availability: ${exitAction.availability}`,
+      ...(exitAction.disabledReason === undefined ? [] : [exitAction.disabledReason]),
+      ...(exitAction.conditionFlag === undefined ? [] : [`Required condition flag: ${exitAction.conditionFlag}`]),
+      ...(exitAction.locked === true ? ["Locked: true"] : []),
+      "Future action hint: Go remains controlled by explicit exit movement only."
+    ],
+    availableFutureActions: ["go"],
+    readonly: true
+  };
+}
+
+function createItemInspectionPanel(item: ContentItemDescriptor): PrototypeInspectionPanel {
+  return {
+    selection: {
+      kind: "item",
+      itemId: item.itemId
+    },
+    title: item.title,
+    lines: [
+      item.description,
+      `Portable: ${item.portable === true ? "yes" : "no"}`,
+      "Future action hint: Take remains disabled in this prototype."
+    ],
+    availableFutureActions: ["take", "use"],
+    readonly: true
+  };
+}
+
+function createNpcInspectionPanel(
+  npc: ContentNpcDescriptor,
+  dialogue?: ContentDialogueDescriptor
+): PrototypeInspectionPanel {
+  return {
+    selection: {
+      kind: "npc",
+      npcId: npc.npcId
+    },
+    title: npc.name,
+    lines: [
+      ...(dialogue?.title === undefined ? ["Description unavailable."] : [dialogue.title]),
+      ...(dialogue?.lines[0] === undefined ? [] : [dialogue.lines[0]]),
+      "Future action hint: Talk remains disabled in this prototype."
+    ],
+    availableFutureActions: ["talk"],
+    readonly: true
+  };
+}
+
+function deriveInspectionPanel(
+  runtime: PrototypeRuntimeContext,
+  location: RuntimeReadonlyPresentationLocationPanel | undefined,
+  exitActions: readonly PrototypeExitAction[],
+  selection?: PrototypeInspectionSelection
+): PrototypeInspectionPanel {
+  if (selection === undefined) {
+    return createDefaultInspectionPanel();
+  }
+
+  if (selection.kind === "location") {
+    if (location?.locationId === selection.locationId) {
+      return createLocationInspectionPanel(location);
+    }
+
+    return createDefaultInspectionPanel();
+  }
+
+  if (selection.kind === "exit") {
+    const exitAction = exitActions.find((candidate) => candidate.exitId === selection.exitId);
+    return exitAction === undefined ? createDefaultInspectionPanel() : createExitInspectionPanel(exitAction);
+  }
+
+  if (selection.kind === "item") {
+    const item = runtime.content.getItem(selection.itemId);
+    return item === undefined ? createDefaultInspectionPanel() : createItemInspectionPanel(item);
+  }
+
+  const npc = runtime.content.getNpc(selection.npcId);
+  if (npc === undefined) {
+    return createDefaultInspectionPanel();
+  }
+
+  const dialogue = npc.dialogueId === undefined ? undefined : runtime.content.getDialogue(npc.dialogueId);
+  return createNpcInspectionPanel(npc, dialogue);
+}
+
 function createStateFromRuntime(
   runtime: PrototypeRuntimeContext,
   snapshot: PrototypePresentationSnapshot,
   output: ReadonlyPrototypeOutputPanel,
   diagnostics: readonly ReadonlyPrototypeDiagnosticView[],
-  status: ReadonlyPrototypeStatus
+  status: ReadonlyPrototypeStatus,
+  selection?: PrototypeInspectionSelection
 ): ReadonlyPrototypeState {
   const commandPalette = createCommandPalette(snapshot.location);
   const availableActions = commandPalette
     .filter((item): item is PrototypeCommandPaletteItem & { readonly enabled: true } => item.enabled)
     .map((item) => item.commandId as ExecutablePrototypeActionId);
+  const exitActions = createExitActions(runtime, snapshot.location);
 
   return {
     screenTitle: PROTOTYPE_SCREEN_TITLE,
@@ -535,8 +698,9 @@ function createStateFromRuntime(
     diagnostics,
     availableActions,
     commandPalette,
-    exitActions: createExitActions(runtime, snapshot.location),
+    exitActions,
     mapPanel: createPrototypeMapPanel(runtime.descriptor.initialMapLayout, runtime.playerState.currentLocationId),
+    inspectionPanel: deriveInspectionPanel(runtime, snapshot.location, exitActions, selection),
     status
   };
 }
@@ -694,7 +858,10 @@ function createMovementOutcome(runtime: PrototypeRuntimeContext, exitId: string)
   };
 }
 
-function buildStateForIdle(runtime: PrototypeRuntimeContext): ReadonlyPrototypeState {
+function buildStateForIdle(
+  runtime: PrototypeRuntimeContext,
+  selection?: PrototypeInspectionSelection
+): ReadonlyPrototypeState {
   const snapshot = createPresentationSnapshot(runtime);
   return createStateFromRuntime(
     runtime,
@@ -703,12 +870,17 @@ function buildStateForIdle(runtime: PrototypeRuntimeContext): ReadonlyPrototypeS
     snapshot.diagnostics,
     {
       kind: "idle",
-      detail: "Ready. Look and Inventory remain read-only. Go is available only through explicit exits when the current location exposes them. Locked and condition-gated exits report movement diagnostics without changing state."
-    }
+      detail: "Ready. Look and Inventory remain read-only. Go is available only through explicit exits when the current location exposes them. Inspection is fully read-only and separate from action execution."
+    },
+    selection
   );
 }
 
-function buildStateFromOutcome(runtime: PrototypeRuntimeContext, outcome: ReadonlyPrototypeActionOutcome): ReadonlyPrototypeState {
+function buildStateFromOutcome(
+  runtime: PrototypeRuntimeContext,
+  outcome: ReadonlyPrototypeActionOutcome,
+  selection?: PrototypeInspectionSelection
+): ReadonlyPrototypeState {
   const snapshot = createPresentationSnapshot(runtime);
   const diagnostics = outcome.diagnostics.length > 0 ? outcome.diagnostics : snapshot.diagnostics;
   const detail = outcome.status === "executed"
@@ -729,7 +901,8 @@ function buildStateFromOutcome(runtime: PrototypeRuntimeContext, outcome: Readon
     {
       kind: outcome.status,
       detail
-    }
+    },
+    selection
   );
 }
 
@@ -739,11 +912,28 @@ export function createReadonlyPrototypeState(
   return cloneJsonValue(buildStateForIdle(createScenarioRuntimeContext(scenarioId)));
 }
 
+function createInspectionSelectionFromExit(
+  exitId: string,
+  runtime: PrototypeRuntimeContext
+): PrototypeInspectionSelection | undefined {
+  const currentLocation = runtime.content.getLocation(runtime.playerState.currentLocationId);
+  const exit = currentLocation?.exits.find((candidate) => candidate.exitId === exitId);
+
+  return exit === undefined
+    ? undefined
+    : {
+        kind: "exit",
+        exitId: exit.exitId,
+        targetLocationId: exit.targetLocationId
+      };
+}
+
 export function createReadonlyPrototypeController(
   initialScenarioId: PrototypeScenarioId = DEFAULT_PROTOTYPE_SCENARIO_ID
 ): ReadonlyPrototypeController {
   let runtime = createScenarioRuntimeContext(initialScenarioId);
-  let state = buildStateForIdle(runtime);
+  let selection: PrototypeInspectionSelection | undefined;
+  let state = buildStateForIdle(runtime, selection);
 
   return {
     getState(): ReadonlyPrototypeState {
@@ -756,17 +946,45 @@ export function createReadonlyPrototypeController(
           ? createGoSelectionOutcome(runtime)
           : createDisabledActionOutcome(runtime, actionId);
 
-      state = buildStateFromOutcome(runtime, outcome);
+      state = buildStateFromOutcome(runtime, outcome, selection);
       return cloneJsonValue(outcome);
     },
     moveToExit(exitId: string): ReadonlyPrototypeActionOutcome {
       const outcome = createMovementOutcome(runtime, exitId);
-      state = buildStateFromOutcome(runtime, outcome);
+      selection = undefined;
+      state = buildStateFromOutcome(runtime, outcome, selection);
       return cloneJsonValue(outcome);
     },
     selectScenario(scenarioId: PrototypeScenarioId): ReadonlyPrototypeState {
       runtime = createScenarioRuntimeContext(scenarioId);
-      state = buildStateForIdle(runtime);
+      selection = undefined;
+      state = buildStateForIdle(runtime, selection);
+      return cloneJsonValue(state);
+    },
+    inspectLocation(): ReadonlyPrototypeState {
+      const location = state.location;
+      selection = location === undefined ? undefined : { kind: "location", locationId: location.locationId };
+      state = buildStateForIdle(runtime, selection);
+      return cloneJsonValue(state);
+    },
+    inspectExit(exitId: string): ReadonlyPrototypeState {
+      selection = createInspectionSelectionFromExit(exitId, runtime);
+      state = buildStateForIdle(runtime, selection);
+      return cloneJsonValue(state);
+    },
+    inspectItem(itemId: string): ReadonlyPrototypeState {
+      selection = { kind: "item", itemId };
+      state = buildStateForIdle(runtime, selection);
+      return cloneJsonValue(state);
+    },
+    inspectNpc(npcId: string): ReadonlyPrototypeState {
+      selection = { kind: "npc", npcId };
+      state = buildStateForIdle(runtime, selection);
+      return cloneJsonValue(state);
+    },
+    clearInspection(): ReadonlyPrototypeState {
+      selection = undefined;
+      state = buildStateForIdle(runtime, selection);
       return cloneJsonValue(state);
     }
   };
