@@ -876,6 +876,7 @@ function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeIn
 }
 
 function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspectionPanel {
+  const inventoryOwned = item.status === "in-inventory";
   const takeStatus = item.status === "visible-here" && item.portable
     ? "already-enabled"
     : "not-applicable";
@@ -883,7 +884,7 @@ function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspec
     ? item.portable
       ? "Take is available through the explicit item button for this visible portable item."
       : "This visible item is not portable."
-    : item.status === "in-inventory"
+    : inventoryOwned
       ? "This item is already in inventory and is not a pickup target."
       : item.status === "elsewhere"
         ? "This item is not currently reachable from the player's location."
@@ -931,6 +932,7 @@ function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspec
       item.description,
       `Presence: ${item.status}`,
       `Portable: ${item.portable ? "yes" : "no"}`,
+      ...(inventoryOwned ? ["Inventory owned: yes", "Pickup no longer applies to inventory-owned items."] : []),
       ...(item.sourceLocationId === undefined ? [] : [`Source location: ${item.sourceLocationId}`]),
       ...(item.status === "visible-here" && item.portable
         ? ["Future action hint: Use the explicit Take button to run the dedicated pickup boundary."]

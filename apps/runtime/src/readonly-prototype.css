@@ -617,6 +617,13 @@ body::after {
   border-style: dashed;
   background: rgba(36, 52, 71, 0.05);
 }
+.prototype-inventory-note {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+}
+
 .prototype-presence-label {
   display: inline-flex;
   width: fit-content;

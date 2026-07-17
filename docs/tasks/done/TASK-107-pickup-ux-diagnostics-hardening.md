@@ -1,7 +1,7 @@
 # Task: TASK-107 - Pickup UX diagnostics hardening
 
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
-**Status:** REVIEW
+**Status:** DONE
 **Priority:** P0
 
 ## Goal

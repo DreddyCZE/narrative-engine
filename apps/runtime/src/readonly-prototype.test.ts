@@ -36,29 +36,19 @@ function assertStateSnapshots(outcome: {
   };
 }
 
-describe("pickup ux diagnostics hardening", () => {
-  it("shows visible portable and visible non-portable item actions while generic Take remains disabled", () => {
+describe("inventory-owned item inspection hardening", () => {
+  it("renders the initial inventory item as in-inventory and inspectable without active Take", () => {
     const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const deckPass = state.itemPresence.find((item) => item.itemId === "item.demo.deck-pass");
-    const bulkheadPlaque = state.itemPresence.find((item) => item.itemId === "item.demo.bulkhead-plaque");
+    const surveyTablet = state.itemPresence.find((item) => item.itemId === "item.demo.survey-tablet");
     const genericTake = state.commandPalette.find((item) => item.commandId === "take");
 
-    expect(state.location?.items.map((item) => item.itemId)).toEqual([
-      "item.demo.deck-pass",
-      "item.demo.bulkhead-plaque"
-    ]);
-    expect(deckPass).toEqual(expect.objectContaining({
-      itemId: "item.demo.deck-pass",
-      status: "visible-here",
+    expect(state.inventory?.items.map((item) => item.itemId)).toEqual(["item.demo.survey-tablet"]);
+    expect(surveyTablet).toEqual(expect.objectContaining({
+      itemId: "item.demo.survey-tablet",
+      status: "in-inventory",
       portable: true,
-      takeEnabled: true
-    }));
-    expect(bulkheadPlaque).toEqual(expect.objectContaining({
-      itemId: "item.demo.bulkhead-plaque",
-      status: "visible-here",
-      portable: false,
       takeEnabled: false,
-      takeDisabledReason: "This visible item is not portable."
+      takeDisabledReason: "This item is already in inventory."
     }));
     expect(genericTake).toEqual(expect.objectContaining({
       commandId: "take",
@@ -67,22 +57,53 @@ describe("pickup ux diagnostics hardening", () => {
     }));
   });
 
-  it("shows non-portable item inspection as take not-applicable", () => {
-    const state = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID).inspectItem("item.demo.bulkhead-plaque");
+  it("shows ownership and pickup-not-applicable copy when inspecting the initial inventory item", () => {
+    const state = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID).inspectItem("item.demo.survey-tablet");
 
-    expect(state.inspectionPanel.title).toBe("Prototype Bulkhead Plaque");
-    expect(state.inspectionPanel.lines).toContain("Presence: visible-here");
+    expect(state.inspectionPanel.title).toBe("Prototype Survey Tablet");
+    expect(state.inspectionPanel.lines).toContain("Presence: in-inventory");
+    expect(state.inspectionPanel.lines).toContain("Portable: yes");
+    expect(state.inspectionPanel.lines).toContain("Inventory owned: yes");
+    expect(state.inspectionPanel.lines).toContain("Pickup no longer applies to inventory-owned items.");
     expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
       {
         commandId: "take",
         label: "Take",
         status: "not-applicable",
-        reason: "This visible item is not portable.",
+        reason: "This item is already in inventory and is not a pickup target.",
         entityKind: "item",
-        entityId: "item.demo.bulkhead-plaque",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      },
+      {
+        commandId: "talk",
+        label: "Talk",
+        status: "not-applicable",
+        reason: "Talk does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
+        readonly: true
+      },
+      {
+        commandId: "go",
+        label: "Go",
+        status: "not-applicable",
+        reason: "Go does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
         readonly: true
       }
     ]));
+  });
+
+  it("shows visible portable and visible non-portable room items while inventory-owned items stay out of room view", () => {
+    const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+
+    expect(state.location?.items.map((item) => item.itemId)).toEqual([
+      "item.demo.deck-pass",
+      "item.demo.bulkhead-plaque"
+    ]);
+    expect(state.location?.items.map((item) => item.itemId)).not.toContain("item.demo.survey-tablet");
   });
 
   it("blocks visible non-portable pickup with the not-portable diagnostic and preserves room visibility", () => {
@@ -98,26 +119,6 @@ describe("pickup ux diagnostics hardening", () => {
     expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
     expect(afterState.location?.items.map((item) => item.itemId)).toEqual(beforeState.location?.items.map((item) => item.itemId));
     expect(afterState.location?.items.map((item) => item.itemId)).toContain("item.demo.bulkhead-plaque");
-    expect(afterState.itemPresence.find((item) => item.itemId === "item.demo.bulkhead-plaque")).toEqual(expect.objectContaining({
-      status: "visible-here",
-      portable: false,
-      takeEnabled: false,
-      takeDisabledReason: "This visible item is not portable."
-    }));
-  });
-
-  it("blocks inventory item pickup with the already-in-inventory diagnostic and preserves state", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const beforeState = controller.getState();
-    const outcome = controller.pickupItem("item.demo.survey-tablet");
-    const afterState = controller.getState();
-    const snapshots = assertStateSnapshots(outcome);
-
-    expect(outcome.status).toBe("blocked");
-    expect(outcome.pickup?.diagnostics[0]?.code).toBe("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_ALREADY_IN_INVENTORY");
-    expect(outcome.output.lines).toContain("Prototype Survey Tablet is already in inventory.");
-    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-    expect(afterState.itemPresence).toEqual(beforeState.itemPresence);
   });
 
   it("blocks elsewhere item pickup with the not-visible-here diagnostic and preserves state", () => {
@@ -160,6 +161,29 @@ describe("pickup ux diagnostics hardening", () => {
     }));
   });
 
+  it("lets the picked-up deck pass be inspected as inventory-owned after pickup", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+
+    controller.pickupItem("item.demo.deck-pass");
+    const state = controller.inspectItem("item.demo.deck-pass");
+
+    expect(state.inspectionPanel.title).toBe("Prototype Deck Pass");
+    expect(state.inspectionPanel.lines).toContain("Presence: in-inventory");
+    expect(state.inspectionPanel.lines).toContain("Inventory owned: yes");
+    expect(state.inspectionPanel.lines).toContain("Pickup no longer applies to inventory-owned items.");
+    expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
+      {
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "This item is already in inventory and is not a pickup target.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      }
+    ]));
+  });
+
   it("keeps current location map highlight and progress flags unchanged after successful pickup", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
     const beforeState = controller.getState();
@@ -176,27 +200,37 @@ describe("pickup ux diagnostics hardening", () => {
     expect(afterState.inventory?.itemCount).toBe(2);
   });
 
-  it("shows take readiness as not-applicable when inspecting the deck pass after pickup", () => {
+  it("blocks pickup of an inventory-owned deck pass after pickup and preserves state", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
 
     controller.pickupItem("item.demo.deck-pass");
-    const state = controller.inspectItem("item.demo.deck-pass");
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.deck-pass");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
 
-    expect(state.inspectionPanel.lines).toContain("Presence: in-inventory");
-    expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
-      {
-        commandId: "take",
-        label: "Take",
-        status: "not-applicable",
-        reason: "This item is already in inventory and is not a pickup target.",
-        entityKind: "item",
-        entityId: "item.demo.deck-pass",
-        readonly: true
-      }
-    ]));
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.pickup?.diagnostics[0]?.code).toBe("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_ALREADY_IN_INVENTORY");
+    expect(outcome.output.lines).toContain("Prototype Deck Pass is already in inventory.");
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(afterState.itemPresence).toEqual(beforeState.itemPresence);
   });
 
-  it("keeps movement behavior intact after pickup hardening", () => {
+  it("blocks pickup of the initial inventory item and preserves state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.survey-tablet");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.pickup?.diagnostics[0]?.code).toBe("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_ALREADY_IN_INVENTORY");
+    expect(outcome.output.lines).toContain("Prototype Survey Tablet is already in inventory.");
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(afterState.itemPresence).toEqual(beforeState.itemPresence);
+  });
+
+  it("keeps movement behavior intact after inventory-owned inspection hardening", () => {
     const controller = createReadonlyPrototypeController();
     const outcome = controller.moveToExit("exit.smoke.to-corridor");
     const nextState = controller.getState();
@@ -218,21 +252,24 @@ describe("pickup ux diagnostics hardening", () => {
     expect(gated.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET");
   });
 
-  it("keeps inspection behavior intact for location exit item and npc views", () => {
+  it("keeps inspection behavior intact for location exit item inventory item and npc views", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
 
     expect(controller.inspectLocation().inspectionPanel.title).toBe("Prototype Observation Deck");
     expect(controller.inspectExit("exit.demo.to-sensor-gallery").inspectionPanel.title).toBe("Slide sensor gallery door");
     expect(controller.inspectItem("item.demo.deck-pass").inspectionPanel.title).toBe("Prototype Deck Pass");
     expect(controller.inspectItem("item.demo.bulkhead-plaque").inspectionPanel.title).toBe("Prototype Bulkhead Plaque");
+    expect(controller.inspectItem("item.demo.survey-tablet").inspectionPanel.title).toBe("Prototype Survey Tablet");
     expect(controller.inspectNpc("npc.demo.analyst").inspectionPanel.title).toBe("Prototype Analyst");
   });
 
-  it("keeps future action readiness read-only while reflecting pickup availability", () => {
-    const state = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID).inspectItem("item.demo.deck-pass");
+  it("keeps future action readiness read-only while reflecting room and inventory pickup availability", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const visibleState = controller.inspectItem("item.demo.deck-pass");
+    const inventoryState = controller.inspectItem("item.demo.survey-tablet");
 
-    expect(state.inspectionPanel.readonly).toBe(true);
-    expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
+    expect(visibleState.inspectionPanel.readonly).toBe(true);
+    expect(visibleState.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
       {
         commandId: "take",
         label: "Take",
@@ -240,6 +277,18 @@ describe("pickup ux diagnostics hardening", () => {
         reason: "Take is available through the explicit item button for this visible portable item.",
         entityKind: "item",
         entityId: "item.demo.deck-pass",
+        readonly: true
+      }
+    ]));
+    expect(inventoryState.inspectionPanel.readonly).toBe(true);
+    expect(inventoryState.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
+      {
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "This item is already in inventory and is not a pickup target.",
+        entityKind: "item",
+        entityId: "item.demo.survey-tablet",
         readonly: true
       }
     ]));
@@ -273,13 +322,14 @@ describe("pickup ux diagnostics hardening", () => {
     expect(PROTOTYPE_COMMAND_IDS).toEqual(["look", "inventory", "go", "talk", "take", "use", "save", "load"]);
   });
 
-  it("does not introduce parser arbitrary input storage replay db p0 map editor or plugin runtime exports", () => {
+  it("does not introduce drop use talk parser arbitrary input storage replay db p0 map editor or plugin runtime exports", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
     const pickup = controller.pickupItem("item.demo.deck-pass");
     const state = controller.getState();
 
     expect("P0ContentPackage" in engineContracts).toBe(false);
     expect("MapEditor" in engineContracts).toBe(false);
+    expect("DropCommand" in engineContracts).toBe(false);
     expect("executeRuntimeCommand" in engineContracts).toBe(false);
     expect("saveGameToBrowserStorage" in engineContracts).toBe(false);
     expect("createReplayRuntime" in engineContracts).toBe(false);
