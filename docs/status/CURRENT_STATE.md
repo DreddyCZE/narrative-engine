@@ -122,8 +122,8 @@
 
 ## Last Checks
 
-- `corepack pnpm validate` - pending final validation.
-- `git diff --check` - pending final validation.
+- `corepack pnpm validate` - passed.
+- `git diff --check` - passed with non-blocking CRLF normalization warning in `docs/status/CURRENT_STATE.md`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects `>=22 <23`.
 
 ## Next Task Boundary
