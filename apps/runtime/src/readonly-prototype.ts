@@ -107,6 +107,22 @@ export type PrototypeFutureActionReadiness = {
   readonly readonly: true;
 };
 
+export type PrototypeItemPresenceStatus =
+  | "visible-here"
+  | "in-inventory"
+  | "elsewhere"
+  | "unknown";
+
+export type PrototypeItemPresence = {
+  readonly itemId: string;
+  readonly title: string;
+  readonly description: string;
+  readonly portable: boolean;
+  readonly status: PrototypeItemPresenceStatus;
+  readonly sourceLocationId?: string;
+  readonly readonly: true;
+};
+
 type ReadonlyPrototypeOutputPanel = {
   readonly kind: "transcript-preview" | PrototypeCommandId;
   readonly title: string;
@@ -138,6 +154,7 @@ export type ReadonlyPrototypeState = {
   readonly availableActions: readonly ExecutablePrototypeActionId[];
   readonly commandPalette: readonly PrototypeCommandPaletteItem[];
   readonly exitActions: readonly PrototypeExitAction[];
+  readonly itemPresence: readonly PrototypeItemPresence[];
   readonly mapPanel: PrototypeMapPanel;
   readonly inspectionPanel: PrototypeInspectionPanel;
   readonly status: ReadonlyPrototypeStatus;
@@ -172,6 +189,7 @@ type PrototypeRuntimeContext = {
   readonly descriptor: PrototypeScenarioDescriptor;
   readonly packageId: string;
   readonly content: ReturnType<typeof createContentReadModel>;
+  readonly allItems: readonly ContentItemDescriptor[];
   playerState: RuntimePlayerState;
 };
 
@@ -369,6 +387,7 @@ function createScenarioRuntimeContext(scenarioId: PrototypeScenarioId): Prototyp
     descriptor,
     packageId: rawPackage.packageId,
     content: createContentReadModel({ graph: loadResult.graph }),
+    allItems: cloneJsonValue(rawPackage.items ?? []),
     playerState: createInitialRuntimePlayerStateFromContent({
       content: { graph: loadResult.graph },
       metadata: {
@@ -376,6 +395,73 @@ function createScenarioRuntimeContext(scenarioId: PrototypeScenarioId): Prototyp
         updatedAtRevision: 0
       }
     })
+  };
+}
+
+function createItemPresenceProjection(
+  runtime: PrototypeRuntimeContext
+): readonly PrototypeItemPresence[] {
+  const inventoryItemIds = new Set(runtime.playerState.inventoryItemIds);
+  const currentLocationId = runtime.playerState.currentLocationId;
+
+  return runtime.allItems.map((item) => {
+    const status = inventoryItemIds.has(item.itemId)
+      ? "in-inventory"
+      : item.locationId === currentLocationId
+        ? "visible-here"
+        : typeof item.locationId === "string"
+          ? "elsewhere"
+          : "unknown";
+
+    return {
+      itemId: item.itemId,
+      title: item.title,
+      description: item.description,
+      portable: item.portable === true,
+      status,
+      ...(item.locationId === undefined ? {} : { sourceLocationId: item.locationId }),
+      readonly: true
+    };
+  });
+}
+
+function createProjectedLocationPanel(
+  location: RuntimeReadonlyPresentationLocationPanel | undefined,
+  itemPresence: readonly PrototypeItemPresence[]
+): RuntimeReadonlyPresentationLocationPanel | undefined {
+  if (location === undefined) {
+    return undefined;
+  }
+
+  return {
+    ...location,
+    items: itemPresence
+      .filter((item) => item.status === "visible-here")
+      .map((item) => ({
+        itemId: item.itemId,
+        title: item.title,
+        description: item.description,
+        portable: item.portable
+      }))
+  };
+}
+
+function createProjectedInventoryPanel(
+  itemPresence: readonly PrototypeItemPresence[]
+): RuntimeReadonlyPresentationInventoryPanel {
+  const inventoryItems = itemPresence
+    .filter((item) => item.status === "in-inventory")
+    .map((item) => ({
+      itemId: item.itemId,
+      title: item.title,
+      description: item.description,
+      portable: item.portable
+    }));
+
+  return {
+    itemCount: inventoryItems.length,
+    empty: inventoryItems.length === 0,
+    items: inventoryItems
   };
 }
 
@@ -724,23 +810,33 @@ function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeIn
   };
 }
 
-function createItemInspectionPanel(item: ContentItemDescriptor): PrototypeInspectionPanel {
+function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspectionPanel {
+  const takeStatus = item.status === "visible-here" && item.portable
+    ? "ready-later"
+    : "not-applicable";
+  const takeReason = item.status === "visible-here"
+    ? item.portable
+      ? "This visible portable item can become a pickup target later, but item pickup is not implemented yet."
+      : "This visible item is not marked as portable."
+    : item.status === "in-inventory"
+      ? "This item is already in inventory and is not a pickup target."
+      : item.status === "elsewhere"
+        ? "This item is not currently reachable from the player's location."
+        : "Item presence is not resolved enough to model pickup.";
   const readiness = [
     createFutureActionReadiness(
       "item",
       item.itemId,
       "take",
-      item.portable === true ? "ready-later" : "not-applicable",
-      item.portable === true
-        ? "This item is portable, but item pickup is not implemented yet."
-        : "This item is not marked as portable."
+      takeStatus,
+      takeReason
     ),
     createFutureActionReadiness(
       "item",
       item.itemId,
       "use",
-      item.portable === true ? "ready-later" : "not-applicable",
-      item.portable === true
+      item.portable ? "ready-later" : "not-applicable",
+      item.portable
         ? "This item may become usable later, but use/effect execution is not implemented."
         : "No future use readiness is modeled for this item yet."
     ),
@@ -768,7 +864,9 @@ function createItemInspectionPanel(item: ContentItemDescriptor): PrototypeInspec
     title: item.title,
     lines: [
       item.description,
-      `Portable: ${item.portable === true ? "yes" : "no"}`,
+      `Presence: ${item.status}`,
+      `Portable: ${item.portable ? "yes" : "no"}`,
+      ...(item.sourceLocationId === undefined ? [] : [`Source location: ${item.sourceLocationId}`]),
       "Future action hint: Take remains disabled in this prototype."
     ],
     availableFutureActions: summarizeReadyActions(readiness),
@@ -835,6 +933,7 @@ function deriveInspectionPanel(
   runtime: PrototypeRuntimeContext,
   location: RuntimeReadonlyPresentationLocationPanel | undefined,
   exitActions: readonly PrototypeExitAction[],
+  itemPresence: readonly PrototypeItemPresence[],
   selection?: PrototypeInspectionSelection
 ): PrototypeInspectionPanel {
   if (selection === undefined) {
@@ -855,8 +954,10 @@ function deriveInspectionPanel(
   }
 
   if (selection.kind === "item") {
-    const item = runtime.content.getItem(selection.itemId);
-    return item === undefined ? createDefaultInspectionPanel() : createItemInspectionPanel(item);
+    const item = itemPresence.find((candidate) => candidate.itemId === selection.itemId);
+    return item === undefined || (item.status !== "visible-here" && item.status !== "in-inventory")
+      ? createDefaultInspectionPanel()
+      : createItemInspectionPanel(item);
   }
 
   const npc = runtime.content.getNpc(selection.npcId);
@@ -876,11 +977,14 @@ function createStateFromRuntime(
   status: ReadonlyPrototypeStatus,
   selection?: PrototypeInspectionSelection
 ): ReadonlyPrototypeState {
-  const commandPalette = createCommandPalette(snapshot.location);
+  const itemPresence = createItemPresenceProjection(runtime);
+  const projectedLocation = createProjectedLocationPanel(snapshot.location, itemPresence);
+  const projectedInventory = createProjectedInventoryPanel(itemPresence);
+  const commandPalette = createCommandPalette(projectedLocation);
   const availableActions = commandPalette
     .filter((item): item is PrototypeCommandPaletteItem & { readonly enabled: true } => item.enabled)
     .map((item) => item.commandId as ExecutablePrototypeActionId);
-  const exitActions = createExitActions(runtime, snapshot.location);
+  const exitActions = createExitActions(runtime, projectedLocation);
 
   return {
     screenTitle: PROTOTYPE_SCREEN_TITLE,
@@ -889,16 +993,17 @@ function createStateFromRuntime(
     selectedScenarioId: runtime.descriptor.scenarioId,
     scenarios: cloneJsonValue(PROTOTYPE_SCENARIO_OPTIONS),
     packageId: runtime.packageId,
-    ...(snapshot.location === undefined ? {} : { location: snapshot.location }),
-    ...(snapshot.inventory === undefined ? {} : { inventory: snapshot.inventory }),
+    ...(projectedLocation === undefined ? {} : { location: projectedLocation }),
+    inventory: projectedInventory,
     transcript: cloneJsonValue(snapshot.transcript),
     output,
     diagnostics,
     availableActions,
     commandPalette,
     exitActions,
+    itemPresence,
     mapPanel: createPrototypeMapPanel(runtime.descriptor.initialMapLayout, runtime.playerState.currentLocationId),
-    inspectionPanel: deriveInspectionPanel(runtime, snapshot.location, exitActions, selection),
+    inspectionPanel: deriveInspectionPanel(runtime, projectedLocation, exitActions, itemPresence, selection),
     status
   };
 }

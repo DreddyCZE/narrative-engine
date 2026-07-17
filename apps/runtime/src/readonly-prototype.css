@@ -598,3 +598,10 @@ body::after {
   border-style: dashed;
   background: rgba(36, 52, 71, 0.05);
 }
+.prototype-presence-label {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(36, 52, 71, 0.08);
+}

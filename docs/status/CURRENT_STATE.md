@@ -1,17 +1,17 @@
 # Current State
 
-**Date:** 2026-07-16
+**Date:** 2026-07-17
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-104 are DONE or REVIEW. TASK-060 through TASK-103 are DONE. TASK-104 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-105 are DONE or REVIEW. TASK-060 through TASK-104 are DONE. TASK-105 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-103 is DONE. TASK-104 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-104 - Prototype future action readiness model`.
+2. **Current state:** TASK-104 is DONE. TASK-105 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-105 - Prototype item presence projection before pickup`.
 4. **What the current scope must not change:** no generic command execution, no free-form parser, no arbitrary target input, no gameplay mutation beyond the accepted deterministic current-location movement slice, no inventory mutation, no dialogue progression, no use/effect execution, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-104 remains review-ready with inspection-scoped future action readiness metadata for locations, exits, visible items, and visible NPCs, while movement diagnostics, deterministic movement behavior, and read-only inspection behavior remain intact and readiness never executes runtime commands.
+5. **How completion is recognized:** TASK-105 remains review-ready with read-only item presence projection separating visible room items, inventory-owned items, and unreachable items, while movement diagnostics, deterministic movement behavior, read-only inspection behavior, and future action readiness remain intact and no pickup mutation exists yet.
 
 ## Repository / PR State
 
@@ -96,6 +96,7 @@
 - `apps/runtime` remains the accepted browser prototype consumer over public engine-contracts exports only.
 - Inspection is app-layer only and must not call planning, read-only execution, or movement execution.
 - Future action readiness is app-layer only, visibly read-only, and must not call planning, read-only execution, or movement execution.
+- Item presence projection is app-layer only and must derive room versus inventory visibility from content item location plus runtime inventory state without mutating either source.
 - `Go` stays bound only to explicit exits already present in the current read model and does not accept arbitrary text.
 - Locked exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED`.
 - Condition-gated exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET` until the required progress flag is present.

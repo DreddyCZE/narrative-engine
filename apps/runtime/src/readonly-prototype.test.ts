@@ -81,6 +81,40 @@ describe("movement diagnostics prototype vertical slice", () => {
     expect(state.commandPalette.find((item) => item.commandId === "go")?.enabled).toBe(true);
     expect(state.availableActions).toEqual(["look", "inventory", "go"]);
   });
+  it("projects current-location inventory and unreachable items into separate presence states", () => {
+    const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+
+    expect(state.itemPresence).toEqual([
+      {
+        itemId: "item.demo.survey-tablet",
+        title: "Prototype Survey Tablet",
+        description: "A portable survey tablet carried only to prove that scenario inventory can switch cleanly.",
+        portable: true,
+        status: "in-inventory",
+        readonly: true
+      },
+      {
+        itemId: "item.demo.deck-pass",
+        title: "Prototype Deck Pass",
+        description: "A portable deck pass resting on the observation rail to validate visible room-item projection before pickup exists.",
+        portable: true,
+        status: "visible-here",
+        sourceLocationId: "location.demo.observation-deck",
+        readonly: true
+      },
+      {
+        itemId: "item.demo.locker-seal",
+        title: "Prototype Locker Seal",
+        description: "A maintenance seal stored away from the player to prove that unreachable items stay out of room and inventory views.",
+        portable: false,
+        status: "elsewhere",
+        sourceLocationId: "location.demo.service-locker",
+        readonly: true
+      }
+    ]);
+    expect(state.location?.items.map((item) => item.itemId)).toEqual(["item.demo.deck-pass"]);
+    expect(state.inventory?.items.map((item) => item.itemId)).toEqual(["item.demo.survey-tablet"]);
+  });
 
   it("available exits still move and update the current location", () => {
     const controller = createReadonlyPrototypeController();
@@ -251,6 +285,7 @@ describe("read-only inspection panel", () => {
     expect(state.inspectionPanel.title).toBe("Prototype Observation Deck");
     expect(state.inspectionPanel.lines).toContain("A bright observation deck with prototype navigation glass and a calm starfield beyond the hull.");
     expect(state.inspectionPanel.lines).toContain("Visible exits: 3");
+    expect(state.inspectionPanel.lines).toContain("Visible items: 1");
     expect(state.inspectionPanel.futureActionReadiness).toEqual([
       {
         commandId: "look",
@@ -273,8 +308,8 @@ describe("read-only inspection panel", () => {
       {
         commandId: "take",
         label: "Take",
-        status: "not-applicable",
-        reason: "No portable visible items are available at this location.",
+        status: "ready-later",
+        reason: "Portable visible items exist, but item pickup is not implemented yet.",
         entityKind: "location",
         entityId: "location.demo.observation-deck",
         readonly: true
@@ -380,20 +415,62 @@ describe("read-only inspection panel", () => {
     ]);
   });
 
-  it("inspects items and npcs with disabled future-action hints", () => {
+  it("inspects visible and inventory items with projected pickup readiness and keeps npc inspection intact", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const itemState = controller.inspectItem("item.demo.survey-tablet");
+    const visibleItemState = controller.inspectItem("item.demo.deck-pass");
+    const inventoryItemState = controller.inspectItem("item.demo.survey-tablet");
     const npcState = controller.inspectNpc("npc.demo.analyst");
 
-    expect(itemState.inspectionPanel.title).toBe("Prototype Survey Tablet");
-    expect(itemState.inspectionPanel.lines).toContain("A portable survey tablet carried only to prove that scenario inventory can switch cleanly.");
-    expect(itemState.inspectionPanel.lines).toContain("Future action hint: Take remains disabled in this prototype.");
-    expect(itemState.inspectionPanel.futureActionReadiness).toEqual([
+    expect(visibleItemState.inspectionPanel.title).toBe("Prototype Deck Pass");
+    expect(visibleItemState.inspectionPanel.lines).toContain("A portable deck pass resting on the observation rail to validate visible room-item projection before pickup exists.");
+    expect(visibleItemState.inspectionPanel.lines).toContain("Presence: visible-here");
+    expect(visibleItemState.inspectionPanel.futureActionReadiness).toEqual([
       {
         commandId: "take",
         label: "Take",
         status: "ready-later",
-        reason: "This item is portable, but item pickup is not implemented yet.",
+        reason: "This visible portable item can become a pickup target later, but item pickup is not implemented yet.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      },
+      {
+        commandId: "use",
+        label: "Use",
+        status: "ready-later",
+        reason: "This item may become usable later, but use/effect execution is not implemented.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      },
+      {
+        commandId: "talk",
+        label: "Talk",
+        status: "not-applicable",
+        reason: "Talk does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      },
+      {
+        commandId: "go",
+        label: "Go",
+        status: "not-applicable",
+        reason: "Go does not apply to inspected items.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      }
+    ]);
+    expect(inventoryItemState.inspectionPanel.title).toBe("Prototype Survey Tablet");
+    expect(inventoryItemState.inspectionPanel.lines).toContain("A portable survey tablet carried only to prove that scenario inventory can switch cleanly.");
+    expect(inventoryItemState.inspectionPanel.lines).toContain("Presence: in-inventory");
+    expect(inventoryItemState.inspectionPanel.futureActionReadiness).toEqual([
+      {
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "This item is already in inventory and is not a pickup target.",
         entityKind: "item",
         entityId: "item.demo.survey-tablet",
         readonly: true
@@ -482,7 +559,7 @@ describe("read-only inspection panel", () => {
     expect(cleared.inventory?.items).toEqual(before.inventory?.items);
   });
 
-  it("inspection does not expose execution results or mutate player-facing state", () => {
+  it("inspection and item presence projection do not expose execution results or mutate player-facing state", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
     const before = controller.getState();
     const inspected = controller.inspectNpc("npc.demo.analyst") as Record<string, unknown>;
@@ -492,6 +569,7 @@ describe("read-only inspection panel", () => {
     expect(inspected.location).toEqual(before.location);
     expect(inspected.inventory).toEqual(before.inventory);
     expect(inspected.mapPanel).toEqual(before.mapPanel);
+    expect(inspected.itemPresence).toEqual(before.itemPresence);
     expect((inspected.inspectionPanel as { futureActionReadiness: readonly unknown[] }).futureActionReadiness.length).toBeGreaterThan(0);
     expectJsonSafe(inspected);
   });
