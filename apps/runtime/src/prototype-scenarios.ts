@@ -114,6 +114,13 @@ function createObservationDeckDemoPackage(): ContentPackage {
         locationId: "location.demo.observation-deck"
       },
       {
+        itemId: "item.demo.bulkhead-plaque",
+        title: "Prototype Bulkhead Plaque",
+        description: "A fixed plaque bolted to the observation rail to prove visible non-portable pickup diagnostics.",
+        portable: false,
+        locationId: "location.demo.observation-deck"
+      },
+      {
         itemId: "item.demo.locker-seal",
         title: "Prototype Locker Seal",
         description: "A maintenance seal stored away from the player to prove that unreachable items stay out of room and inventory views.",
