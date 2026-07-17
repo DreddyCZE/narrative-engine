@@ -125,9 +125,14 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
             <span class="prototype-list-title">${escapeHtml(item.title)}</span>
             <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
             <div class="prototype-code prototype-presence-label">Presence: ${escapeHtml(item.status)}</div>
+            <div class="prototype-code prototype-presence-label">Portable: ${item.portable ? "yes" : "no"}</div>
             <div class="prototype-inline-actions">
               <button type="button" class="prototype-inspect-button" data-inspect-item="${escapeHtml(item.itemId)}">Inspect</button>
+              ${item.takeEnabled
+                ? `<button type="button" class="prototype-take-button" data-take-item="${escapeHtml(item.itemId)}">Take</button>`
+                : `<button type="button" class="prototype-take-button is-disabled" disabled>Take</button>`}
             </div>
+            ${item.takeEnabled ? "" : `<div class="prototype-palette-copy">${escapeHtml(item.takeDisabledReason ?? "Take is not available for this item.")}</div>`}
           </li>
         `).join("")}
       </ul>
@@ -448,7 +453,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
         <article class="prototype-panel prototype-panel-wide">
           <h2>Command Palette</h2>
-          <p class="prototype-summary">The palette shows what is safe to execute now. Go is enabled only when the current location exposes concrete exits, and each exit reports whether movement is available, locked, or waiting on a progress flag.</p>
+          <p class="prototype-summary">The palette shows what is safe to execute now. Go is enabled only when the current location exposes concrete exits. Generic Take stays disabled here, while explicit visible portable item buttons run the dedicated pickup boundary.</p>
           ${renderCommandPalette(state)}
         </article>
         <article class="prototype-panel prototype-panel-wide">
@@ -482,7 +487,7 @@ function renderApp(state: ReadonlyPrototypeState): string {
         </article>
       </section>
       <div class="prototype-footer-note">
-        The prototype stays in-memory, keeps scenario and map data in the app layer, routes Look and Inventory through the TASK-095 read-only boundary, and executes Go only through explicit exit-targeted planning plus the dedicated movement boundary.
+        The prototype stays in-memory, keeps scenario and map data in the app layer, routes Look and Inventory through the TASK-095 read-only boundary, executes Go only through explicit exit-targeted planning plus the dedicated movement boundary, and executes Take only through explicit visible-item planning plus the dedicated pickup boundary.
       </div>
     </main>
   `;
@@ -549,6 +554,16 @@ function render(): void {
       const itemId = button.getAttribute("data-inspect-item");
       if (typeof itemId === "string" && itemId.length > 0) {
         controller.inspectItem(itemId);
+        render();
+      }
+    });
+  });
+
+  root.querySelectorAll<HTMLButtonElement>("[data-take-item]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const itemId = button.getAttribute("data-take-item");
+      if (typeof itemId === "string" && itemId.length > 0) {
+        controller.pickupItem(itemId);
         render();
       }
     });

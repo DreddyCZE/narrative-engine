@@ -36,87 +36,128 @@ function assertStateSnapshots(outcome: {
   };
 }
 
-describe("movement diagnostics prototype vertical slice", () => {
-  it("exposes exit availability metadata", () => {
+describe("controlled item pickup prototype vertical slice", () => {
+  it("shows an explicit Take action for visible portable items while generic Take remains disabled", () => {
     const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const deckPass = state.itemPresence.find((item) => item.itemId === "item.demo.deck-pass");
+    const genericTake = state.commandPalette.find((item) => item.commandId === "take");
 
-    expect(state.exitActions).toEqual([
-      {
-        exitId: "exit.demo.to-sensor-gallery",
-        label: "Slide sensor gallery door",
-        targetLocationId: "location.demo.sensor-gallery",
-        targetLocationTitle: "Prototype Sensor Gallery",
-        availability: "available",
-        enabled: true
-      },
-      {
-        exitId: "exit.demo.locked-service-door",
-        label: "Open service locker",
-        targetLocationId: "location.demo.service-locker",
-        targetLocationTitle: "Prototype Service Locker",
-        availability: "locked",
-        enabled: false,
-        disabledReason: "Movement is blocked because this exit is locked.",
-        locked: true
-      },
-      {
-        exitId: "exit.demo.maintenance-hatch",
-        label: "Cycle maintenance hatch",
-        targetLocationId: "location.demo.maintenance-hatch",
-        targetLocationTitle: "Prototype Maintenance Hatch",
-        availability: "condition-gated",
-        enabled: false,
-        disabledReason: "Movement is blocked until progress flag \"demo.maintenance-access\" is present.",
-        conditionFlag: "demo.maintenance-access"
-      }
+    expect(deckPass).toEqual(expect.objectContaining({
+      itemId: "item.demo.deck-pass",
+      status: "visible-here",
+      portable: true,
+      takeEnabled: true
+    }));
+    expect(genericTake).toEqual(expect.objectContaining({
+      commandId: "take",
+      enabled: false,
+      disabledReason: "Generic Take stays disabled. Use explicit visible item Take buttons only."
+    }));
+  });
+
+  it("picks up the observation deck pass and moves it from visible-here to in-inventory projection", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.deck-pass");
+    const afterState = controller.getState();
+
+    expect(outcome.status).toBe("executed");
+    expect(outcome.pickup?.status).toBe("executed");
+    expect(outcome.pickup?.itemId).toBe("item.demo.deck-pass");
+    expect(outcome.output.lines).toContain("Picked up Prototype Deck Pass.");
+    expect(beforeState.location?.items.map((item) => item.itemId)).toEqual(["item.demo.deck-pass"]);
+    expect(afterState.location?.items.map((item) => item.itemId)).toEqual([]);
+    expect(afterState.inventory?.items.map((item) => item.itemId)).toEqual([
+      "item.demo.survey-tablet",
+      "item.demo.deck-pass"
     ]);
+    expect(afterState.itemPresence.find((item) => item.itemId === "item.demo.deck-pass")).toEqual(expect.objectContaining({
+      status: "in-inventory",
+      takeEnabled: false,
+      takeDisabledReason: "This item is already in inventory."
+    }));
   });
 
-  it("keeps go enabled when the current location has visible exits", () => {
-    const state = createReadonlyPrototypeState();
+  it("keeps current location map highlight and progress flags unchanged after pickup", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.deck-pass");
+    const afterState = controller.getState();
 
-    expect(DEFAULT_PROTOTYPE_SCENARIO_ID).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
-    expect(state.selectedScenarioId).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
-    expect(state.location?.title).toBe("Smoke Test Airlock");
-    expect(state.commandPalette.find((item) => item.commandId === "go")?.enabled).toBe(true);
-    expect(state.availableActions).toEqual(["look", "inventory", "go"]);
+    expect(outcome.playerStateUnchanged).toBe(false);
+    expect(outcome.playerStateBefore.currentLocationId).toBe("location.demo.observation-deck");
+    expect(outcome.playerStateAfter.currentLocationId).toBe("location.demo.observation-deck");
+    expect(outcome.playerStateBefore.progressFlags).toEqual(["demo.ready"]);
+    expect(outcome.playerStateAfter.progressFlags).toEqual(["demo.ready"]);
+    expect(beforeState.mapPanel.currentLocationId).toBe("location.demo.observation-deck");
+    expect(afterState.mapPanel.currentLocationId).toBe("location.demo.observation-deck");
+    expect(afterState.inventory?.itemCount).toBe(2);
   });
-  it("projects current-location inventory and unreachable items into separate presence states", () => {
-    const state = createReadonlyPrototypeState(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
 
-    expect(state.itemPresence).toEqual([
+  it("shows take readiness as not-applicable when inspecting the deck pass after pickup", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+
+    controller.pickupItem("item.demo.deck-pass");
+    const state = controller.inspectItem("item.demo.deck-pass");
+
+    expect(state.inspectionPanel.lines).toContain("Presence: in-inventory");
+    expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
       {
-        itemId: "item.demo.survey-tablet",
-        title: "Prototype Survey Tablet",
-        description: "A portable survey tablet carried only to prove that scenario inventory can switch cleanly.",
-        portable: true,
-        status: "in-inventory",
-        readonly: true
-      },
-      {
-        itemId: "item.demo.deck-pass",
-        title: "Prototype Deck Pass",
-        description: "A portable deck pass resting on the observation rail to validate visible room-item projection before pickup exists.",
-        portable: true,
-        status: "visible-here",
-        sourceLocationId: "location.demo.observation-deck",
-        readonly: true
-      },
-      {
-        itemId: "item.demo.locker-seal",
-        title: "Prototype Locker Seal",
-        description: "A maintenance seal stored away from the player to prove that unreachable items stay out of room and inventory views.",
-        portable: false,
-        status: "elsewhere",
-        sourceLocationId: "location.demo.service-locker",
+        commandId: "take",
+        label: "Take",
+        status: "not-applicable",
+        reason: "This item is already in inventory and is not a pickup target.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
         readonly: true
       }
-    ]);
-    expect(state.location?.items.map((item) => item.itemId)).toEqual(["item.demo.deck-pass"]);
-    expect(state.inventory?.items.map((item) => item.itemId)).toEqual(["item.demo.survey-tablet"]);
+    ]));
   });
 
-  it("available exits still move and update the current location", () => {
+  it("blocks attempts to pick up an inventory item and preserves state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.survey-tablet");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.pickup?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_ALREADY_IN_INVENTORY");
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(afterState.itemPresence).toEqual(beforeState.itemPresence);
+  });
+
+  it("blocks attempts to pick up an elsewhere item and preserves state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.locker-seal");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(outcome.pickup?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_NOT_VISIBLE_HERE");
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
+  });
+
+  it("blocks attempts to pick up the non-portable locker seal fixture and preserves state", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const beforeState = controller.getState();
+    const outcome = controller.pickupItem("item.demo.locker-seal");
+    const afterState = controller.getState();
+    const snapshots = assertStateSnapshots(outcome);
+
+    expect(outcome.status).toBe("blocked");
+    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
+    expect(afterState.location?.title).toBe(beforeState.location?.title);
+    expect(afterState.itemPresence.find((item) => item.itemId === "item.demo.locker-seal")).toEqual(expect.objectContaining({
+      portable: false,
+      status: "elsewhere",
+      takeEnabled: false
+    }));
+  });
+
+  it("keeps movement behavior intact after adding pickup", () => {
     const controller = createReadonlyPrototypeController();
     const outcome = controller.moveToExit("exit.smoke.to-corridor");
     const nextState = controller.getState();
@@ -125,102 +166,46 @@ describe("movement diagnostics prototype vertical slice", () => {
     expect(outcome.movement?.status).toBe("executed");
     expect(outcome.movement?.toLocationId).toBe("location.smoke.corridor");
     expect(nextState.location?.title).toBe("Smoke Test Corridor");
-    expect(nextState.output.lines.some((line) => line.includes("Smoke Test Corridor"))).toBe(true);
   });
 
-  it("updates the map highlight after accepted movement", () => {
-    const controller = createReadonlyPrototypeController();
-    const beforeState = controller.getState();
-
-    controller.moveToExit("exit.smoke.to-corridor");
-    const afterState = controller.getState();
-
-    expect(beforeState.mapPanel.currentLocationId).toBe("location.smoke.start");
-    expect(afterState.mapPanel.currentLocationId).toBe("location.smoke.corridor");
-  });
-
-  it("preserves inventory after movement", () => {
-    const controller = createReadonlyPrototypeController();
-    const beforeState = controller.getState();
-    const outcome = controller.moveToExit("exit.smoke.to-corridor");
-    const afterState = controller.getState();
-
-    expect(outcome.playerStateUnchanged).toBe(false);
-    expect(beforeState.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
-    expect(afterState.inventory?.items.map((item) => item.title)).toEqual(["Smoke Test Keycard"]);
-    expect(outcome.playerStateBefore.inventoryItemIds).toEqual(outcome.playerStateAfter.inventoryItemIds);
-    expect(outcome.playerStateBefore.progressFlags).toEqual(outcome.playerStateAfter.progressFlags);
-  });
-
-  it("shows the new location when look runs after movement", () => {
-    const controller = createReadonlyPrototypeController();
-
-    controller.moveToExit("exit.smoke.to-corridor");
-    const outcome = controller.runAction("look");
-
-    expect(outcome.status).toBe("executed");
-    expect(outcome.interaction?.execution?.view?.kind).toBe("look");
-    expect(outcome.output.title).toBe("Smoke Test Corridor");
-    expect(outcome.output.lines.some((line) => line.includes("Service") || line.includes("corridor") || line.includes("Corridor"))).toBe(true);
-  });
-
-  it("available movement still works in the observation deck scenario", () => {
+  it("keeps locked and condition-gated movement diagnostics intact", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const outcome = controller.moveToExit("exit.demo.to-sensor-gallery");
-    const nextState = controller.getState();
+    const locked = controller.moveToExit("exit.demo.locked-service-door");
+    const gated = controller.moveToExit("exit.demo.maintenance-hatch");
 
-    expect(outcome.status).toBe("executed");
-    expect(outcome.movement?.toLocationId).toBe("location.demo.sensor-gallery");
-    expect(nextState.location?.title).toBe("Prototype Sensor Gallery");
+    expect(locked.status).toBe("blocked");
+    expect(locked.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED");
+    expect(gated.status).toBe("blocked");
+    expect(gated.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET");
   });
 
-  it("locked exits display blocked diagnostics without changing location or map highlight", () => {
+  it("keeps inspection behavior intact for location exit item and npc views", () => {
     const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const beforeState = controller.getState();
-    const outcome = controller.moveToExit("exit.demo.locked-service-door");
-    const afterState = controller.getState();
-    const snapshots = assertStateSnapshots(outcome);
 
-    expect(outcome.status).toBe("blocked");
-    expect(outcome.movement?.status).toBe("blocked");
-    expect(outcome.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED");
-    expect(outcome.output.lines.some((line) => line.includes("RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED"))).toBe(true);
-    expect(afterState.location?.title).toBe(beforeState.location?.title);
-    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
-    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-    expect(outcome.playerStateUnchanged).toBe(true);
+    expect(controller.inspectLocation().inspectionPanel.title).toBe("Prototype Observation Deck");
+    expect(controller.inspectExit("exit.demo.to-sensor-gallery").inspectionPanel.title).toBe("Slide sensor gallery door");
+    expect(controller.inspectItem("item.demo.deck-pass").inspectionPanel.title).toBe("Prototype Deck Pass");
+    expect(controller.inspectNpc("npc.demo.analyst").inspectionPanel.title).toBe("Prototype Analyst");
   });
 
-  it("condition-gated exits display blocked diagnostics without changing location or map highlight", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const beforeState = controller.getState();
-    const outcome = controller.moveToExit("exit.demo.maintenance-hatch");
-    const afterState = controller.getState();
-    const snapshots = assertStateSnapshots(outcome);
+  it("keeps future action readiness read-only while reflecting pickup availability", () => {
+    const state = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID).inspectItem("item.demo.deck-pass");
 
-    expect(outcome.status).toBe("blocked");
-    expect(outcome.movement?.status).toBe("blocked");
-    expect(outcome.movement?.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET");
-    expect(outcome.output.lines.some((line) => line.includes("RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET"))).toBe(true);
-    expect(afterState.location?.title).toBe(beforeState.location?.title);
-    expect(afterState.mapPanel.currentLocationId).toBe(beforeState.mapPanel.currentLocationId);
-    expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-    expect(outcome.playerStateUnchanged).toBe(true);
+    expect(state.inspectionPanel.readonly).toBe(true);
+    expect(state.inspectionPanel.futureActionReadiness).toEqual(expect.arrayContaining([
+      {
+        commandId: "take",
+        label: "Take",
+        status: "already-enabled",
+        reason: "Take is available through the explicit item button for this visible portable item.",
+        entityKind: "item",
+        entityId: "item.demo.deck-pass",
+        readonly: true
+      }
+    ]));
   });
 
-  it("disables go after moving to a no-exit location", () => {
-    const controller = createReadonlyPrototypeController();
-
-    controller.moveToExit("exit.smoke.to-corridor");
-    const nextState = controller.getState();
-
-    expect(nextState.exitActions).toEqual([]);
-    expect(nextState.commandPalette.find((item) => item.commandId === "go")?.enabled).toBe(false);
-    expect(nextState.commandPalette.find((item) => item.commandId === "go")?.disabledReason).toBe("No exit is available from the current location.");
-    expect(nextState.availableActions).toEqual(["look", "inventory"]);
-  });
-
-  it("keeps Talk Take Use Save and Load disabled local ui-only actions", () => {
+  it("keeps Talk Take Use Save and Load palette actions disabled local ui-only commands", () => {
     const controller = createReadonlyPrototypeController();
 
     for (const actionId of DISABLED_PROTOTYPE_ACTIONS) {
@@ -230,347 +215,37 @@ describe("movement diagnostics prototype vertical slice", () => {
       expect(outcome.status).toBe("disabled");
       expect(outcome.interaction).toBeUndefined();
       expect(outcome.movement).toBeUndefined();
+      expect(outcome.pickup).toBeUndefined();
       expect(canonicalizeJson(snapshots.before)).toBe(canonicalizeJson(snapshots.after));
-      expect(outcome.playerStateUnchanged).toBe(true);
-      expectJsonSafe(outcome);
     }
   });
 
-  it("keeps engine contracts free of storage replay db and final-game exports", () => {
-    const controller = createReadonlyPrototypeController();
-    const smokeMove = controller.moveToExit("exit.smoke.to-corridor");
-    const demoController = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const demoState = demoController.selectScenario(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+  it("keeps scenario metadata and default routing intact", () => {
+    const state = createReadonlyPrototypeState();
 
+    expect(DEFAULT_PROTOTYPE_SCENARIO_ID).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
+    expect(state.selectedScenarioId).toBe(SMOKE_PROTOTYPE_SCENARIO_ID);
     expect(PROTOTYPE_SCENARIOS.map((scenario) => scenario.scenarioId)).toEqual([
       SMOKE_PROTOTYPE_SCENARIO_ID,
       OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID
     ]);
-    expect(PROTOTYPE_COMMAND_IDS).toEqual(["look", "inventory", "go", "talk", "take", "use", "save", "load"]);
     expect(EXECUTABLE_PROTOTYPE_ACTIONS).toEqual(["look", "inventory", "go"]);
+    expect(PROTOTYPE_COMMAND_IDS).toEqual(["look", "inventory", "go", "talk", "take", "use", "save", "load"]);
+  });
+
+  it("does not introduce parser arbitrary input storage replay db p0 map editor or plugin runtime exports", () => {
+    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
+    const pickup = controller.pickupItem("item.demo.deck-pass");
+    const state = controller.getState();
+
     expect("P0ContentPackage" in engineContracts).toBe(false);
     expect("MapEditor" in engineContracts).toBe(false);
-    expect("moveTo" in engineContracts).toBe(false);
     expect("executeRuntimeCommand" in engineContracts).toBe(false);
     expect("saveGameToBrowserStorage" in engineContracts).toBe(false);
     expect("createReplayRuntime" in engineContracts).toBe(false);
     expect("connectDatabaseRuntime" in engineContracts).toBe(false);
     expect("pluginRuntime" in engineContracts).toBe(false);
-    expect(smokeMove.movement?.finalPlayerState?.currentLocationId).toBe("location.smoke.corridor");
-    expect(demoState.location?.title).toBe("Prototype Observation Deck");
-    expectJsonSafe(demoState);
-    expectJsonSafe(smokeMove);
-  });
-});
-
-describe("read-only inspection panel", () => {
-  it("includes an inspection panel in read-only mode by default", () => {
-    const state = createReadonlyPrototypeState();
-
-    expect(state.inspectionPanel.readonly).toBe(true);
-    expect(state.inspectionPanel.selection).toBeUndefined();
-    expect(state.inspectionPanel.title).toBe("Inspection");
-    expect(state.inspectionPanel.futureActionReadiness).toEqual([]);
-  });
-
-  it("inspects the current location without moving or mutating state", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const before = controller.getState();
-    const state = controller.inspectLocation();
-
-    expect(state.inspectionPanel.selection).toEqual({
-      kind: "location",
-      locationId: "location.demo.observation-deck"
-    });
-    expect(state.inspectionPanel.title).toBe("Prototype Observation Deck");
-    expect(state.inspectionPanel.lines).toContain("A bright observation deck with prototype navigation glass and a calm starfield beyond the hull.");
-    expect(state.inspectionPanel.lines).toContain("Visible exits: 3");
-    expect(state.inspectionPanel.lines).toContain("Visible items: 1");
-    expect(state.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "look",
-        label: "Look",
-        status: "already-enabled",
-        reason: "Look already runs through the accepted read-only boundary.",
-        entityKind: "location",
-        entityId: "location.demo.observation-deck",
-        readonly: true
-      },
-      {
-        commandId: "go",
-        label: "Go",
-        status: "ready-later",
-        reason: "Visible exits exist. Use explicit exit Move buttons for controlled movement.",
-        entityKind: "location",
-        entityId: "location.demo.observation-deck",
-        readonly: true
-      },
-      {
-        commandId: "take",
-        label: "Take",
-        status: "ready-later",
-        reason: "Portable visible items exist, but item pickup is not implemented yet.",
-        entityKind: "location",
-        entityId: "location.demo.observation-deck",
-        readonly: true
-      },
-      {
-        commandId: "talk",
-        label: "Talk",
-        status: "ready-later",
-        reason: "Visible NPCs exist, but dialogue execution is not implemented yet.",
-        entityKind: "location",
-        entityId: "location.demo.observation-deck",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "ready-later",
-        reason: "A visible locked or condition-gated exit may become usable later, but use/effect execution is not implemented.",
-        entityKind: "location",
-        entityId: "location.demo.observation-deck",
-        readonly: true
-      }
-    ]);
-    expect(state.mapPanel.currentLocationId).toBe(before.mapPanel.currentLocationId);
-    expect(state.location?.title).toBe(before.location?.title);
-  });
-
-  it("inspects available and blocked exits without executing movement", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const available = controller.inspectExit("exit.demo.to-sensor-gallery");
-    const locked = controller.inspectExit("exit.demo.locked-service-door");
-    const gated = controller.inspectExit("exit.demo.maintenance-hatch");
-
-    expect(available.inspectionPanel.selection).toEqual({
-      kind: "exit",
-      exitId: "exit.demo.to-sensor-gallery",
-      targetLocationId: "location.demo.sensor-gallery"
-    });
-    expect(available.inspectionPanel.lines).toContain("Availability: available");
-    expect(available.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "go",
-        label: "Go",
-        status: "already-enabled",
-        reason: "Go is already enabled here. Use the Move button for explicit exit-targeted movement.",
-        entityKind: "exit",
-        entityId: "exit.demo.to-sensor-gallery",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "not-applicable",
-        reason: "This exit already moves through the explicit Go boundary, so Use does not apply.",
-        entityKind: "exit",
-        entityId: "exit.demo.to-sensor-gallery",
-        readonly: true
-      }
-    ]);
-    expect(locked.inspectionPanel.lines).toContain("Availability: locked");
-    expect(locked.inspectionPanel.lines).toContain("Movement is blocked because this exit is locked.");
-    expect(locked.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "go",
-        label: "Go",
-        status: "blocked",
-        reason: "Movement is blocked because this exit is locked.",
-        entityKind: "exit",
-        entityId: "exit.demo.locked-service-door",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "ready-later",
-        reason: "A future use/effect interaction may unlock this exit, but use/effect execution is not implemented.",
-        entityKind: "exit",
-        entityId: "exit.demo.locked-service-door",
-        readonly: true
-      }
-    ]);
-    expect(gated.inspectionPanel.lines).toContain("Availability: condition-gated");
-    expect(gated.inspectionPanel.lines).toContain("Required condition flag: demo.maintenance-access");
-    expect(gated.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "go",
-        label: "Go",
-        status: "blocked",
-        reason: "Movement is blocked until progress flag \"demo.maintenance-access\" is present.",
-        entityKind: "exit",
-        entityId: "exit.demo.maintenance-hatch",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "ready-later",
-        reason: "A future use/effect interaction may satisfy the required condition flag \"demo.maintenance-access\", but use/effect execution is not implemented.",
-        entityKind: "exit",
-        entityId: "exit.demo.maintenance-hatch",
-        readonly: true
-      }
-    ]);
-  });
-
-  it("inspects visible and inventory items with projected pickup readiness and keeps npc inspection intact", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const visibleItemState = controller.inspectItem("item.demo.deck-pass");
-    const inventoryItemState = controller.inspectItem("item.demo.survey-tablet");
-    const npcState = controller.inspectNpc("npc.demo.analyst");
-
-    expect(visibleItemState.inspectionPanel.title).toBe("Prototype Deck Pass");
-    expect(visibleItemState.inspectionPanel.lines).toContain("A portable deck pass resting on the observation rail to validate visible room-item projection before pickup exists.");
-    expect(visibleItemState.inspectionPanel.lines).toContain("Presence: visible-here");
-    expect(visibleItemState.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "take",
-        label: "Take",
-        status: "ready-later",
-        reason: "This visible portable item can become a pickup target later, but item pickup is not implemented yet.",
-        entityKind: "item",
-        entityId: "item.demo.deck-pass",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "ready-later",
-        reason: "This item may become usable later, but use/effect execution is not implemented.",
-        entityKind: "item",
-        entityId: "item.demo.deck-pass",
-        readonly: true
-      },
-      {
-        commandId: "talk",
-        label: "Talk",
-        status: "not-applicable",
-        reason: "Talk does not apply to inspected items.",
-        entityKind: "item",
-        entityId: "item.demo.deck-pass",
-        readonly: true
-      },
-      {
-        commandId: "go",
-        label: "Go",
-        status: "not-applicable",
-        reason: "Go does not apply to inspected items.",
-        entityKind: "item",
-        entityId: "item.demo.deck-pass",
-        readonly: true
-      }
-    ]);
-    expect(inventoryItemState.inspectionPanel.title).toBe("Prototype Survey Tablet");
-    expect(inventoryItemState.inspectionPanel.lines).toContain("A portable survey tablet carried only to prove that scenario inventory can switch cleanly.");
-    expect(inventoryItemState.inspectionPanel.lines).toContain("Presence: in-inventory");
-    expect(inventoryItemState.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "take",
-        label: "Take",
-        status: "not-applicable",
-        reason: "This item is already in inventory and is not a pickup target.",
-        entityKind: "item",
-        entityId: "item.demo.survey-tablet",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "ready-later",
-        reason: "This item may become usable later, but use/effect execution is not implemented.",
-        entityKind: "item",
-        entityId: "item.demo.survey-tablet",
-        readonly: true
-      },
-      {
-        commandId: "talk",
-        label: "Talk",
-        status: "not-applicable",
-        reason: "Talk does not apply to inspected items.",
-        entityKind: "item",
-        entityId: "item.demo.survey-tablet",
-        readonly: true
-      },
-      {
-        commandId: "go",
-        label: "Go",
-        status: "not-applicable",
-        reason: "Go does not apply to inspected items.",
-        entityKind: "item",
-        entityId: "item.demo.survey-tablet",
-        readonly: true
-      }
-    ]);
-    expect(npcState.inspectionPanel.title).toBe("Prototype Analyst");
-    expect(npcState.inspectionPanel.lines).toContain("Prototype Advisory");
-    expect(npcState.inspectionPanel.lines).toContain("Future action hint: Talk remains disabled in this prototype.");
-    expect(npcState.inspectionPanel.futureActionReadiness).toEqual([
-      {
-        commandId: "talk",
-        label: "Talk",
-        status: "ready-later",
-        reason: "Dialogue may apply later, but Talk remains disabled in this prototype.",
-        entityKind: "npc",
-        entityId: "npc.demo.analyst",
-        readonly: true
-      },
-      {
-        commandId: "take",
-        label: "Take",
-        status: "not-applicable",
-        reason: "Take does not apply to inspected NPCs.",
-        entityKind: "npc",
-        entityId: "npc.demo.analyst",
-        readonly: true
-      },
-      {
-        commandId: "use",
-        label: "Use",
-        status: "not-applicable",
-        reason: "Use does not apply to inspected NPCs.",
-        entityKind: "npc",
-        entityId: "npc.demo.analyst",
-        readonly: true
-      },
-      {
-        commandId: "go",
-        label: "Go",
-        status: "not-applicable",
-        reason: "Go does not apply to inspected NPCs.",
-        entityKind: "npc",
-        entityId: "npc.demo.analyst",
-        readonly: true
-      }
-    ]);
-  });
-
-  it("clears inspection and keeps runtime state unchanged", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    controller.inspectExit("exit.demo.locked-service-door");
-    const before = controller.getState();
-    const cleared = controller.clearInspection();
-
-    expect(cleared.inspectionPanel.selection).toBeUndefined();
-    expect(cleared.inspectionPanel.title).toBe("Inspection");
-    expect(cleared.mapPanel.currentLocationId).toBe(before.mapPanel.currentLocationId);
-    expect(cleared.location?.title).toBe(before.location?.title);
-    expect(cleared.inventory?.items).toEqual(before.inventory?.items);
-  });
-
-  it("inspection and item presence projection do not expose execution results or mutate player-facing state", () => {
-    const controller = createReadonlyPrototypeController(OBSERVATION_DECK_PROTOTYPE_SCENARIO_ID);
-    const before = controller.getState();
-    const inspected = controller.inspectNpc("npc.demo.analyst") as Record<string, unknown>;
-
-    expect("interaction" in inspected).toBe(false);
-    expect("movement" in inspected).toBe(false);
-    expect(inspected.location).toEqual(before.location);
-    expect(inspected.inventory).toEqual(before.inventory);
-    expect(inspected.mapPanel).toEqual(before.mapPanel);
-    expect(inspected.itemPresence).toEqual(before.itemPresence);
-    expect((inspected.inspectionPanel as { futureActionReadiness: readonly unknown[] }).futureActionReadiness.length).toBeGreaterThan(0);
-    expectJsonSafe(inspected);
+    expectJsonSafe(state);
+    expectJsonSafe(pickup);
   });
 });

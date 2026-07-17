@@ -2,12 +2,14 @@ import {
   createContentReadModel,
   createInitialRuntimePlayerStateFromContent,
   createRuntimeCommandPlan,
+  executeRuntimeItemPickupCommand,
   executeRuntimeMovementCommand,
   executeRuntimeReadonlyInteraction,
   loadContentPackageFromObject,
   type ContentDialogueDescriptor,
   type ContentItemDescriptor,
   type ContentNpcDescriptor,
+  type RuntimeItemPickupCommandExecutorResult,
   type RuntimeMovementCommandExecutorResult,
   type RuntimePlayerState,
   type RuntimeReadonlyInteractionDiagnostic,
@@ -119,6 +121,8 @@ export type PrototypeItemPresence = {
   readonly description: string;
   readonly portable: boolean;
   readonly status: PrototypeItemPresenceStatus;
+  readonly takeEnabled: boolean;
+  readonly takeDisabledReason?: string;
   readonly sourceLocationId?: string;
   readonly readonly: true;
 };
@@ -166,6 +170,7 @@ export type ReadonlyPrototypeActionOutcome = {
   readonly disabledReason?: string;
   readonly interaction?: RuntimeReadonlyInteractionResult;
   readonly movement?: RuntimeMovementCommandExecutorResult;
+  readonly pickup?: RuntimeItemPickupCommandExecutorResult;
   readonly output: ReadonlyPrototypeOutputPanel;
   readonly diagnostics: readonly ReadonlyPrototypeDiagnosticView[];
   readonly playerStateBefore: RuntimePlayerState;
@@ -177,6 +182,7 @@ export type ReadonlyPrototypeController = {
   readonly getState: () => ReadonlyPrototypeState;
   readonly runAction: (actionId: PrototypeCommandId) => ReadonlyPrototypeActionOutcome;
   readonly moveToExit: (exitId: string) => ReadonlyPrototypeActionOutcome;
+  readonly pickupItem: (itemId: string) => ReadonlyPrototypeActionOutcome;
   readonly selectScenario: (scenarioId: PrototypeScenarioId) => ReadonlyPrototypeState;
   readonly inspectLocation: () => ReadonlyPrototypeState;
   readonly inspectExit: (exitId: string) => ReadonlyPrototypeState;
@@ -207,8 +213,8 @@ type DisabledActionDescriptor = {
 
 type PrototypeInspectionEntityKind = PrototypeInspectionSelection["kind"];
 
-const PROTOTYPE_SCREEN_TITLE = "Movement Diagnostics Vertical Slice";
-const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement diagnostics for available, locked, and condition-gated exits.";
+const PROTOTYPE_SCREEN_TITLE = "Controlled Movement And Pickup Slice";
+const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement diagnostics plus explicit visible-item pickup through a dedicated take executor.";
 const PROTOTYPE_SCENARIO_OPTIONS = createPrototypeScenarioOptions();
 const GO_SELECT_EXIT_DETAIL = "Select a visible exit below to run controlled movement through the planned go boundary.";
 const DEFAULT_INSPECTION_TITLE = "Inspection";
@@ -221,7 +227,7 @@ const DISABLED_ACTION_DETAILS: Record<DisabledPrototypeActionId, DisabledActionD
   },
   take: {
     label: "Take",
-    reason: "Inventory mutation is not implemented yet."
+    reason: "Generic Take stays disabled. Use explicit visible item Take buttons only."
   },
   use: {
     label: "Use",
@@ -412,17 +418,37 @@ function createItemPresenceProjection(
         : typeof item.locationId === "string"
           ? "elsewhere"
           : "unknown";
+    const portable = item.portable === true;
+    const takeEnabled = status === "visible-here" && portable;
+    const takeDisabledReason = takeEnabled
+      ? undefined
+      : status === "visible-here"
+        ? "This visible item is not portable."
+        : status === "in-inventory"
+          ? "This item is already in inventory."
+          : status === "elsewhere"
+            ? "This item is not visible here."
+            : "Item presence is unresolved.";
 
     return {
       itemId: item.itemId,
       title: item.title,
       description: item.description,
-      portable: item.portable === true,
+      portable,
       status,
+      takeEnabled,
+      ...(takeDisabledReason === undefined ? {} : { takeDisabledReason }),
       ...(item.locationId === undefined ? {} : { sourceLocationId: item.locationId }),
       readonly: true
     };
   });
+}
+
+function findProjectedItem(
+  runtime: PrototypeRuntimeContext,
+  itemId: string
+): PrototypeItemPresence | undefined {
+  return createItemPresenceProjection(runtime).find((item) => item.itemId === itemId);
 }
 
 function createProjectedLocationPanel(
@@ -641,6 +667,29 @@ function createOutputFromMovement(
   };
 }
 
+function createOutputFromPickup(
+  result: RuntimeItemPickupCommandExecutorResult,
+  item?: PrototypeItemPresence
+): ReadonlyPrototypeOutputPanel {
+  const itemTitle = item?.title ?? result.itemId ?? "Unknown item";
+  const lines = result.status === "executed"
+    ? [
+        `Picked up ${itemTitle}.`,
+        `Item id: ${result.itemId ?? "unknown"}`,
+        ...(result.fromLocationId === undefined ? [] : [`From location: ${result.fromLocationId}`]),
+        "Item presence now derives from unchanged content item location plus updated runtime inventory state."
+      ]
+    : result.diagnostics.length > 0
+      ? result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
+      : ["Pickup output is unavailable."];
+
+  return {
+    kind: "take",
+    title: result.status === "executed" ? `Picked Up ${itemTitle}` : "Pickup Diagnostics",
+    lines
+  };
+}
+
 function createDiagnosticView(code: string, message: string, path: readonly (string | number)[]): ReadonlyPrototypeDiagnosticView {
   return {
     code,
@@ -719,9 +768,9 @@ function createLocationInspectionPanel(location: RuntimeReadonlyPresentationLoca
       "location",
       location.locationId,
       "take",
-      hasPortableItems ? "ready-later" : "not-applicable",
+      hasPortableItems ? "already-enabled" : "not-applicable",
       hasPortableItems
-        ? "Portable visible items exist, but item pickup is not implemented yet."
+        ? "Visible portable items can be picked up now through explicit item Take buttons."
         : "No portable visible items are available at this location."
     ),
     createFutureActionReadiness(
@@ -812,11 +861,11 @@ function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeIn
 
 function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspectionPanel {
   const takeStatus = item.status === "visible-here" && item.portable
-    ? "ready-later"
+    ? "already-enabled"
     : "not-applicable";
   const takeReason = item.status === "visible-here"
     ? item.portable
-      ? "This visible portable item can become a pickup target later, but item pickup is not implemented yet."
+      ? "Take is available through the explicit item button for this visible portable item."
       : "This visible item is not marked as portable."
     : item.status === "in-inventory"
       ? "This item is already in inventory and is not a pickup target."
@@ -867,7 +916,9 @@ function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspec
       `Presence: ${item.status}`,
       `Portable: ${item.portable ? "yes" : "no"}`,
       ...(item.sourceLocationId === undefined ? [] : [`Source location: ${item.sourceLocationId}`]),
-      "Future action hint: Take remains disabled in this prototype."
+      ...(item.status === "visible-here" && item.portable
+        ? ["Future action hint: Use the explicit Take button to run the dedicated pickup boundary."]
+        : ["Future action hint: Take does not apply in the current projected state."])
     ],
     availableFutureActions: summarizeReadyActions(readiness),
     futureActionReadiness: readiness,
@@ -1161,6 +1212,53 @@ function createMovementOutcome(runtime: PrototypeRuntimeContext, exitId: string)
   };
 }
 
+function createPickupOutcome(runtime: PrototypeRuntimeContext, itemId: string): ReadonlyPrototypeActionOutcome {
+  const projectedItem = findProjectedItem(runtime, itemId);
+  const playerStateBefore = cloneJsonValue(runtime.playerState);
+  const requestId = `${runtime.descriptor.scenarioId}.take.${itemId}`;
+  const plan = createRuntimeCommandPlan({
+    request: {
+      commandId: "take",
+      targetId: itemId
+    },
+    content: runtime.content,
+    playerState: runtime.playerState,
+    metadata: {
+      deterministic: true,
+      requestId,
+      correlationId: runtime.descriptor.scenarioId
+    }
+  });
+
+  const pickup = executeRuntimeItemPickupCommand({
+    plan,
+    content: runtime.content,
+    playerState: runtime.playerState,
+    metadata: {
+      deterministic: true,
+      requestId,
+      correlationId: runtime.descriptor.scenarioId
+    }
+  });
+
+  if (pickup.status === "executed" && pickup.finalPlayerState !== undefined) {
+    runtime.playerState = cloneJsonValue(pickup.finalPlayerState);
+  }
+
+  const playerStateAfter = cloneJsonValue(pickup.finalPlayerState ?? runtime.playerState);
+
+  return {
+    actionId: "take",
+    status: pickup.status,
+    pickup,
+    output: createOutputFromPickup(pickup, projectedItem),
+    diagnostics: pickup.diagnostics,
+    playerStateBefore,
+    playerStateAfter,
+    playerStateUnchanged: canonicalizeValue(playerStateBefore) === canonicalizeValue(playerStateAfter)
+  };
+}
+
 function buildStateForIdle(
   runtime: PrototypeRuntimeContext,
   selection?: PrototypeInspectionSelection
@@ -1173,7 +1271,7 @@ function buildStateForIdle(
     snapshot.diagnostics,
     {
       kind: "idle",
-      detail: "Ready. Look and Inventory remain read-only. Go is available only through explicit exits when the current location exposes them. Inspection is fully read-only and separate from action execution."
+      detail: "Ready. Look and Inventory remain read-only. Go stays bound to explicit exits, and Take stays bound to explicit visible portable item buttons. Inspection is fully read-only and separate from action execution."
     },
     selection
   );
@@ -1189,7 +1287,9 @@ function buildStateFromOutcome(
   const detail = outcome.status === "executed"
     ? outcome.actionId === "go"
       ? "GO executed through the controlled movement boundary."
-      : `${outcome.actionId.toUpperCase()} executed through the read-only boundary with no gameplay mutation.`
+      : outcome.actionId === "take"
+        ? "TAKE executed through the dedicated item pickup boundary."
+        : `${outcome.actionId.toUpperCase()} executed through the read-only boundary with no gameplay mutation.`
     : outcome.status === "disabled"
       ? `${outcome.actionId.toUpperCase()}: ${outcome.disabledReason ?? "Unavailable."}`
       : outcome.status === "blocked"
@@ -1255,6 +1355,12 @@ export function createReadonlyPrototypeController(
     moveToExit(exitId: string): ReadonlyPrototypeActionOutcome {
       const outcome = createMovementOutcome(runtime, exitId);
       selection = undefined;
+      state = buildStateFromOutcome(runtime, outcome, selection);
+      return cloneJsonValue(outcome);
+    },
+    pickupItem(itemId: string): ReadonlyPrototypeActionOutcome {
+      const outcome = createPickupOutcome(runtime, itemId);
+      selection = { kind: "item", itemId };
       state = buildStateFromOutcome(runtime, outcome, selection);
       return cloneJsonValue(outcome);
     },

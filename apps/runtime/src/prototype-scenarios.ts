@@ -40,7 +40,7 @@ function createSmokeMovementPrototypePackage(): ContentPackage {
   const basePackage = createReadonlyRuntimeSmokeScenarioPackage();
   return cloneJsonValue({
     ...basePackage,
-    actionAffordances: ["look", "inventory", "go"]
+    actionAffordances: ["look", "inventory", "go", "take"]
   });
 }
 
@@ -141,7 +141,7 @@ function createObservationDeckDemoPackage(): ContentPackage {
       inventoryItemIds: ["item.demo.survey-tablet"],
       progressFlags: ["demo.ready"]
     },
-    actionAffordances: ["look", "inventory", "go"]
+    actionAffordances: ["look", "inventory", "go", "take"]
   };
 }
 
