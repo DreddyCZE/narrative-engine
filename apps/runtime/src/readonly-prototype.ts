@@ -87,6 +87,23 @@ export type PrototypeInspectionPanel = {
   readonly title: string;
   readonly lines: readonly string[];
   readonly availableFutureActions: readonly PrototypeCommandId[];
+  readonly futureActionReadiness: readonly PrototypeFutureActionReadiness[];
+  readonly readonly: true;
+};
+
+export type PrototypeFutureActionReadinessStatus =
+  | "ready-later"
+  | "blocked"
+  | "not-applicable"
+  | "already-enabled";
+
+export type PrototypeFutureActionReadiness = {
+  readonly commandId: PrototypeCommandId;
+  readonly label: string;
+  readonly status: PrototypeFutureActionReadinessStatus;
+  readonly reason: string;
+  readonly entityKind: "location" | "exit" | "item" | "npc";
+  readonly entityId: string;
   readonly readonly: true;
 };
 
@@ -169,6 +186,8 @@ type DisabledActionDescriptor = {
   readonly label: string;
   readonly reason: string;
 };
+
+type PrototypeInspectionEntityKind = PrototypeInspectionSelection["kind"];
 
 const PROTOTYPE_SCREEN_TITLE = "Movement Diagnostics Vertical Slice";
 const PROTOTYPE_SCREEN_SUBTITLE = "Prototype scenarios loaded through public content contracts, rendered through the accepted read-only runtime boundary, with controlled movement diagnostics for available, locked, and condition-gated exits.";
@@ -552,11 +571,93 @@ function createDefaultInspectionPanel(): PrototypeInspectionPanel {
     title: DEFAULT_INSPECTION_TITLE,
     lines: [...DEFAULT_INSPECTION_LINES],
     availableFutureActions: [],
+    futureActionReadiness: [],
     readonly: true
   };
 }
 
+function createFutureActionReadiness(
+  entityKind: PrototypeInspectionEntityKind,
+  entityId: string,
+  commandId: PrototypeCommandId,
+  status: PrototypeFutureActionReadinessStatus,
+  reason: string
+): PrototypeFutureActionReadiness {
+  return {
+    commandId,
+    label: commandId === "look"
+      ? "Look"
+      : commandId === "inventory"
+        ? "Inventory"
+        : commandId === "go"
+          ? "Go"
+          : DISABLED_ACTION_DETAILS[commandId].label,
+    status,
+    reason,
+    entityKind,
+    entityId,
+    readonly: true
+  };
+}
+
+function summarizeReadyActions(
+  rows: readonly PrototypeFutureActionReadiness[]
+): readonly PrototypeCommandId[] {
+  return rows
+    .filter((row) => row.status === "ready-later" || row.status === "already-enabled")
+    .map((row) => row.commandId);
+}
+
 function createLocationInspectionPanel(location: RuntimeReadonlyPresentationLocationPanel): PrototypeInspectionPanel {
+  const hasPortableItems = location.items.some((item) => item.portable === true);
+  const hasTalkableNpcs = location.npcs.length > 0;
+  const hasBlockedExit = location.exits.some((exit) => exit.locked === true || exit.conditionFlag !== undefined);
+  const readiness = [
+    createFutureActionReadiness(
+      "location",
+      location.locationId,
+      "look",
+      "already-enabled",
+      "Look already runs through the accepted read-only boundary."
+    ),
+    createFutureActionReadiness(
+      "location",
+      location.locationId,
+      "go",
+      location.exits.length > 0 ? "ready-later" : "not-applicable",
+      location.exits.length > 0
+        ? "Visible exits exist. Use explicit exit Move buttons for controlled movement."
+        : "No visible exits are available from this location."
+    ),
+    createFutureActionReadiness(
+      "location",
+      location.locationId,
+      "take",
+      hasPortableItems ? "ready-later" : "not-applicable",
+      hasPortableItems
+        ? "Portable visible items exist, but item pickup is not implemented yet."
+        : "No portable visible items are available at this location."
+    ),
+    createFutureActionReadiness(
+      "location",
+      location.locationId,
+      "talk",
+      hasTalkableNpcs ? "ready-later" : "not-applicable",
+      hasTalkableNpcs
+        ? "Visible NPCs exist, but dialogue execution is not implemented yet."
+        : "No visible NPCs are available for dialogue at this location."
+    ),
+    createFutureActionReadiness(
+      "location",
+      location.locationId,
+      "use",
+      hasBlockedExit ? "ready-later" : "not-applicable",
+      hasBlockedExit
+        ? "A visible locked or condition-gated exit may become usable later, but use/effect execution is not implemented."
+        : "No visible exit or object suggests a future use interaction here yet."
+    )
+  ] as const;
+
   return {
     selection: {
       kind: "location",
@@ -569,12 +670,38 @@ function createLocationInspectionPanel(location: RuntimeReadonlyPresentationLoca
       `Visible items: ${String(location.items.length)}`,
       `Visible NPCs: ${String(location.npcs.length)}`
     ],
-    availableFutureActions: ["go", "take", "talk", "use"],
+    availableFutureActions: summarizeReadyActions(readiness),
+    futureActionReadiness: readiness,
     readonly: true
   };
 }
 
 function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeInspectionPanel {
+  const goStatus = exitAction.enabled ? "already-enabled" : "blocked";
+  const useStatus = exitAction.availability === "available" ? "not-applicable" : "ready-later";
+  const readiness = [
+    createFutureActionReadiness(
+      "exit",
+      exitAction.exitId,
+      "go",
+      goStatus,
+      exitAction.enabled
+        ? "Go is already enabled here. Use the Move button for explicit exit-targeted movement."
+        : exitAction.disabledReason ?? "Movement is blocked for this exit."
+    ),
+    createFutureActionReadiness(
+      "exit",
+      exitAction.exitId,
+      "use",
+      useStatus,
+      exitAction.availability === "available"
+        ? "This exit already moves through the explicit Go boundary, so Use does not apply."
+        : exitAction.availability === "locked"
+          ? "A future use/effect interaction may unlock this exit, but use/effect execution is not implemented."
+          : `A future use/effect interaction may satisfy the required condition flag "${exitAction.conditionFlag ?? "unknown"}", but use/effect execution is not implemented.`
+    )
+  ] as const;
+
   return {
     selection: {
       kind: "exit",
@@ -591,12 +718,48 @@ function createExitInspectionPanel(exitAction: PrototypeExitAction): PrototypeIn
       ...(exitAction.locked === true ? ["Locked: true"] : []),
       "Future action hint: Go remains controlled by explicit exit movement only."
     ],
-    availableFutureActions: ["go"],
+    availableFutureActions: summarizeReadyActions(readiness),
+    futureActionReadiness: readiness,
     readonly: true
   };
 }
 
 function createItemInspectionPanel(item: ContentItemDescriptor): PrototypeInspectionPanel {
+  const readiness = [
+    createFutureActionReadiness(
+      "item",
+      item.itemId,
+      "take",
+      item.portable === true ? "ready-later" : "not-applicable",
+      item.portable === true
+        ? "This item is portable, but item pickup is not implemented yet."
+        : "This item is not marked as portable."
+    ),
+    createFutureActionReadiness(
+      "item",
+      item.itemId,
+      "use",
+      item.portable === true ? "ready-later" : "not-applicable",
+      item.portable === true
+        ? "This item may become usable later, but use/effect execution is not implemented."
+        : "No future use readiness is modeled for this item yet."
+    ),
+    createFutureActionReadiness(
+      "item",
+      item.itemId,
+      "talk",
+      "not-applicable",
+      "Talk does not apply to inspected items."
+    ),
+    createFutureActionReadiness(
+      "item",
+      item.itemId,
+      "go",
+      "not-applicable",
+      "Go does not apply to inspected items."
+    )
+  ] as const;
+
   return {
     selection: {
       kind: "item",
@@ -608,7 +771,8 @@ function createItemInspectionPanel(item: ContentItemDescriptor): PrototypeInspec
       `Portable: ${item.portable === true ? "yes" : "no"}`,
       "Future action hint: Take remains disabled in this prototype."
     ],
-    availableFutureActions: ["take", "use"],
+    availableFutureActions: summarizeReadyActions(readiness),
+    futureActionReadiness: readiness,
     readonly: true
   };
 }
@@ -617,6 +781,39 @@ function createNpcInspectionPanel(
   npc: ContentNpcDescriptor,
   dialogue?: ContentDialogueDescriptor
 ): PrototypeInspectionPanel {
+  const readiness = [
+    createFutureActionReadiness(
+      "npc",
+      npc.npcId,
+      "talk",
+      npc.dialogueId === undefined ? "not-applicable" : "ready-later",
+      npc.dialogueId === undefined
+        ? "No dialogue is linked to this NPC."
+        : "Dialogue may apply later, but Talk remains disabled in this prototype."
+    ),
+    createFutureActionReadiness(
+      "npc",
+      npc.npcId,
+      "take",
+      "not-applicable",
+      "Take does not apply to inspected NPCs."
+    ),
+    createFutureActionReadiness(
+      "npc",
+      npc.npcId,
+      "use",
+      "not-applicable",
+      "Use does not apply to inspected NPCs."
+    ),
+    createFutureActionReadiness(
+      "npc",
+      npc.npcId,
+      "go",
+      "not-applicable",
+      "Go does not apply to inspected NPCs."
+    )
+  ] as const;
+
   return {
     selection: {
       kind: "npc",
@@ -628,7 +825,8 @@ function createNpcInspectionPanel(
       ...(dialogue?.lines[0] === undefined ? [] : [dialogue.lines[0]]),
       "Future action hint: Talk remains disabled in this prototype."
     ],
-    availableFutureActions: ["talk"],
+    availableFutureActions: summarizeReadyActions(readiness),
+    futureActionReadiness: readiness,
     readonly: true
   };
 }

@@ -1,6 +1,6 @@
 # Runtime Prototype
 
-This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice, locked-exit diagnostics, and a read-only inspection panel.
+This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice, locked-exit diagnostics, a read-only inspection panel, and a UI-only future action readiness model.
 
 ## What It Shows
 
@@ -11,6 +11,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - explicit exit controls derived from the current location read model
 - exit availability states for available, locked, and condition-gated movement
 - a read-only inspection panel for the current location, visible exits, visible items, and visible NPCs
+- a future action readiness section that explains which actions may later apply to the inspected entity
 - current inventory
 - transcript preview and latest action output
 - diagnostics
@@ -25,6 +26,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - routes `Look` and `Inventory` through `executeRuntimeReadonlyInteraction(...)`
 - routes `Go` through `createRuntimeCommandPlan(...)` plus `executeRuntimeMovementCommand(...)`
 - keeps inspection fully local to app-layer state and content/read-model lookups only
+- derives future action readiness from inspected app-layer state only and never executes planning, readonly interaction, or movement
 - binds movement to explicit exit buttons only
 - reuses existing exit `locked` and `conditionFlag` metadata without widening the content schema
 - never accepts free-form text or arbitrary command input
@@ -49,6 +51,7 @@ These scenarios are prototype data only. They are not final game content and do 
 - movement runs only by clicking a visible exit move button that maps to a specific target location
 - clicking a locked or condition-gated exit keeps player state and map highlight unchanged and reports the movement diagnostic
 - inspection is separate from movement and never executes runtime commands
+- future action readiness is visibly read-only metadata only and does not render executable controls for Talk, Take, or Use
 - inspection can show details for the current location, a visible exit, a visible item, or a visible NPC
 - clicking `Go` without choosing an exit does not execute movement and instead explains how to continue safely
 

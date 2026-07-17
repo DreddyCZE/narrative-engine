@@ -322,6 +322,27 @@ function renderMapConnection(
   `;
 }
 
+function renderInspectionReadiness(state: ReadonlyPrototypeState): string {
+  if (state.inspectionPanel.futureActionReadiness.length === 0) {
+    return `<div class="prototype-empty">No future action readiness metadata is available until an inspectable entity is selected.</div>`;
+  }
+
+  return `
+    <div class="prototype-readiness-list" aria-label="Future action readiness">
+      ${state.inspectionPanel.futureActionReadiness.map((row) => `
+        <div class="prototype-readiness-row prototype-readiness-${escapeHtml(row.status)}">
+          <div class="prototype-command-header">
+            <span class="prototype-command-label">${escapeHtml(row.label)}</span>
+            <span class="prototype-command-state">${escapeHtml(row.status)}</span>
+          </div>
+          <div class="prototype-code">${escapeHtml(row.entityKind)} · ${escapeHtml(row.entityId)} · readonly</div>
+          <div class="prototype-palette-copy">${escapeHtml(row.reason)}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
 function renderInspectionPanel(state: ReadonlyPrototypeState): string {
   return `
     <div class="prototype-subpanel">
@@ -338,6 +359,11 @@ function renderInspectionPanel(state: ReadonlyPrototypeState): string {
           <span class="prototype-list-label">Future actions</span>
           <strong>${state.inspectionPanel.availableFutureActions.length === 0 ? "none" : state.inspectionPanel.availableFutureActions.map((actionId) => escapeHtml(actionId)).join(" · ")}</strong>
         </div>
+      </div>
+      <div class="prototype-subpanel">
+        <h3>Future Action Readiness</h3>
+        <p class="prototype-summary">These readiness rows are UI-only metadata for inspected entities. They do not execute planning, runtime commands, or movement.</p>
+        ${renderInspectionReadiness(state)}
       </div>
       <div class="prototype-inline-actions">
         <button type="button" class="prototype-inspect-button" data-clear-inspection="true">Clear Inspection</button>
