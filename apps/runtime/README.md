@@ -1,6 +1,6 @@
 # Runtime Prototype
 
-This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice, locked-exit diagnostics, a read-only inspection panel, and a UI-only future action readiness model.
+This browser prototype renders multiple prototype scenarios through the public engine contracts and now includes a tightly scoped movement slice, locked-exit diagnostics, a read-only inspection panel, a UI-only future action readiness model, and a read-only item presence projection.
 
 ## What It Shows
 
@@ -26,6 +26,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - routes `Look` and `Inventory` through `executeRuntimeReadonlyInteraction(...)`
 - routes `Go` through `createRuntimeCommandPlan(...)` plus `executeRuntimeMovementCommand(...)`
 - keeps inspection fully local to app-layer state and content/read-model lookups only
+- derives item presence from content item location plus runtime inventory state without mutating either source
 - derives future action readiness from inspected app-layer state only and never executes planning, readonly interaction, or movement
 - binds movement to explicit exit buttons only
 - reuses existing exit `locked` and `conditionFlag` metadata without widening the content schema
@@ -36,7 +37,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 ## Prototype Scenarios
 
 - `Smoke Scenario`: public smoke package adapted at the app layer for prototype movement, with `Smoke Test Airlock`, `Smoke Test Corridor`, and `Smoke Test Keycard`
-- `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, `Prototype Sensor Gallery`, `Prototype Survey Tablet`, and `Prototype Analyst`
+- `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, a visible `Prototype Deck Pass`, an inventory-owned `Prototype Survey Tablet`, an unreachable `Prototype Locker Seal`, `Prototype Sensor Gallery`, and `Prototype Analyst`
 - the observation deck demo also includes a locked service locker exit and a condition-gated maintenance hatch for movement-readiness diagnostics
 
 These scenarios are prototype data only. They are not final game content and do not add P0 story content to engine contracts.
@@ -52,6 +53,7 @@ These scenarios are prototype data only. They are not final game content and do 
 - clicking a locked or condition-gated exit keeps player state and map highlight unchanged and reports the movement diagnostic
 - inspection is separate from movement and never executes runtime commands
 - future action readiness is visibly read-only metadata only and does not render executable controls for Talk, Take, or Use
+- item projection ensures room items and inventory items render from separate read-only sources before any future pickup mutation exists
 - inspection can show details for the current location, a visible exit, a visible item, or a visible NPC
 - clicking `Go` without choosing an exit does not execute movement and instead explains how to continue safely
 

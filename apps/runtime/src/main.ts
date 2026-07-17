@@ -29,22 +29,6 @@ function escapeHtml(value: string): string {
     .replaceAll("'", "&#39;");
 }
 
-function renderListItems(items: readonly { readonly title: string; readonly description: string }[], empty: string): string {
-  if (items.length === 0) {
-    return `<div class="prototype-empty">${escapeHtml(empty)}</div>`;
-  }
-
-  return `
-    <ul class="prototype-list">
-      ${items.map((item) => `
-        <li>
-          <span class="prototype-list-title">${escapeHtml(item.title)}</span>
-          <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
-        </li>
-      `).join("")}
-    </ul>
-  `;
-}
 
 function renderScenarioSelectorItem(
   option: PrototypeScenarioOption,
@@ -131,14 +115,16 @@ function renderWorldDetails(state: ReadonlyPrototypeState): string {
       </div>
     `;
 
-  const itemsMarkup = location.items.length === 0
+  const visibleItems = state.itemPresence.filter((item) => item.status === "visible-here");
+  const itemsMarkup = visibleItems.length === 0
     ? `<div class="prototype-empty">No visible items.</div>`
     : `
       <ul class="prototype-list">
-        ${location.items.map((item) => `
+        ${visibleItems.map((item) => `
           <li>
             <span class="prototype-list-title">${escapeHtml(item.title)}</span>
             <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
+            <div class="prototype-code prototype-presence-label">Presence: ${escapeHtml(item.status)}</div>
             <div class="prototype-inline-actions">
               <button type="button" class="prototype-inspect-button" data-inspect-item="${escapeHtml(item.itemId)}">Inspect</button>
             </div>
@@ -184,19 +170,37 @@ function renderInventory(state: ReadonlyPrototypeState): string {
     return `<div class="prototype-empty">Inventory data is not available.</div>`;
   }
 
+  const inventoryItems = state.itemPresence.filter((item) => item.status === "in-inventory");
+  const itemsMarkup = inventoryItems.length === 0
+    ? `<div class="prototype-empty">Inventory is empty.</div>`
+    : `
+      <ul class="prototype-list">
+        ${inventoryItems.map((item) => `
+          <li>
+            <span class="prototype-list-title">${escapeHtml(item.title)}</span>
+            <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
+            <div class="prototype-code prototype-presence-label">Presence: ${escapeHtml(item.status)}</div>
+            <div class="prototype-inline-actions">
+              <button type="button" class="prototype-inspect-button" data-inspect-item="${escapeHtml(item.itemId)}">Inspect</button>
+            </div>
+          </li>
+        `).join("")}
+      </ul>
+    `;
+
   return `
     <div class="prototype-chip-row">
       <div class="prototype-chip">
         <span class="prototype-list-label">Item count</span>
-        <strong>${String(state.inventory.itemCount)}</strong>
+        <strong>${String(inventoryItems.length)}</strong>
       </div>
       <div class="prototype-chip">
         <span class="prototype-list-label">Runtime state</span>
-        <strong>${state.inventory.empty ? "Empty" : "Stable"}</strong>
+        <strong>${inventoryItems.length === 0 ? "Empty" : "Stable"}</strong>
       </div>
     </div>
     <div class="prototype-subpanel">
-      ${renderListItems(state.inventory.items, "Inventory is empty.")}
+      ${itemsMarkup}
     </div>
   `;
 }

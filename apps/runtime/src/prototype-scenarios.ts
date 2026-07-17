@@ -105,6 +105,20 @@ function createObservationDeckDemoPackage(): ContentPackage {
         title: "Prototype Survey Tablet",
         description: "A portable survey tablet carried only to prove that scenario inventory can switch cleanly.",
         portable: true
+      },
+      {
+        itemId: "item.demo.deck-pass",
+        title: "Prototype Deck Pass",
+        description: "A portable deck pass resting on the observation rail to validate visible room-item projection before pickup exists.",
+        portable: true,
+        locationId: "location.demo.observation-deck"
+      },
+      {
+        itemId: "item.demo.locker-seal",
+        title: "Prototype Locker Seal",
+        description: "A maintenance seal stored away from the player to prove that unreachable items stay out of room and inventory views.",
+        portable: false,
+        locationId: "location.demo.service-locker"
       }
     ],
     npcs: [
