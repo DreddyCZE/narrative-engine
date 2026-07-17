@@ -40,7 +40,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 ## Prototype Scenarios
 
 - `Smoke Scenario`: public smoke package adapted at the app layer for prototype movement and pickup, with `Smoke Test Airlock`, `Smoke Test Corridor`, and `Smoke Test Keycard`
-- `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, a visible `Prototype Deck Pass`, an inventory-owned `Prototype Survey Tablet`, an unreachable non-portable `Prototype Locker Seal`, `Prototype Sensor Gallery`, and `Prototype Analyst`
+- `Observation Deck Demo`: prototype-only app-layer demo package with `Prototype Observation Deck`, a visible portable `Prototype Deck Pass`, a visible non-portable `Prototype Bulkhead Plaque`, an inventory-owned `Prototype Survey Tablet`, an unreachable non-portable `Prototype Locker Seal`, `Prototype Sensor Gallery`, and `Prototype Analyst`
 - the observation deck demo also includes a locked service locker exit and a condition-gated maintenance hatch for movement-readiness diagnostics
 
 These scenarios are prototype data only. They are not final game content and do not add P0 story content to engine contracts.
@@ -57,7 +57,7 @@ These scenarios are prototype data only. They are not final game content and do 
 - picking up an item mutates only runtime inventory state plus revision metadata and never mutates content item location
 - projection hides a picked-up item from visible room items and shows it in inventory by combining unchanged content item location with updated runtime inventory state
 - clicking a locked or condition-gated exit keeps player state and map highlight unchanged and reports the movement diagnostic
-- blocked item pickup keeps player state unchanged and reports the pickup diagnostic
+- blocked item pickup keeps player state unchanged and reports clearer pickup diagnostics for already-in-inventory, not-visible-here, and visible-but-not-portable cases
 - inspection is separate from movement and pickup and never executes runtime commands
 - future action readiness is visibly read-only metadata only and does not render executable generic controls for Talk, Take, or Use
 - clicking `Go` without choosing an exit does not execute movement and instead explains how to continue safely

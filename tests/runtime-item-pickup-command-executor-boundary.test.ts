@@ -290,7 +290,15 @@ describe("runtime item pickup command executor boundary", () => {
     const result = executeRuntimeItemPickupCommand(createInput(createPlan({ commandId: "take", targetId: "item.visible-fixed" })));
 
     expect(result.status).toBe("blocked");
-    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toContain("RUNTIME_ITEM_PICKUP_COMMAND_ITEM_NOT_PORTABLE");
+    expect(result.diagnostics[0]).toEqual(expect.objectContaining({
+      code: "RUNTIME_ITEM_PICKUP_COMMAND_ITEM_NOT_PORTABLE",
+      details: {
+        currentLocationId: "location.start",
+        itemId: "item.visible-fixed",
+        itemLocationId: "location.start",
+        inventoryItemIds: ["item.inventory-owned"]
+      }
+    }));
   });
 
   it("blocked paths preserve player state", () => {

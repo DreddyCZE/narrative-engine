@@ -672,6 +672,7 @@ function createOutputFromPickup(
   item?: PrototypeItemPresence
 ): ReadonlyPrototypeOutputPanel {
   const itemTitle = item?.title ?? result.itemId ?? "Unknown item";
+  const primaryDiagnostic = result.diagnostics[0];
   const lines = result.status === "executed"
     ? [
         `Picked up ${itemTitle}.`,
@@ -679,9 +680,24 @@ function createOutputFromPickup(
         ...(result.fromLocationId === undefined ? [] : [`From location: ${result.fromLocationId}`]),
         "Item presence now derives from unchanged content item location plus updated runtime inventory state."
       ]
-    : result.diagnostics.length > 0
-      ? result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
-      : ["Pickup output is unavailable."];
+    : primaryDiagnostic?.code === "RUNTIME_ITEM_PICKUP_COMMAND_ITEM_ALREADY_IN_INVENTORY"
+      ? [
+          `${itemTitle} is already in inventory.`,
+          ...result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
+        ]
+      : primaryDiagnostic?.code === "RUNTIME_ITEM_PICKUP_COMMAND_ITEM_NOT_VISIBLE_HERE"
+        ? [
+            `${itemTitle} is not visible here.`,
+            ...result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
+          ]
+        : primaryDiagnostic?.code === "RUNTIME_ITEM_PICKUP_COMMAND_ITEM_NOT_PORTABLE"
+          ? [
+              `${itemTitle} is visible here but not portable.`,
+              ...result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
+            ]
+          : result.diagnostics.length > 0
+            ? result.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
+            : ["Pickup output is unavailable."];
 
   return {
     kind: "take",
@@ -866,7 +882,7 @@ function createItemInspectionPanel(item: PrototypeItemPresence): PrototypeInspec
   const takeReason = item.status === "visible-here"
     ? item.portable
       ? "Take is available through the explicit item button for this visible portable item."
-      : "This visible item is not marked as portable."
+      : "This visible item is not portable."
     : item.status === "in-inventory"
       ? "This item is already in inventory and is not a pickup target."
       : item.status === "elsewhere"
