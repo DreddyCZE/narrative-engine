@@ -242,6 +242,18 @@ export {
   type RuntimeMovementCommandExecutorResult
 } from "./runtime-host/runtime-movement-command-executor.js";
 export {
+  assertRuntimeItemPickupCommandExecutionInput,
+  executeRuntimeItemPickupCommand,
+  formatRuntimeItemPickupCommandExecutionValidationMessage,
+  inspectRuntimeItemPickupCommandExecutionInput,
+  RUNTIME_ITEM_PICKUP_COMMAND_EXECUTION_STATUSES,
+  RUNTIME_ITEM_PICKUP_COMMAND_EXECUTOR_CONTRACT_VERSION,
+  type RuntimeItemPickupCommandDiagnostic,
+  type RuntimeItemPickupCommandExecutionStatus,
+  type RuntimeItemPickupCommandExecutorInput,
+  type RuntimeItemPickupCommandExecutorResult
+} from "./runtime-host/runtime-item-pickup-command-executor.js";
+export {
   assertRuntimeLookCommandExecutionInput,
   executeRuntimeLookCommand,
   formatRuntimeLookCommandExecutionValidationMessage,

@@ -3,26 +3,25 @@
 **Date:** 2026-07-17
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-105 are DONE or REVIEW. TASK-060 through TASK-104 are DONE. TASK-105 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-106 are DONE or REVIEW. TASK-060 through TASK-105 are DONE. TASK-106 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-104 is DONE. TASK-105 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-105 - Prototype item presence projection before pickup`.
-4. **What the current scope must not change:** no generic command execution, no free-form parser, no arbitrary target input, no gameplay mutation beyond the accepted deterministic current-location movement slice, no inventory mutation, no dialogue progression, no use/effect execution, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-105 remains review-ready with read-only item presence projection separating visible room items, inventory-owned items, and unreachable items, while movement diagnostics, deterministic movement behavior, read-only inspection behavior, and future action readiness remain intact and no pickup mutation exists yet.
+2. **Current state:** TASK-105 is DONE. TASK-106 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-106 - Controlled item pickup boundary`.
+4. **What the current scope must not change:** no generic command execution, no free-form parser, no arbitrary target input, no dialogue progression, no use/effect execution, no save/load UI, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-106 remains review-ready with a dedicated `take` executor accepting only planned `take` commands, explicit visible portable item pickup through item buttons only, inventory-only runtime mutation preserving content item location, projection-driven room-versus-inventory separation after pickup, and existing movement, inspection, and readiness behavior intact.
 
 ## Repository / PR State
 
 - Correct GitHub remote is configured:
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
-- PR #84 was merged into `origin/main` at merge commit `53e66a6`.
-- PR #85 was merged into `origin/main` at merge commit `47b8584`.
-- TASK-102 is done.
-- TASK-103 is in review.
-- TASK-104 has not been created.
+- PR #88 was merged into `origin/main` at merge commit `da265a7`.
+- TASK-105 is done.
+- TASK-106 is in review.
+- TASK-107 has not been created.
 - No DB adapter, external storage adapter, replay runtime, browser storage, map editor, or plugin runtime task is active.
 
 ## Planning State
@@ -78,14 +77,17 @@
   - `TASK-100 - Prototype milestone checkpoint and next gameplay-scope decision` DONE
   - `TASK-101 - Controlled movement planning vertical slice` DONE
   - `TASK-102 - Movement diagnostics and locked-exit readiness` DONE
+  - `TASK-103 - Prototype read-only inspection panel` DONE
+  - `TASK-104 - Prototype future action readiness model` DONE
+  - `TASK-105 - Prototype item presence projection before pickup` DONE
 - In review:
-  - `TASK-103 - Prototype read-only inspection panel`
+  - `TASK-106 - Controlled item pickup boundary`
 - Next task after acceptance:
-  - `TASK-104` not created
+  - `TASK-107` not created
 
 ## Boundary Reminder
 
-- Runtime host remains pure and in-memory except for the accepted read-only `look` and `inventory` boundaries plus the dedicated movement executor boundary for planned `go` commands.
+- Runtime host remains pure and in-memory except for the accepted read-only `look` and `inventory` boundaries, the dedicated movement executor boundary for planned `go` commands, and the dedicated item pickup executor boundary for planned `take` commands.
 - File IO exists only in the explicit file storage adapter boundary.
 - Memory storage adapter remains in-process and host-side-effect free.
 - Save/load remains behind its public facade and diagnostics surface.
@@ -94,14 +96,18 @@
 - Future UX must remain separate from content data.
 - P0 story content must not be hardcoded into engine contracts.
 - `apps/runtime` remains the accepted browser prototype consumer over public engine-contracts exports only.
-- Inspection is app-layer only and must not call planning, read-only execution, or movement execution.
-- Future action readiness is app-layer only, visibly read-only, and must not call planning, read-only execution, or movement execution.
+- Inspection is app-layer only and must not call planning, read-only execution, movement execution, or pickup execution.
+- Future action readiness is app-layer only, visibly read-only, and must not call planning, read-only execution, movement execution, or pickup execution.
 - Item presence projection is app-layer only and must derive room versus inventory visibility from content item location plus runtime inventory state without mutating either source.
 - `Go` stays bound only to explicit exits already present in the current read model and does not accept arbitrary text.
+- Generic `Take` stays disabled in the command palette.
+- `Take` executes only through explicit visible portable item buttons already present in the current projection.
+- Successful pickup mutates only `inventoryItemIds`, `revision`, and `metadata.updatedAtRevision` on runtime player state.
+- Content item location remains unchanged during pickup.
 - Locked exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED`.
 - Condition-gated exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET` until the required progress flag is present.
 - Scenario registry and map registry remain app-layer only.
-- `Talk`, `Take`, `Use`, `Save`, and `Load` remain disabled local UI-only affordances.
+- `Talk`, `Use`, `Save`, and `Load` remain disabled local UI-only affordances.
 - No DB adapter.
 - No external or browser storage adapter.
 - No map editor.
@@ -109,6 +115,7 @@
 
 ## Last Checks
 
+- `corepack pnpm test -- tests/runtime-item-pickup-command-executor-boundary.test.ts` - passed.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype build` - passed.
 - `corepack pnpm test -- tests/runtime-movement-command-executor-boundary.test.ts` - passed.
@@ -123,9 +130,9 @@
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed.
+- `git diff --check` - passed with non-blocking CRLF normalization warnings in `apps/runtime/README.md` and `apps/runtime/src/readonly-prototype.test.ts`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects `>=22 <23`.
 
 ## Next Task Boundary
 
-Review `TASK-103` next. Keep the work focused on the accepted controlled movement slice and read-only inspection panel only. Do not introduce parser input, arbitrary targeting, item pickup, inventory mutation, dialogue progression, use/effect execution, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.
+Review `TASK-106` next. Keep the work focused on the accepted controlled movement and controlled item pickup slices only. Do not introduce parser input, arbitrary targeting, dialogue progression, use/effect execution, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.
