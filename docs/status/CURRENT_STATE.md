@@ -3,25 +3,25 @@
 **Date:** 2026-07-17
 **Milestone:** M7 Production Storage Adapter / Replay Boundary
 **Active task:** none
-**Status:** TASK-037 through TASK-107 are DONE or REVIEW. TASK-060 through TASK-106 are DONE. TASK-107 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
+**Status:** TASK-037 through TASK-108 are DONE or REVIEW. TASK-060 through TASK-107 are DONE. TASK-108 is REVIEW. M2 gate verdict is `M2_GATE_PASS_WITH_DEFERRED_ITEMS`. M3 gate verdict is `M3_GATE_PASS_WITH_DEFERRED_ITEMS`. M4 gate verdict is `M4_GATE_PASS_WITH_DEFERRED_ITEMS`. M5 gate verdict is `M5_GATE_PASS_WITH_DEFERRED_ITEMS`. M6 gate verdict is `M6_GATE_PASS_WITH_DEFERRED_ITEMS`.
 
 ## Current Workflow
 
 1. **Current milestone:** M7 Production Storage Adapter / Replay Boundary.
-2. **Current state:** TASK-106 is DONE. TASK-107 is REVIEW. There is no active task.
-3. **Single next most important task:** Review `TASK-107 - Pickup UX diagnostics hardening`.
-4. **What the current scope must not change:** no new gameplay executor, no generic command execution, no free-form parser, no arbitrary target input, no dialogue progression, no use/effect execution, no save/load UI, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
-5. **How completion is recognized:** TASK-107 remains review-ready with a visible non-portable pickup diagnostic fixture, clearer blocked pickup output for already-in-inventory, not-visible-here, and visible-but-not-portable cases, projection-driven room-versus-inventory separation preserved, generic `Take` still disabled, and existing movement, inspection, and readiness behavior intact.
+2. **Current state:** TASK-107 is DONE. TASK-108 is REVIEW. There is no active task.
+3. **Single next most important task:** Review `TASK-108 - Inventory-owned item inspection hardening`.
+4. **What the current scope must not change:** no engine contract changes, no new gameplay executor, no generic command execution, no free-form parser, no arbitrary target input, no dialogue progression, no use/effect execution, no save/load UI, no replay runtime, no DB adapter, and no external or browser storage adapter may be introduced until later tasks explicitly accept them.
+5. **How completion is recognized:** TASK-108 remains review-ready with inventory-owned items clearly inspectable before and after pickup, explicit inventory ownership and pickup-not-applicable inspection copy, projection-driven room-versus-inventory separation preserved, generic `Take` still disabled, engine contracts unchanged, and existing movement plus blocked-pickup diagnostics intact.
 
 ## Repository / PR State
 
 - Correct GitHub remote is configured:
   - `origin`: `https://github.com/DreddyCZE/narrative-engine.git`
 - The old incorrect remote remains isolated and must not be used for pushes.
-- PR #89 was merged into `origin/main` at merge commit `1c5981a`.
-- TASK-106 is done.
-- TASK-107 is in review.
-- TASK-108 has not been created.
+- PR #90 was merged into `origin/main` at merge commit `069c872`.
+- TASK-107 is done.
+- TASK-108 is in review.
+- TASK-109 has not been created.
 - No DB adapter, external storage adapter, replay runtime, browser storage, map editor, or plugin runtime task is active.
 
 ## Planning State
@@ -81,10 +81,11 @@
   - `TASK-104 - Prototype future action readiness model` DONE
   - `TASK-105 - Prototype item presence projection before pickup` DONE
   - `TASK-106 - Controlled item pickup boundary` DONE
+  - `TASK-107 - Pickup UX diagnostics hardening` DONE
 - In review:
-  - `TASK-107 - Pickup UX diagnostics hardening`
+  - `TASK-108 - Inventory-owned item inspection hardening`
 - Next task after acceptance:
-  - `TASK-108` not created
+  - `TASK-109` not created
 
 ## Boundary Reminder
 
@@ -102,13 +103,14 @@
 - Item presence projection is app-layer only and must derive room versus inventory visibility from content item location plus runtime inventory state without mutating either source.
 - `Go` stays bound only to explicit exits already present in the current read model and does not accept arbitrary text.
 - Generic `Take` stays disabled in the command palette.
-- `Take` executes only through explicit visible portable item buttons already present in the current projection, while visible non-portable items stay inspectable and report local non-portable reasons.
+- `Take` executes only through explicit visible portable item buttons already present in the current projection, while visible non-portable items stay inspectable and report local non-portable reasons and inventory-owned items stay inspectable with explicit ownership copy.
 - Successful pickup mutates only `inventoryItemIds`, `revision`, and `metadata.updatedAtRevision` on runtime player state.
 - Content item location remains unchanged during pickup.
 - Locked exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_LOCKED`.
 - Condition-gated exits block movement with `RUNTIME_MOVEMENT_COMMAND_EXIT_CONDITION_UNMET` until the required progress flag is present.
 - Scenario registry and map registry remain app-layer only.
 - `Talk`, `Use`, `Save`, and `Load` remain disabled local UI-only affordances.
+- No `Drop` command or inventory mutation beyond accepted pickup behavior.
 - No DB adapter.
 - No external or browser storage adapter.
 - No map editor.
@@ -116,9 +118,9 @@
 
 ## Last Checks
 
-- `corepack pnpm test -- tests/runtime-item-pickup-command-executor-boundary.test.ts` - passed.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype test` - passed.
 - `corepack pnpm --filter @narrative-engine/runtime-prototype build` - passed.
+- `corepack pnpm test -- tests/runtime-item-pickup-command-executor-boundary.test.ts` - passed.
 - `corepack pnpm test -- tests/runtime-movement-command-executor-boundary.test.ts` - passed.
 - `corepack pnpm test -- tests/runtime-command-planning-boundary.test.ts` - passed.
 - `corepack pnpm test -- tests/runtime-command-request-boundary.test.ts` - passed.
@@ -131,9 +133,9 @@
 - `corepack pnpm typecheck` - passed.
 - `corepack pnpm build` - passed.
 - `corepack pnpm validate` - passed.
-- `git diff --check` - passed with non-blocking CRLF normalization warnings in `apps/runtime/README.md`, `apps/runtime/src/prototype-scenarios.ts`, `apps/runtime/src/readonly-prototype.test.ts`, `apps/runtime/src/readonly-prototype.ts`, and `tests/runtime-item-pickup-command-executor-boundary.test.ts`.
+- `git diff --check` - passed with non-blocking CRLF normalization warnings in `apps/runtime/README.md`, `apps/runtime/src/main.ts`, `apps/runtime/src/readonly-prototype.css`, `apps/runtime/src/readonly-prototype.test.ts`, `apps/runtime/src/readonly-prototype.ts`, and `docs/status/CURRENT_STATE.md`.
 - Known local environment warning remains: Node `v24.16.0` while the repo expects `>=22 <23`.
 
 ## Next Task Boundary
 
-Review `TASK-107` next. Keep the work focused on pickup UX diagnostics hardening only. Do not introduce new gameplay executors, parser input, arbitrary targeting, dialogue progression, use/effect execution, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.
+Review `TASK-108` next. Keep the work focused on inventory-owned inspection hardening only. Do not introduce engine contract changes, new gameplay executors, drop/use/talk execution, parser input, arbitrary targeting, save/load UI, replay runtime, DB integration, browser persistence, map editing, plugin runtime, or P0 story content in this step.

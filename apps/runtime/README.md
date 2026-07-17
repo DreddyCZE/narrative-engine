@@ -11,7 +11,7 @@ This browser prototype renders multiple prototype scenarios through the public e
 - explicit exit controls derived from the current location read model
 - explicit visible-item controls derived from app-layer item presence projection
 - exit availability states for available, locked, and condition-gated movement
-- a read-only inspection panel for the current location, visible exits, visible items, inventory-owned items, and visible NPCs
+- a read-only inspection panel for the current location, visible exits, visible items, inventory-owned items with explicit ownership copy, and visible NPCs
 - a future action readiness section that explains which actions may later apply to the inspected entity
 - current inventory
 - transcript preview and latest action output
@@ -58,6 +58,7 @@ These scenarios are prototype data only. They are not final game content and do 
 - projection hides a picked-up item from visible room items and shows it in inventory by combining unchanged content item location with updated runtime inventory state
 - clicking a locked or condition-gated exit keeps player state and map highlight unchanged and reports the movement diagnostic
 - blocked item pickup keeps player state unchanged and reports clearer pickup diagnostics for already-in-inventory, not-visible-here, and visible-but-not-portable cases
+- inventory-owned items remain inspectable after pickup and clearly report that pickup no longer applies
 - inspection is separate from movement and pickup and never executes runtime commands
 - future action readiness is visibly read-only metadata only and does not render executable generic controls for Talk, Take, or Use
 - clicking `Go` without choosing an exit does not execute movement and instead explains how to continue safely

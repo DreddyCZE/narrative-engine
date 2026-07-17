@@ -185,9 +185,12 @@ function renderInventory(state: ReadonlyPrototypeState): string {
             <span class="prototype-list-title">${escapeHtml(item.title)}</span>
             <span class="prototype-list-copy">${escapeHtml(item.description)}</span>
             <div class="prototype-code prototype-presence-label">Presence: ${escapeHtml(item.status)}</div>
+            <div class="prototype-code prototype-presence-label">Portable: ${item.portable ? "yes" : "no"}</div>
+            <div class="prototype-code prototype-presence-label">Ownership: inventory-owned</div>
             <div class="prototype-inline-actions">
               <button type="button" class="prototype-inspect-button" data-inspect-item="${escapeHtml(item.itemId)}">Inspect</button>
             </div>
+            <div class="prototype-inventory-note">Already in inventory.</div>
           </li>
         `).join("")}
       </ul>
