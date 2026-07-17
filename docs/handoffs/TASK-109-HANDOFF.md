@@ -2,6 +2,7 @@
 
 - Branch: `codex/task-109-pickup-milestone-checkpoint-before-next-command`
 - Base commit: `1ebffe66283d493a967405131f9bbc99d131089d`
+- Implementation commit: `932b146aafda8ef9b7bb6ee15ff2bf650383cbac`
 - Checkpoint date: `2026-07-17`
 - TASK-110 created: `no`
 
@@ -16,11 +17,11 @@
 - No files under `apps/runtime` were modified.
 - No files under `packages` were modified.
 - No files under `tests` were modified.
-- This task only updates planning, status, task metadata, and handoff documentation.
+- This task updates only planning, status, task metadata, and handoff documentation.
 
 ## Validation Results
-- `git diff --check` pending implementation commit
-- `corepack pnpm validate` pending implementation commit
+- `git diff --check` PASS with a non-blocking CRLF normalization warning in `docs/status/CURRENT_STATE.md`
+- `corepack pnpm validate` PASS
 
 ## Accepted Boundary Summary
 - Accepted runtime command boundaries remain read-only `look`, read-only `inventory`, controlled explicit-exit `go`, and controlled explicit-visible-portable-item `take`.
