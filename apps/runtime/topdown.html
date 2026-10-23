@@ -1,34 +1,23 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ORION-7 — první hratelná ukázka</title>
-  <link rel="stylesheet" href="./topdown.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ORION-7 — hratelný prototyp</title><link rel="stylesheet" href="./topdown.css">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
 </head>
-<body>
-  <main class="shell">
-    <header class="topbar">
-      <div><p class="eyebrow">NARRATIVE ENGINE · VERTICAL SLICE 01</p><h1>ORION-7 <span>/ Paluba P0</span></h1></div>
-      <div class="status"><i></i> SYSTÉMY ČÁSTEČNĚ FUNKČNÍ</div>
-    </header>
-    <section class="game-layout">
-      <div class="viewport"><div id="game"></div><div class="map-caption">SEKTOR B · GRID 32 PX</div></div>
-      <aside class="panel">
-        <p class="eyebrow">OSOBNÍ TERMINÁL</p><h2 id="room-name">Komora 7</h2>
-        <p id="room-description">Probudil ses v nouzové ubytovací komoře. Najdi cestu do hlavní chodby.</p>
-        <div class="divider"></div>
-        <p class="label">ÚKOL</p><p id="objective">Dostaň se z Komory 7 do hlavní chodby.</p>
-        <div class="divider"></div>
-        <p class="label">ZÁZNAMY</p><ul id="log" aria-live="polite"><li>Nouzové napájení aktivní.</li><li>Komunikační síť nedostupná.</li></ul>
-        <div class="divider"></div>
-        <p class="label">OVLÁDÁNÍ</p><p class="controls"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> pohyb</p><p class="controls"><kbd>E</kbd> interakce / dveře</p>
-        <button id="reset" type="button">Restartovat scénu ↺</button>
-      </aside>
-    </section>
-    <footer>Prototyp: pohyb po mřížce · kolize · dveře · interakce · zamčená oblast</footer>
-  </main>
-  <script src="./topdown.js"></script>
-</body>
-</html>
+<body><main class="shell">
+  <header class="topbar"><div><p class="eyebrow">NARRATIVE ENGINE · PLAYABLE SLICE 02</p><h1>ORION-7 <span>/ Paluba P0</span></h1></div><div id="status" class="status"><i></i>SYSTÉMY ČÁSTEČNĚ FUNKČNÍ</div></header>
+  <section class="game-layout">
+    <div class="game-column"><div class="viewport"><div id="game"></div><div class="map-caption">SEKTOR B · P0 · KLIKNI PRO POHYB</div><div id="toast" class="toast" role="status"></div></div>
+      <div class="touchbar"><span>POHYB</span><button data-move="up" aria-label="Nahoru">▲</button><div><button data-move="left" aria-label="Vlevo">◀</button><button data-move="down" aria-label="Dolů">▼</button><button data-move="right" aria-label="Vpravo">▶</button></div><small>Myš: klikni na podlahu · klikni poblíž objektu pro interakci</small></div>
+    </div>
+    <aside class="panel"><p class="eyebrow">OSOBNÍ TERMINÁL</p><h2 id="room-name">Komora 7</h2><p id="room-description">Probuzení po výpadku. Najdi cestu z komory.</p>
+      <div class="divider"></div><p class="label">AKTUÁLNÍ ÚKOL</p><p id="objective">Opusť Komoru 7 a prozkoumej Blok C</p><div class="progressline"><span>PROZKOUMÁNO</span><b id="progress">1 / 6 oblastí</b></div>
+      <div class="divider"></div><p class="label">INVENTÁŘ</p><ul id="inventory" class="inventory"><li>Prázdný</li></ul>
+      <div class="divider"></div><p class="label">INTERAKCE</p><p id="interact-hint">Klikni na podlahu pro pohyb</p><p class="small">U objektu stiskni <kbd>E</kbd> nebo <kbd>mezerník</kbd>.</p>
+      <div class="divider"></div><p class="label">ZÁZNAMY UDÁLOSTÍ</p><ul id="log" aria-live="polite"><li>Nouzové napájení aktivní.</li><li>Komunikační síť nedostupná.</li></ul><button id="reset" type="button">Restartovat scénu ↺</button>
+    </aside>
+  </section><footer>Prototyp 02 · klikací pohyb · interaktivní objekty · inventář · úkoly · uzamčená sekce</footer>
+</main>
+<div id="modal" class="modal" hidden><section class="modal-card"><p class="eyebrow">NALEZENÁ DATA</p><h2 id="modal-title">Terminál</h2><p id="modal-text"></p><button id="modal-close" type="button">ZAVŘÍT</button></section></div>
+<script src="./topdown.js"></script></body></html>
