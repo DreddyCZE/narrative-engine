@@ -1,23 +1,93 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ORION-7 — hratelný prototyp</title><link rel="stylesheet" href="./topdown.css">
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ORION-7 — průzkum stanice</title>
+<style>
+:root{color-scheme:dark;--bg:#080e15;--panel:#111d28;--line:#2a4050;--text:#e0edf4;--muted:#8ba3b3;--cyan:#63deea;--amber:#f0bd62}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#152939,#080e15 70%);color:var(--text);font:14px/1.5 system-ui,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:1500px;margin:auto;padding:18px}.head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}.eyebrow{margin:0 0 5px;color:var(--cyan);font-size:10px;font-weight:800;letter-spacing:.18em}.head h1{margin:0;font-size:clamp(22px,3vw,34px);letter-spacing:.06em}.head h1 span{font-size:.52em;color:var(--muted);font-weight:500}.status{border:1px solid #695536;color:var(--amber);padding:7px 10px;font-size:10px;letter-spacing:.1em}.status.online{border-color:#3a8069;color:#9de5be}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:14px;align-items:start}.play{min-width:0}.board{position:relative;background:#060b10;border:1px solid #304a5b;box-shadow:0 16px 55px #0008}canvas{display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair}.toast{position:absolute;top:12px;left:50%;transform:translate(-50%,-5px);padding:8px 13px;background:#0b1b26f2;border:1px solid #3c7584;color:#d4fbff;font-size:12px;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .15s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#0e1923;border:1px solid var(--line);border-top:0;padding:9px}.toolbar span{font-size:10px;color:var(--muted);letter-spacing:.1em;margin-right:auto}.toolbar button,.panel button,.modal button{border:1px solid #3d7180;background:#18313d;color:#c8f8fc;padding:9px 12px;cursor:pointer;font:inherit}.toolbar button:hover,.panel button:hover,.modal button:hover{background:#244959}.hint{color:var(--muted);font-size:11px;padding:8px 2px}
+.panel{background:linear-gradient(145deg,#121f2b,#0c151e);border:1px solid var(--line);padding:18px;min-width:0}.panel h2{font-size:21px;margin:0 0 8px}.panel p{color:#adbfcb;margin:0 0 8px}.divider{height:1px;background:var(--line);margin:14px 0}.label{font-size:10px;letter-spacing:.16em;color:#7e9aab;font-weight:800;margin:0 0 7px}.objective{color:#f0d59c!important}.progress{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}.progress b{color:var(--cyan)}ul{padding-left:17px;margin:5px 0;color:#a7bac7;font-size:12px}li{margin:5px 0}.inventory{display:flex;flex-wrap:wrap;gap:5px;padding:0;list-style:none}.inventory li{border:1px solid #304b59;background:#142733;padding:4px 7px;margin:0}.inventory li.empty{color:#718898}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:9px}.actions button{padding:8px 4px}.actions .up{grid-column:2}.actions .left{grid-column:1;grid-row:2}.actions .down{grid-column:2;grid-row:2}.actions .right{grid-column:3;grid-row:2}.panel .reset{width:100%;margin-top:12px}.modal{position:fixed;inset:0;background:#02070bd9;display:grid;place-items:center;padding:18px;z-index:5}.modal[hidden]{display:none}.dialog{width:min(520px,100%);background:#111f2b;border:1px solid #477384;padding:22px;box-shadow:0 20px 70px #000b}.dialog h2{margin:0 0 12px}.dialog p{line-height:1.8;color:#c4d4dd}.dialog button{width:100%;margin-top:12px}footer{font-size:11px;color:#647d8e;padding:13px 2px}
+@media(max-width:920px){main{padding:10px}.layout{grid-template-columns:1fr}.panel{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.panel>.wide,.panel>.divider,.panel>.reset{grid-column:1/-1}.panel .divider{margin:10px 0}.head{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.panel{display:block}.toolbar span{width:100%}.head h1 span{display:block;margin-top:4px}}
+</style>
 </head>
-<body><main class="shell">
-  <header class="topbar"><div><p class="eyebrow">NARRATIVE ENGINE · PLAYABLE SLICE 02</p><h1>ORION-7 <span>/ Paluba P0</span></h1></div><div id="status" class="status"><i></i>SYSTÉMY ČÁSTEČNĚ FUNKČNÍ</div></header>
-  <section class="game-layout">
-    <div class="game-column"><div class="viewport"><div id="game"></div><div class="map-caption">SEKTOR B · P0 · KLIKNI PRO POHYB</div><div id="toast" class="toast" role="status"></div></div>
-      <div class="touchbar"><span>POHYB</span><button data-move="up" aria-label="Nahoru">▲</button><div><button data-move="left" aria-label="Vlevo">◀</button><button data-move="down" aria-label="Dolů">▼</button><button data-move="right" aria-label="Vpravo">▶</button></div><small>Myš: klikni na podlahu · klikni poblíž objektu pro interakci</small></div>
-    </div>
-    <aside class="panel"><p class="eyebrow">OSOBNÍ TERMINÁL</p><h2 id="room-name">Komora 7</h2><p id="room-description">Probuzení po výpadku. Najdi cestu z komory.</p>
-      <div class="divider"></div><p class="label">AKTUÁLNÍ ÚKOL</p><p id="objective">Opusť Komoru 7 a prozkoumej Blok C</p><div class="progressline"><span>PROZKOUMÁNO</span><b id="progress">1 / 6 oblastí</b></div>
-      <div class="divider"></div><p class="label">INVENTÁŘ</p><ul id="inventory" class="inventory"><li>Prázdný</li></ul>
-      <div class="divider"></div><p class="label">INTERAKCE</p><p id="interact-hint">Klikni na podlahu pro pohyb</p><p class="small">U objektu stiskni <kbd>E</kbd> nebo <kbd>mezerník</kbd>.</p>
-      <div class="divider"></div><p class="label">ZÁZNAMY UDÁLOSTÍ</p><ul id="log" aria-live="polite"><li>Nouzové napájení aktivní.</li><li>Komunikační síť nedostupná.</li></ul><button id="reset" type="button">Restartovat scénu ↺</button>
-    </aside>
-  </section><footer>Prototyp 02 · klikací pohyb · interaktivní objekty · inventář · úkoly · uzamčená sekce</footer>
-</main>
-<div id="modal" class="modal" hidden><section class="modal-card"><p class="eyebrow">NALEZENÁ DATA</p><h2 id="modal-title">Terminál</h2><p id="modal-text"></p><button id="modal-close" type="button">ZAVŘÍT</button></section></div>
-<script src="./topdown.js"></script></body></html>
+<body><main>
+<header class="head"><div><p class="eyebrow">NARRATIVE ENGINE · LOKÁLNÍ PROTOTYP</p><h1>ORION-7 <span>/ Paluba P0 · průzkumná mise</span></h1></div><div id="status" class="status">SYSTÉMY ČÁSTEČNĚ FUNKČNÍ</div></header>
+<section class="layout"><div class="play"><div class="board"><canvas id="map" width="960" height="640" aria-label="Mapa vesmírné stanice. Kliknutím na podlahu se postava přesune."></canvas><div id="toast" class="toast" role="status"></div></div>
+<div class="toolbar"><span>KLIKNI NA PODLAHU PRO POHYB · NA OBJEKT PRO INTERAKCI</span><button id="interact">Interakce (E)</button><button id="zoom">Zvětšit mapu</button></div>
+<div class="hint">Ovládání: kliknutí / dotyk, WASD nebo šipky. U objektu stiskni E nebo tlačítko Interakce. Spustíš i dvojklikem na tento HTML soubor — server ani instalace nejsou potřeba.</div>
+</div>
+<aside class="panel"><p class="eyebrow">OSOBNÍ TERMINÁL</p><h2 id="room-name">Komora 7</h2><p id="room-description">Probudil ses po výpadku. Najdi cestu z komory a prozkoumej stanici.</p>
+<div class="divider wide"></div><div class="wide"><p class="label">AKTUÁLNÍ ÚKOL</p><p id="objective" class="objective">Opusť Komoru 7 a prozkoumej Blok C.</p><div class="progress"><span>PROZKOUMANÉ OBLASTI</span><b id="progress">1 / 6</b></div></div>
+<div class="divider"></div><div><p class="label">INVENTÁŘ</p><ul id="inventory" class="inventory"><li class="empty">Prázdný</li></ul></div>
+<div class="divider"></div><div><p class="label">V DOSAHU</p><p id="nearby">Klikni na podlahu pro pohyb.</p><div class="actions"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="down" data-dir="down">▼</button><button class="right" data-dir="right">▶</button></div></div>
+<div class="divider wide"></div><div class="wide"><p class="label">ZÁZNAMY UDÁLOSTÍ</p><ul id="log" aria-live="polite"><li>Nouzové napájení aktivní.</li><li>Komunikační síť nedostupná.</li></ul></div><button id="reset" class="reset wide">Restartovat misi ↺</button></aside></section>
+<footer>ORION-7 · samostatný HTML prototyp · bez externích knihoven a bez instalace</footer></main>
+<div id="modal" class="modal" hidden><section class="dialog"><p class="eyebrow">NALEZENÁ DATA</p><h2 id="modal-title">Terminál</h2><p id="modal-text"></p><button id="modal-close">ZAVŘÍT</button></section></div>
+<script>
+(() => {
+const cv=document.getElementById('map'),ctx=cv.getContext('2d'),T=32,W=30,H=20;
+const grid=Array.from({length:H},()=>Array(W).fill(1));
+const rooms=[
+{id:'chamber',x:2,y:2,w:7,h:6,name:'Komora 7',desc:'Nouzová obytná komora. Komunikační terminál je bez spojení. Na podlaze bliká servisní modul.',color:'#1b3039'},
+{id:'blockC',x:11,y:2,w:6,h:6,name:'Obytný blok C',desc:'Několik lůžek je převrácených. Nouzový záznamník stále napájí jediná dioda.',color:'#1b3039'},
+{id:'section99',x:20,y:2,w:7,h:6,name:'Sekce 99-ALFA',desc:'Pancéřové dveře jsou uzamčeny protokolem velitele. Panel požaduje bezpečnostní klíč a obnovení napájení.',color:'#2c2028'},
+{id:'workshop',x:2,y:12,w:7,h:5,name:'Dílna a sklad',desc:'Prázdné regály, servisní vozík a rozebraný údržbový robot. Některé součástky se ještě mohou hodit.',color:'#1b3039'},
+{id:'utility',x:11,y:12,w:6,h:5,name:'Technická komora',desc:'Rozvodna napájí palubu P0. Jeden jistič je shozený; vedle něj je nouzový ovládací panel.',color:'#1b3039'},
+{id:'reactor',x:20,y:12,w:7,h:5,name:'Servisní uzel',desc:'Za mříží vede servisní trasa k výtahu. Přístup na technické patro čeká na autorizaci.',color:'#1b3039'}];
+for(const r of rooms)for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)grid[y][x]=0;
+for(let y=9;y<=10;y++)for(let x=1;x<W-1;x++)grid[y][x]=0;
+const doors=[
+{id:'d1',x:5,y:8,room:'chamber',name:'Dveře Komory 7'},
+{id:'d2',x:13,y:8,room:'blockC',name:'Vstup do Bloku C'},
+{id:'d3',x:23,y:8,room:'section99',name:'Sekce 99-ALFA',locked:true},
+{id:'d4',x:5,y:11,room:'workshop',name:'Dveře dílny'},
+{id:'d5',x:13,y:11,room:'utility',name:'Vstup do technické komory'},
+{id:'d6',x:23,y:11,room:'reactor',name:'Vstup do servisního uzlu'}];
+for(let x=1;x<W-1;x++){grid[8][x]=1;grid[11][x]=1}for(const d of doors)grid[d.y][d.x]=0;
+const objs=[
+{id:'pod',x:4,y:5,title:'Nouzový modul',text:'V modulu je servisní karta. Uložil jsi ji do inventáře.',item:'Servisní karta',once:true},
+{id:'terminal',x:7,y:5,title:'Osobní terminál',text:'POSLEDNÍ ZÁZNAM: „Světla zhasla v 03:17. Velitel nařídil uzavřít 99-ALFA. Nikdo nesmí dolů.“'},
+{id:'recorder',x:14,y:5,title:'Nouzový záznamník',text:'ZÁZNAM: „Evakuace Bloku C selhala. Bezpečnostní klíč byl předán technikovi. Hledejte v rozvodně.“',item:'Fragment záznamu',once:true},
+{id:'breaker',x:14,y:14,title:'Nouzový jistič',text:'Jistič cvakne a nouzové okruhy se rozsvítí. Napájení paluby P0 je obnoveno.',once:true},
+{id:'robot',x:5,y:14,title:'Servisní robot R-04',text:'Robot se probere: „...KLÍČ... POD SKŘÍNÍ...“ Získal jsi bezpečnostní klíč.',item:'Bezpečnostní klíč',once:true},
+{id:'lift',x:24,y:14,title:'Výtah na P1',text:'Výtah je funkční. Přístup na technické patro bude dostupný v další části.'}];
+let player={x:5.5,y:4.5},path=[],moveAfter=null,near=null,visited=new Set(['chamber']),inventory=new Set(),used=new Set(),power=false,quest=0,toastTimer=null,zoomed=false,lastTime=0;
+const px=(x)=>x*T,py=(y)=>y*T;
+function walk(x,y){return x>=0&&x<W&&y>=0&&y<H&&grid[y][x]===0}
+function pathfind(sx,sy,tx,ty){sx=Math.floor(sx);sy=Math.floor(sy);if(!walk(tx,ty))return[];let q=[[sx,sy]],prev=new Map([[sx+','+sy,null]]),dirs=[[1,0],[-1,0],[0,1],[0,-1]];for(let i=0;i<q.length;i++){let [x,y]=q[i];if(x===tx&&y===ty)break;for(const [dx,dy]of dirs){let nx=x+dx,ny=y+dy,k=nx+','+ny;if(walk(nx,ny)&&!prev.has(k)){prev.set(k,[x,y]);q.push([nx,ny])}}}let k=tx+','+ty;if(!prev.has(k))return[];let out=[],cur=[tx,ty];while(cur){out.push(cur);cur=prev.get(cur[0]+','+cur[1])}return out.reverse().slice(1)}
+function log(s){let li=document.createElement('li');li.textContent=s;document.getElementById('log').prepend(li);while(document.querySelectorAll('#log li').length>7)document.querySelector('#log li:last-child').remove()}
+function toast(s){let el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+function modal(title,text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('modal').hidden=false}
+function setRoom(r){document.getElementById('room-name').textContent=r.name;document.getElementById('room-description').textContent=r.desc}
+function sync(){let tasks=['Opusť Komoru 7 a prozkoumej Blok C','Najdi bezpečnostní klíč v dílně','Obnov napájení v technické komoře','Odemkni Sekci 99-ALFA'];document.getElementById('objective').textContent=tasks[Math.min(quest,3)];document.getElementById('progress').textContent=visited.size+' / '+rooms.length;let ul=document.getElementById('inventory');ul.replaceChildren();if(!inventory.size){let li=document.createElement('li');li.className='empty';li.textContent='Prázdný';ul.append(li)}else for(const item of inventory){let li=document.createElement('li');li.textContent='▣ '+item;ul.append(li)}let st=document.getElementById('status');st.textContent=power?'NAPÁJENÍ P0 OBNOVENO':'SYSTÉMY ČÁSTEČNĚ FUNKČNÍ';st.classList.toggle('online',power)}
+function nearest(){const all=[...objs.map(o=>({...o,type:'object'})),...doors.map(d=>({...d,type:'door'}))];return all.map(o=>({...o,dist:Math.hypot(player.x-(o.x+.5),player.y-(o.y+.5))})).sort((a,b)=>a.dist-b.dist)[0]}
+function refresh(){let x=Math.floor(player.x),y=Math.floor(player.y),r=rooms.find(a=>x>=a.x&&x<a.x+a.w&&y>=a.y&&y<a.y+a.h);if(r){if(!visited.has(r.id)){visited.add(r.id);log('Prozkoumána oblast: '+r.name+'.');if(r.id==='blockC'){quest=Math.max(quest,1);log('Záznam odkazuje na klíč v servisní dílně.')}}setRoom(r)}else if(y>=8&&y<=11){setRoom({name:'Hlavní chodba',desc:'Hlavní spojovací koridor paluby P0. Nouzová světla blikají v nepravidelných intervalech.'})}
+near=nearest();if(near&&near.dist<1.45)document.getElementById('nearby').textContent=near.type==='door'?(near.locked?'Sekce 99-ALFA — uzamčeno':near.name):near.title;else{near=null;document.getElementById('nearby').textContent='Klikni na podlahu pro pohyb'}sync()}
+function render(){ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#08121a';ctx.fillRect(0,0,cv.width,cv.height);
+for(let y=0;y<H;y++)for(let x=0;x<W;x++){let r=rooms.find(a=>x>=a.x&&x<a.x+a.w&&y>=a.y&&y<a.y+a.h);if(grid[y][x]===0){ctx.fillStyle=r?r.color:'#263d49';ctx.fillRect(px(x),py(y),T,T);ctx.strokeStyle='#304957';ctx.lineWidth=1;ctx.strokeRect(px(x)+.5,py(y)+.5,T-1,T-1)}else{ctx.fillStyle='#425a68';ctx.fillRect(px(x),py(y),T,T);ctx.fillStyle='#1b2c37';ctx.fillRect(px(x)+3,py(y)+3,T-6,T-6);ctx.strokeStyle='#657e8b';ctx.strokeRect(px(x)+5,py(y)+5,T-10,T-10)}}
+for(const r of rooms){ctx.fillStyle='#9ab6c4';ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.fillText(r.name.toUpperCase(),(r.x+r.w/2)*T,r.y*T+17);if(r.id==='chamber'){ctx.fillStyle='#53616b';ctx.fillRect((r.x+1)*T,(r.y+2)*T,64,28);ctx.fillStyle='#273943';ctx.fillRect((r.x+1)*T+6,(r.y+2)*T+5,52,18)}else if(r.id==='section99'){ctx.fillStyle='#6b3237';ctx.fillRect((r.x+2)*T,(r.y+3)*T,80,25);ctx.fillStyle='#ffd0c9';ctx.font='bold 10px monospace';ctx.fillText('LOCK',(r.x+3.25)*T,(r.y+3)*T+16)}else{ctx.fillStyle=r.id==='utility'?'#594b32':'#263d48';ctx.fillRect((r.x+1.5)*T,(r.y+3)*T,43,22);ctx.fillRect((r.x+3.5)*T,(r.y+3)*T,43,22)}}
+for(let x=2;x<W-2;x+=4){ctx.fillStyle='#55d7e8';ctx.fillRect((x+.5)*T,9.5*T,2,22)}ctx.fillStyle='#8eb4c4';ctx.font='11px monospace';ctx.textAlign='center';ctx.fillText('HLAVNÍ CHODBA',15*T,9.5*T+4);
+for(const d of doors){ctx.fillStyle=d.locked?'#d65f68':'#63deea';ctx.fillRect(d.x*T+2,d.y*T+12,T-4,7);ctx.fillStyle=d.locked?'#ff9b8e':'#9bffff';ctx.beginPath();ctx.arc((d.x+.5)*T,(d.y+.5)*T,3,0,Math.PI*2);ctx.fill()}
+for(const o of objs){let col=o.id==='breaker'?'#f0bd62':o.id==='robot'?'#9acb8e':'#55d7e8';ctx.fillStyle='#10212c';ctx.fillRect(o.x*T+6,o.y*T+6,20,20);ctx.strokeStyle=col;ctx.lineWidth=2;ctx.strokeRect(o.x*T+6,o.y*T+6,20,20);ctx.fillStyle=col;ctx.beginPath();ctx.arc((o.x+.5)*T,(o.y+.5)*T,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7faff';ctx.font='10px sans-serif';ctx.fillText('◆',(o.x+.5)*T,(o.y+.5)*T-12)}
+if(path.length){ctx.strokeStyle='#f0bd62';ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(player.x*T,player.y*T);for(const [x,y]of path)ctx.lineTo((x+.5)*T,(y+.5)*T);ctx.stroke();ctx.setLineDash([])}
+ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(player.x*T,player.y*T+8,11,5,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f0bd62';ctx.fillRect(player.x*T-8,player.y*T-10,16,20);ctx.strokeStyle='#ffdfa1';ctx.lineWidth=2;ctx.strokeRect(player.x*T-8,player.y*T-10,16,20);ctx.fillStyle='#142e3a';ctx.fillRect(player.x*T-5,player.y*T-6,10,5);
+if(near&&near.dist<1.45){ctx.strokeStyle='#c8fbff';ctx.lineWidth=2;ctx.beginPath();ctx.arc((near.x+.5)*T,(near.y+.5)*T,15,0,Math.PI*2);ctx.stroke()}}
+function interactTarget(o){if(!o)return;if(o.type==='door'){let d=doors.find(a=>a.id===o.id);if(d.locked){if(inventory.has('Bezpečnostní klíč')&&power){d.locked=false;quest=3;log('Klíč přijat. Zámek Sekce 99-ALFA se uvolnil.');toast('SEKCE 99-ALFA ODEMČENA');}else{let missing=[];if(!inventory.has('Bezpečnostní klíč'))missing.push('bezpečnostní klíč');if(!power)missing.push('napájení P0');log('PŘÍSTUP ZAMÍTNUT — chybí '+missing.join(' a ')+'.');toast('PŘÍSTUP ZAMÍTNUT');}}else{log(d.name+': dveře se otevřely.');toast('Dveře otevřeny');}return}
+let a=objs.find(v=>v.id===o.id);if(!a)return;if(a.id==='lift'&&(!power||!inventory.has('Bezpečnostní klíč'))){toast('Výtah vyžaduje napájení a bezpečnostní klíč.');return}if(a.once&&used.has(a.id)){toast('Tento objekt už jsi prozkoumal.');return}if(a.once)used.add(a.id);if(a.item)inventory.add(a.item);if(a.id==='breaker'){power=true;quest=Math.max(quest,2);log('Napájení paluby P0 obnoveno.')}if(a.id==='robot'){inventory.add('Bezpečnostní klíč');quest=Math.max(quest,2)}if(a.id==='terminal'||a.id==='recorder')modal(a.title,a.text);else{log(a.text);toast(a.title+' — prozkoumáno')}sync()}
+function approach(o){let sx=Math.floor(player.x),sy=Math.floor(player.y),opts=[[o.x,o.y-1],[o.x-1,o.y],[o.x+1,o.y],[o.x,o.y+1]].filter(([x,y])=>walk(x,y)).map(([x,y])=>({x,y,p:pathfind(sx,sy,x,y)})).filter(a=>a.p.length||sx===a.x&&sy===a.y).sort((a,b)=>a.p.length-b.p.length);if(!opts.length){toast('K objektu se teď nelze dostat.');return}path=opts[0].p;moveAfter={...o};if(!path.length){interactTarget(moveAfter);moveAfter=null}}
+function clickAt(e){const rect=cv.getBoundingClientRect(),x=Math.floor((e.clientX-rect.left)/rect.width*W),y=Math.floor((e.clientY-rect.top)/rect.height*H);if(x<0||y<0||x>=W||y>=H)return;const target=[...objs.map(o=>({...o,type:'object'})),...doors.map(d=>({...d,type:'door'}))].find(o=>o.x===x&&o.y===y);if(target){approach(target);return}if(!walk(x,y)){toast('Tady je stěna. Klikni na podlahu.');return}path=pathfind(Math.floor(player.x),Math.floor(player.y),x,y);moveAfter=null;if(!path.length&&Math.floor(player.x)!==x||!path.length&&Math.floor(player.y)!==y)toast('Tudy se nedá projít.')}
+function step(dx,dy){const x=Math.floor(player.x)+dx,y=Math.floor(player.y)+dy;if(!walk(x,y)){toast('Tímto směrem je stěna.');return}path=pathfind(Math.floor(player.x),Math.floor(player.y),x,y);moveAfter=null}
+function frame(ts){let dt=Math.min((ts-lastTime)/1000||0,.04);lastTime=ts;if(path.length){const [tx,ty]=path[0],gx=tx+.5,gy=ty+.5,dx=gx-player.x,dy=gy-player.y,d=Math.hypot(dx,dy),speed=4.2;if(d<speed*dt+.025){player.x=gx;player.y=gy;path.shift();if(!path.length&&moveAfter){let t=moveAfter;moveAfter=null;interactTarget(t)}}else{player.x+=dx/d*speed*dt;player.y+=dy/d*speed*dt}}refresh();render();requestAnimationFrame(frame)}
+cv.addEventListener('click',clickAt);document.getElementById('interact').addEventListener('click',()=>{if(near&&near.dist<1.45)interactTarget(near);else toast('Přijdi blíž k objektu nebo dveřím.')});document.getElementById('modal-close').addEventListener('click',()=>document.getElementById('modal').hidden=true);
+document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>{const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[b.dataset.dir];step(...d)}));
+window.addEventListener('keydown',e=>{if(document.getElementById('modal').hidden===false&&e.key==='Escape'){document.getElementById('modal').hidden=true;return}const d={w:[0,-1],arrowup:[0,-1],s:[0,1],arrowdown:[0,1],a:[-1,0],arrowleft:[-1,0],d:[1,0],arrowright:[1,0]}[e.key.toLowerCase()];if(d){e.preventDefault();step(...d)}if(e.key.toLowerCase()==='e'||e.key===' '){e.preventDefault();if(near&&near.dist<1.45)interactTarget(near);else toast('Přijdi blíž k objektu nebo dveřím.')}});
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.currentTarget.hidden=true});
+document.getElementById('zoom').addEventListener('click',()=>{zoomed=!zoomed;document.querySelector('.layout').style.gridTemplateColumns=zoomed?'minmax(0,1fr)':'minmax(0,1fr) 290px';document.querySelector('.panel').style.display=zoomed?'none':'';document.getElementById('zoom').textContent=zoomed?'Zobrazit terminál':'Zvětšit mapu'});
+document.getElementById('reset').addEventListener('click',()=>{player={x:5.5,y:4.5};path=[];moveAfter=null;near=null;visited=new Set(['chamber']);inventory=new Set();used=new Set();power=false;quest=0;doors.find(d=>d.id==='d3').locked=true;document.getElementById('log').replaceChildren();log('Nouzové napájení aktivní.');log('Komunikační síť nedostupná.');setRoom(rooms[0]);sync();toast('Mise restartována')});
+sync();requestAnimationFrame(frame);
+})();
+</script></body></html>
